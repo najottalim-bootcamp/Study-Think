@@ -2,6 +2,11 @@
 {
     public class MediaHelper
     {
+        /// <summary>
+        /// This function create unique Image Name
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static string MakeImageName(string filename)
         {
             FileInfo fileInfo = new FileInfo(filename);
@@ -16,6 +21,7 @@
             }
             return null;
         }
+
 
         public static string[] GetImageExtensions()
         {
