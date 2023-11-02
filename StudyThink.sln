@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{22B32085-9687-4CE7-B895-44A85F08645C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyThink.Api", "src\StudyThink.Api\StudyThink.Api.csproj", "{BAEFA200-411C-4228-ADD7-33C8B8A1C41D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BAEFA200-411C-4228-ADD7-33C8B8A1C41D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAEFA200-411C-4228-ADD7-33C8B8A1C41D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAEFA200-411C-4228-ADD7-33C8B8A1C41D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAEFA200-411C-4228-ADD7-33C8B8A1C41D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BAEFA200-411C-4228-ADD7-33C8B8A1C41D} = {22B32085-9687-4CE7-B895-44A85F08645C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7F64A636-C16D-4E25-9A39-9FE8B0A1D3E9}
+	EndGlobalSection
+EndGlobal
