@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace StudyThink.Service.DTOs.Courses.CourseComment;
 
-namespace StudyThink.Service.DTOs.Courses.CourseComment
+public class CourseCommentUpdateDto
 {
-    internal class CourseCommentUpdateDto
-    {
-    }
+    public int Id { get; set; }
+    public string Comment { get; set; }
+    public int StudentId { get; set; }
+    public int CourseId { get; set; }
+    public int AdminId { get; set; }
 }

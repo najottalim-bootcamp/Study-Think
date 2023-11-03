@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace StudyThink.Service.Interfaces.Courses;
 
-namespace StudyThink.Service.Interfaces.Courses
+public  interface ICourseRepository
 {
-    internal interface ICourseRepository
-    {
-    }
+    
 }

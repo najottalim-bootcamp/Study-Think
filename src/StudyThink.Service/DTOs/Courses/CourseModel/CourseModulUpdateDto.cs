@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace StudyThink.Service.DTOs.Courses.CourseModel;
 
-namespace StudyThink.Service.DTOs.Courses.CourseModel
+public class CourseModulUpdateDto
 {
-    internal class CourseModulUpdateDto
-    {
-    }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int CourseID { get; set; }
 }
