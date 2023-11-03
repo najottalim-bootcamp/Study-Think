@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace StudyThink.Domain.Entities.Courses;
 
-namespace StudyThink.Domain.Entities.Courses
+public class CourseRequirment:Auditable
 {
-    internal class CourseRequirment
-    {
-    }
+    public  string Requirments { get; set; }
+    public int CourceId { get; set; }
+    public DateTime CretedAt { get; set; }=DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; }
+
 }

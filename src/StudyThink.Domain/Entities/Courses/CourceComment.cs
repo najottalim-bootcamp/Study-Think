@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace StudyThink.Domain.Entities.Course;
 
-namespace StudyThink.Domain.Entities.Courses
+public class CourceComment:Auditable
 {
-    internal class CourceComments
-    {
-    }
+    public string Comment { get; set; }
+    public int StudentId { get; set; }
+    public int CourseId { get;set; }
+    public int AdminId { get; set;}
+    public DateTime CreatedAt { get; set; }= DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set;}
 }
