@@ -12,8 +12,6 @@ public class Course:Auditable
     public float Duration { get; set; }
     public string Language { get; set; }
     public float DiscountPrice { get; set; }
-    public DateTime CretedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; }
     public int CourseReqId { get; set; }
 
 }
