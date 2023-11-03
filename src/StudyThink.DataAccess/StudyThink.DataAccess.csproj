@@ -7,9 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="ViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Common\" />
     <Folder Include="Contexts\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Repositories\" />
     <Folder Include="Utils\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
