@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StudyThink.Domain\StudyThink.Domain.csproj" />
+    <ProjectReference Include="..\StudyThink.DataAccess\StudyThink.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
