@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StudyThink.Domain\StudyThink.Domain.csproj" />
+    <Folder Include="Common\" />
+    <Folder Include="Contexts\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Utils\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>
