@@ -1,9 +1,10 @@
-﻿using StudyThink.DataAccess.Interfaces;
+﻿using StudyThink.DataAccess.Common;
+using StudyThink.DataAccess.Interfaces;
 using StudyThink.Domain.Entities.Courses;
 
 namespace StudyThink.Service.Interfaces.Courses;
 
-public interface ICourseReqRepository: IRepository<CourseRequirment>
+public interface ICourseReqRepository: IRepository<CourseRequirment>,IGetAll<CourseRequirment>
 {  
     ValueTask<CourseRequirment> GetByNameAsync(string name);
 }
