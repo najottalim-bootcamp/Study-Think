@@ -10,6 +10,6 @@ public class BaseRepository
     public BaseRepository()
     {
         DefaultTypeMap.MatchNamesWithUnderscores = true;
-        this._connection = new SqlConnection("Server=LAPTOP-UVN5MKL6\\SQLEXPRESS;Database=StudyThink;Trusted_Connection=True;TrustServerCertificate=true;");
+        this._connection = new SqlConnection("Server=(localdb)\\MSSQLLocalDB;Database=StudyThink;Trusted_Connection=True;TrustServerCertificate=true;");
     }
 }
