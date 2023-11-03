@@ -2,6 +2,6 @@
 
 public class CourseRequirments : Auditable
 {
-    public int CourseId { get; set; }
+    public long CourseId { get; set; }
     public string Requirments { get; set; }
 }
