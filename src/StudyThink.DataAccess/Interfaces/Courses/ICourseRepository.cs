@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace StudyThink.Service.Interfaces.Courses;
 
-public  interface ICourseRepository:IRepository<Course>,IGetAll<Course>
+public  interface ICourseRepository:IRepository<Course>
 {
 
     ValueTask<IEnumerable<Course>> GetByNameAsync (string name);
