@@ -1,4 +1,4 @@
-﻿namespace StudyThink.Service.Interfaces.Common.Helpers
+﻿namespace StudyThink.Service.Common.Helpers
 {
     public class MediaHelper
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.Interfaces.Common;
-using StudyThink.Service.Interfaces.Common.Helpers;
 
 namespace StudyThink.Service.Services.Common
 {
