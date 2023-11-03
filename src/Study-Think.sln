@@ -18,6 +18,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Triggers", "Triggers", "{B9
 		TriggerAfterDelete.sql = TriggerAfterDelete.sql
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Databases", "Databases", "{E4D07177-CBD6-4895-8D80-C842A8A6D9D6}"
+	ProjectSection(SolutionItems) = preProject
+		StudyThink.sql = StudyThink.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +51,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B913A34F-9B20-4BC0-8BE0-ADE262D9D510} = {8B5499EE-AD2D-43AF-8837-FA615BE28DEC}
+		{E4D07177-CBD6-4895-8D80-C842A8A6D9D6} = {8B5499EE-AD2D-43AF-8837-FA615BE28DEC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {87604423-560B-49A2-B9A3-EFB0A2763A0F}
