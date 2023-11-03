@@ -10,6 +10,7 @@
     <Folder Include="Common\" />
     <Folder Include="Contexts\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Repositories\" />
     <Folder Include="Utils\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Repositories\" />
