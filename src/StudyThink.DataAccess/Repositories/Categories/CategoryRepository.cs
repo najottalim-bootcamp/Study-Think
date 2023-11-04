@@ -1,4 +1,5 @@
-﻿using StudyThink.DataAccess.Interfaces.Categories;
+﻿using Dapper;
+using StudyThink.DataAccess.Interfaces.Categories;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Categories;
 
@@ -6,9 +7,25 @@ namespace StudyThink.DataAccess.Repositories.Categories;
 
 public class CategoryRepository : BaseRepository, ICategoryRepository
 {
-    public ValueTask<long> CountAsync()
+    public async ValueTask<long> CountAsync()
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT COUNT(*) FROM Categories";
+
+            long result = await _connection.ExecuteScalarAsync<long>(query);
+            return result;
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> CreateAsync(Category model)
