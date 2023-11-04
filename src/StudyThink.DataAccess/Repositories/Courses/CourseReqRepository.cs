@@ -4,7 +4,7 @@ using StudyThink.Service.Interfaces.Courses;
 
 namespace StudyThink.DataAccess.Repositories.Courses;
 
-public class CourseReqRepository : BaseRepository, ICourseModulRepository
+public class CourseReqRepository : BaseRepository, ICourseReqRepository
 {
     public ValueTask<long> CountAsync()
     {

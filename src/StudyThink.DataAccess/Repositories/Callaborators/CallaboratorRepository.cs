@@ -1,4 +1,5 @@
-﻿using StudyThink.DataAccess.Interfaces.Coloborators;
+﻿using Dapper;
+using StudyThink.DataAccess.Interfaces.Coloborators;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Callaborators;
 
@@ -6,9 +7,25 @@ namespace StudyThink.DataAccess.Repositories.Callaborators;
 
 public class CallaboratorRepository : BaseRepository, ICalloboratorRepository
 {
-    public ValueTask<long> CountAsync()
+    public async ValueTask<long> CountAsync()
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT COUNT(*) FROM Callaborators";
+
+            long result = await _connection.ExecuteScalarAsync<long>(query);
+            return result;
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> CreateAsync(Callaborator model)
