@@ -13,8 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common\" />
     <Folder Include="Contexts\" />
     <Folder Include="Repositories\" />
+    <Folder Include="Utils\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
 
