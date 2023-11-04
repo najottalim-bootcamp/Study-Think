@@ -1,4 +1,5 @@
-﻿using StudyThink.DataAccess.Interfaces;
+﻿using StudyThink.DataAccess.Common;
+using StudyThink.DataAccess.Interfaces;
 using StudyThink.Domain.Entities.Course;
 using StudyThink.Domain.Entities.Courses;
 using System.ComponentModel;
