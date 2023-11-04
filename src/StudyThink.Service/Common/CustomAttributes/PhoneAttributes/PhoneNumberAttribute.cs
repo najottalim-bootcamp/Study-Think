@@ -20,7 +20,7 @@ namespace StudyThink.Service.Common.CustomAttributes.PhoneAttributes
 
         public override bool IsValid(object? value)
         {
-            if(value == null)
+            if (value == null)
                 return false;
 
             string phoneNumber = value.ToString();
@@ -29,7 +29,7 @@ namespace StudyThink.Service.Common.CustomAttributes.PhoneAttributes
             {
                 string number = i.CountryPhoneNumberCode.ToString() + i.PhoneNumberLength.ToString();
 
-                if (Regex.IsMatch(phoneNumber, $@"^\+\d{number}$"))
+                if (Regex.IsMatch(phoneNumber, $@"^\+\d{number.Count()}$"))
                     return true;
             }
             return false;
