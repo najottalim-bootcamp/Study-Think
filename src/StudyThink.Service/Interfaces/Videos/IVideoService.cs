@@ -10,7 +10,7 @@ namespace StudyThink.Service.Interfaces.Videos
         ValueTask<bool> CreateAsync(VideoCreationDto model);
         // Get
         ValueTask<long> CountAsync();
-        ValueTask<IEnumerable<Video>> GetAll(PaginationParams @params);
+        ValueTask<IEnumerable<Video>> GetAllAsync(PaginationParams @params);
         ValueTask<IEnumerable<Video>> GetVideoByModuleIdAsync(int modulId);
         ValueTask<Video> GetByIdAsync(long Id);
         // Delete

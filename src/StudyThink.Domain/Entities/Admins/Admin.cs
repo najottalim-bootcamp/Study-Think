@@ -6,4 +6,5 @@ public class Admin : Human
 {
     public AdminRole Role { get; set; }
 
+    public DateTime DeletedAt { get; set; }
 }
