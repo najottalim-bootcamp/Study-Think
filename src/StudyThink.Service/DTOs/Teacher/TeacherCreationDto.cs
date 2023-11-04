@@ -1,4 +1,5 @@
-﻿using StudyThink.Domain.Enums;
+﻿using Microsoft.AspNetCore.Http;
+using StudyThink.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace StudyThink.Service.DTOs.Teachers;
@@ -11,7 +12,7 @@ public class TeacherCreationDto
 
     public DateTime DateOfBirth { get; set; }
 
-    public string ImagePath { get; set; } = string.Empty;
+    public IFormFile ImagePath { get; set; }
 
     public string FirstName { get; set; } = string.Empty;
 
