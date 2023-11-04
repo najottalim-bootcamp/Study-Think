@@ -4,6 +4,6 @@ namespace StudyThink.Domain.Entities.Admins;
 
 public class Admin : Human
 {
-    public Role Role { get; set; }
+    public AdminRole Role { get; set; }
 
 }

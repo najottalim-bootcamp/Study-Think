@@ -8,7 +8,7 @@ public class Course:Auditable
     public float Price { get; set; }
     public string? ImagePath { get; set; }
     public float TotalPrice { get; set; }
-    public int Lessons { get; set; }
+    public long Lessons { get; set; }
     public float Duration { get; set; }
     public string Language { get; set; }
     public float DiscountPrice { get; set; }
