@@ -8,17 +8,12 @@ namespace StudyThink.Service.Common.CustomAttributes.EmailAttributes
     {
         public override bool IsValid(object? value)
         {
-            if (value == null)
-            {
-                return false;
-            }
+            if (value == null) return false;
 
             string? email = value.ToString();
 
             if (Regex.IsMatch(email, @"^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$"))
-            {
                 return true;
-            }
             return false;
         }
     }
