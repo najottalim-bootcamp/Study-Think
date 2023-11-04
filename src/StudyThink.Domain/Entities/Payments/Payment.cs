@@ -1,4 +1,4 @@
-﻿namespace StudyThink.Domain.Entities.Callaborators;
+﻿namespace StudyThink.Domain.Entities.Payments;
 
 public class Payment : BaseEntity
 {
