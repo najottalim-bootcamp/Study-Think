@@ -7,6 +7,5 @@
         ValueTask<bool> DeleteAsync(long Id);
         ValueTask<bool> UpdateAsync(T model);
         ValueTask<bool> CreateAsync(T model);
-
     }
 }
