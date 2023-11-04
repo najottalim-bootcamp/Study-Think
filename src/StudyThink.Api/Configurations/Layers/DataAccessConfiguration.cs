@@ -2,7 +2,7 @@
 
 public static class DataAccessConfiguration
 {
-    public static void ConfigurationDataAccess(this WebApplicationBuilder builder)
+    public static void ConfigureDataAccess(this WebApplicationBuilder builder)
     {
         // Database Configurations field
 
