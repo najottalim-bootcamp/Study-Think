@@ -5,7 +5,7 @@ using StudyThink.Service.DTOs.Teachers;
 
 namespace StudyThink.Service.Interfaces.Teachers
 {
-    public interface ITeacherRepository
+    public interface ITeacherService
     {
         // Append
         ValueTask<bool> CreateAsync(TeacherCreationDto model);
