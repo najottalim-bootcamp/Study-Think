@@ -7,5 +7,6 @@
         public float Length { get; set; }
         public long CourseModulsId { get; set; }
         public long AdminId { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
