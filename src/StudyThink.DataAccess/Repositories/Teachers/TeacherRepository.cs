@@ -194,6 +194,10 @@ namespace StudyThink.DataAccess.Repositories.Teachers
             {
                 return false;
             }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
         }
     }
 }
