@@ -10,6 +10,6 @@ public interface ICourseRepository : IRepository<Course>,
 
     ValueTask<IEnumerable<Course>> GetByNameAsync(string name);
 
-    public Task<bool> UpdateImageAsync(long categoryId, string imagePath);
+    ValueTask<bool> UpdateImageAsync(long categoryId, string imagePath);
 
 }

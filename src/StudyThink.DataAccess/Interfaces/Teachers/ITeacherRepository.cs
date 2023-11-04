@@ -7,5 +7,5 @@ public interface ITeacherRepository : IRepository<Teacher>, IGetAll<Teacher>
 {
     ValueTask<Teacher> GetByPhoneNumberAsyncz(string phoneNumber);
 
-    public Task<bool> UpdateImageAsync(long teacherId, string imagePath);
+    ValueTask<bool> UpdateImageAsync(long teacherId, string imagePath);
 }
