@@ -1,4 +1,6 @@
-﻿namespace StudyThink.Service.DTOs.Courses.Course;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace StudyThink.Service.DTOs.Courses.Course;
 
 public class CourseCreationDto
 {
@@ -6,7 +8,7 @@ public class CourseCreationDto
     public string Description { get; set; }
     public long CategoryId { get; set; }
     public float Price { get; set; }
-    public string ImagePath { get; set; }
+    public IFormFile ImagePath { get; set; }
     public float TotalPrice { get; set; }
     public long Lessons { get; set; }
     public float Duration { get; set; }
