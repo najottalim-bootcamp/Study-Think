@@ -1,10 +1,12 @@
-﻿using StudyThink.DataAccess.Utils;
+﻿using StudyThink.DataAccess.Common;
+using StudyThink.DataAccess.Interfaces;
+using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
 using StudyThink.Service.Interfaces.Courses;
 
 namespace StudyThink.DataAccess.Repositories.Courses;
 
-public class CourseReqRepository : BaseRepository, ICourseModulRepository
+public class CourseModulRepository : BaseRepository, ICourseModulRepository
 {
     public ValueTask<long> CountAsync()
     {
@@ -12,6 +14,11 @@ public class CourseReqRepository : BaseRepository, ICourseModulRepository
     }
 
     public ValueTask<bool> CreateAsync(CourseRequirments model)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask<bool> CreateAsync(CourseModul model)
     {
         throw new NotImplementedException();
     }
@@ -42,6 +49,31 @@ public class CourseReqRepository : BaseRepository, ICourseModulRepository
     }
 
     public ValueTask<bool> UpdateAsync(CourseRequirments model)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask<bool> UpdateAsync(CourseModul model)
+    {
+        throw new NotImplementedException();
+    }
+
+    ValueTask<IEnumerable<CourseModul>> IGetAll<CourseModul>.GetAllAsync(PaginationParams @params)
+    {
+        throw new NotImplementedException();
+    }
+
+    ValueTask<CourseModul> IRepository<CourseModul>.GetByIdAsync(long Id)
+    {
+        throw new NotImplementedException();
+    }
+
+    ValueTask<CourseModul> ICourseModulRepository.GetByNameAsync(string name)
+    {
+        throw new NotImplementedException();
+    }
+
+    ValueTask<(long ItemsCount, IEnumerable<CourseModul>)> ISearchable<CourseModul>.SearchAsync(string search, PaginationParams @params)
     {
         throw new NotImplementedException();
     }
