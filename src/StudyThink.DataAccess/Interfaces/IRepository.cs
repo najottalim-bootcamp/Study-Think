@@ -6,8 +6,10 @@ namespace StudyThink.DataAccess.Interfaces
     {
         ValueTask<long> CountAsync();
         ValueTask<T> GetByIdAsync(long Id);
-        ValueTask<bool> Delete(int Id);
-        ValueTask<bool> Update(T model);
-        ValueTask<bool> Create(T model);
+        ValueTask<IEnumerable<T>> GetAllAsync();
+        ValueTask<bool> DeleteAsync(int Id);
+        ValueTask<bool> UpdateAsync(T model);
+        ValueTask<bool> CreateAsync(T model);
+
     }
 }
