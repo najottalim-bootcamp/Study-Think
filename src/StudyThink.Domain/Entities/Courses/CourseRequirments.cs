@@ -1,8 +1,8 @@
 ﻿namespace StudyThink.Domain.Entities.Courses;
 
-public class CourseModul:Auditable
+public class CourseRequirments : Auditable
 {
-    public string Name { get; set; }
     public long CourseId { get; set; }
 
+    public string Requirments { get; set; }
 }
