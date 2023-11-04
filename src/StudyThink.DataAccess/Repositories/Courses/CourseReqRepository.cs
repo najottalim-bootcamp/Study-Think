@@ -1,4 +1,5 @@
-﻿using StudyThink.DataAccess.Utils;
+﻿using Dapper;
+using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
 using StudyThink.Service.Interfaces.Courses;
 
@@ -6,9 +7,25 @@ namespace StudyThink.DataAccess.Repositories.Courses;
 
 public class CourseReqRepository : BaseRepository, ICourseReqRepository
 {
-    public ValueTask<long> CountAsync()
+    public async ValueTask<long> CountAsync()
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT COUNT(*) FROM CourseRequirments";
+
+            long result = await _connection.ExecuteScalarAsync<long>(query);
+            return result;
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> CreateAsync(CourseRequirments model)
