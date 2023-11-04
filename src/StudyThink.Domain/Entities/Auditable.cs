@@ -6,5 +6,4 @@ public class Auditable : BaseEntity
 
     public DateTime UpdatedAt { get; set; }
 
-    public DateTime DeletedAt { get; set; }
 }

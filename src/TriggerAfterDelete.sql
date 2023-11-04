@@ -2,7 +2,7 @@ CREATE TABLE ArchiveTeacher(Id BIGINT IDENTITY(1,1) PRIMARY KEY,TeacherId BIGINT
 CREATE TABLE ArchiveAdmins(Id BIGINT IDENTITY(1,1) PRIMARY KEY,AdminId BIGINT,FirstName nchar(255),LastName nchar(255),Email nchar(255),PhoneNumber nchar(255),Password nchar(255),DeletedAt DATETIME DEFAULT GETDATE());
 CREATE TABLE ArchiveStudents(Id BIGINT IDENTITY(1,1) PRIMARY KEY,StudentId BIGINT,FirstName nchar(255),UserName nchar(255),LastName nchar(255),Email nchar(255),PhoneNumber nchar(255),Password nchar(255),DeletedAt DATETIME DEFAULT GETDATE());
 CREATE TABLE ArchivePaymentDetails(Id BIGINT PRIMARY KEY IDENTITY(1,1),StudentId BIGINT,CourseId BIGINT);
-
+GO
 CREATE TRIGGER AfterDeleteTeacher
 on Teachers
 AFTER DELETE
@@ -21,7 +21,7 @@ select @Id = deleted.Id, @FirstName = deleted.FirstName,@LastName = deleted.Last
 INSERT INTO ArchiveTeacher(TeacherId,FirstName,LastName,Email,PhoneNumber,Password) VALUES(@Id,@FirstName,@LastName,@Email,@PhoneNumber,@Password)
 END
 
-
+GO
 CREATE TRIGGER AfterDeleteAdmins
 on Admins
 AFTER DELETE
@@ -40,7 +40,7 @@ select @Id = deleted.Id, @FirstName = deleted.FirstName,@LastName = deleted.Last
 INSERT INTO ArchiveAdmins(AdminId,FirstName,LastName,Email,PhoneNumber,Password) VALUES(@Id,@FirstName,@LastName,@Email,@PhoneNumber,@Password)
 END
 
-
+GO
 
 CREATE TRIGGER AfterDeleteStudents
 on Students
@@ -61,7 +61,7 @@ select @Id = deleted.Id, @FirstName = deleted.FirstName,@LastName = deleted.Last
 INSERT INTO ArchiveStudents(StudentId,FirstName,LastName,Email,PhoneNumber,Password,UserName) VALUES(@Id,@FirstName,@LastName,@Email,@PhoneNumber,@Password,@UserName)
 END
 
-
+GO
 CREATE TRIGGER AfterDeletePaymentDetails
 on PaymentDetails
 AFTER DELETE
