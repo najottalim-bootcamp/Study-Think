@@ -5,11 +5,11 @@ namespace StudyThink.DataAccess.Interfaces.Teachers
 {
     internal interface ITeacherCourses
     {
-        ValueTask<long> CountTeacherCourses(long teacherId);
-        ValueTask<IEnumerable<Course>> GetTeacherCourses(long teacherId);
-        ValueTask<Teacher> GetCourseTeacher(long courseId);
-        ValueTask<bool> DeleteTeacherFromCourse(long teacherId, long courseId);
-        ValueTask<bool> ChangeTeacherCourse(long teacherId, long oldCourse, long newCourseId);
-        ValueTask<bool> AddTeacherToCourse(long teacherId, long courseId);
+        ValueTask<long> CountTeacherCoursesAsync(long teacherId);
+        ValueTask<IEnumerable<Course>> GetTeacherCoursesAsync(long teacherId);
+        ValueTask<Teacher> GetCourseTeacherAsync(long courseId);
+        ValueTask<bool> DeleteTeacherFromCourseAsync(long teacherId, long courseId);
+        ValueTask<bool> ChangeTeacherCourseAsync(long teacherId, long oldCourseId, long newCourseId);
+        ValueTask<bool> AddTeacherToCourseAsync(long teacherId, long courseId);
     }
 }
