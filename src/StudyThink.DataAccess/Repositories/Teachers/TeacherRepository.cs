@@ -16,16 +16,16 @@ namespace StudyThink.DataAccess.Repositories.Teachers
                 await _connection.OpenAsync();
 
                 DynamicParameters @params = new DynamicParameters();
-                @params.Add("FirstName");
-                @params.Add("LastName");
-                @params.Add("DataOfBirth");
-                @params.Add("ImagePath");
-                @params.Add("Level");
-                @params.Add("Description");
-                @params.Add("Gender");
-                @params.Add("Email");
-                @params.Add("PhoneNumber");
-                @params.Add("Password");
+                @params.Add("@FirstName",model.FirstName);
+                @params.Add("@LastName",model.LastName);
+                @params.Add("@DataOfBirth",model.DateOfBirth);
+                @params.Add("@ImagePath",model.ImagePath);
+                @params.Add("@Level",model.Level);
+                @params.Add("@Description",model.Description);
+                @params.Add("@Gender");
+                @params.Add("@Email",model.Email);
+                @params.Add("@PhoneNumber",model.PhoneNumber);
+                @params.Add("@Password",model.Password);
 
                 string query = @"insert into Teachers (FirstName,LastName,DataOfBirth,ImagePath,Level,Description,Gender,Email,PhoneNumber,Password)" +
                     "values (@FirstName,@LastName,@DateOfBirth,@ImagePath,@Level,@Description,@Email,@PhoneNumber,@Password)";
@@ -73,7 +73,7 @@ namespace StudyThink.DataAccess.Repositories.Teachers
                 await _connection.OpenAsync();
 
                 DynamicParameters @params = new DynamicParameters();
-                @params.Add("Id", Id);
+                @params.Add("@Id", Id);
 
                 string query = @"delete from teachers where Id = @Id";
 
@@ -164,26 +164,26 @@ namespace StudyThink.DataAccess.Repositories.Teachers
             }
         }
 
-        public async ValueTask<bool> UpdateAsync(long Id,Teacher model)
+        public async ValueTask<bool> UpdateAsync(Teacher model)
         {
             try
             {
                 await _connection.OpenAsync();
 
                 DynamicParameters @params = new DynamicParameters();
-                @params.Add("FirstName");
-                @params.Add("LastName");
-                @params.Add("DataOfBirth");
-                @params.Add("ImagePath");
-                @params.Add("Level");
-                @params.Add("Description");
-                @params.Add("Gender");
-                @params.Add("Email");
-                @params.Add("PhoneNumber");
-                @params.Add("Password");
-                @params.Add("UpdatedAt");
+                @params.Add("@FirstName",model.FirstName);
+                @params.Add("@LastName",model.LastName);
+                @params.Add("@DataOfBirth",model.DateOfBirth);
+                @params.Add("@ImagePath",model.ImagePath);
+                @params.Add("@Level",model.Level);
+                @params.Add("@Description",model.Description);
+                @params.Add("@Gender");
+                @params.Add("@Email",model.Email);
+                @params.Add("@PhoneNumber",model.PhoneNumber);
+                @params.Add("@Password",model.Password);
+                @params.Add("@UpdatedAt",model.UpdatedAt);
 
-                string query = "update teachers set FirstName = @FirstName,@LastName = LastName,DataOfBirth = @DataOfBirth,ImagePath = @ImagePath,Level = @Level" +
+                string query = @"update teachers set FirstName = @FirstName,@LastName = LastName,DataOfBirth = @DataOfBirth,ImagePath = @ImagePath,Level = @Level" +
                     "Description = @Description,Gender = @Gender,Email = @Email,PhoneNumber = @PhoneNumber,Password = @Password,UpdatedAt = @UpdatedAt";
 
                 int result = await _connection.ExecuteAsync(query, @params);
