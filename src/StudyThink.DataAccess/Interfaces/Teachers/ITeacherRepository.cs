@@ -1,10 +1,11 @@
 ﻿using StudyThink.DataAccess.Common;
 using StudyThink.Domain.Entities.Teachers;
 
-namespace StudyThink.DataAccess.Interfaces.Teachers
+namespace StudyThink.DataAccess.Interfaces.Teachers;
+
+public interface ITeacherRepository : IRepository<Teacher>, IGetAll<Teacher>
 {
-    public interface ITeacherRepository : IRepository<Teacher>, IGetAll<Teacher>
-    {
-        ValueTask<Teacher> GetByPhoneNumber(string phoneNumber);
-    }
+    ValueTask<Teacher> GetByPhoneNumberAsync(string phoneNumber);
+
+    ValueTask<bool> UpdateImageAsync(long teacherId, string imagePath);
 }
