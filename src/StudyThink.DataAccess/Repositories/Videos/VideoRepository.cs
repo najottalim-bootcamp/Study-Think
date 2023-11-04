@@ -45,7 +45,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
                 string query = "insert into videos (Name,VideoPath,Length,CourseModulsId,AdminId) values" +
                     "(@Name,@VideoPath,@Length,@CourseModulsId,@AdminId)";
 
-                int result = await _connection.ExecuteAsync(query);
+                int result = await _connection.ExecuteAsync(query,@params);
 
                 return result > 0;
             }
@@ -70,7 +70,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
 
                 string query = @"delete from videos where Id = @Id";
 
-                int result = await _connection.ExecuteAsync(query);
+                int result = await _connection.ExecuteAsync(query, @params);
 
                 return result > 0;
             }
@@ -93,7 +93,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
                 string query = $"SELECT * FROM videos order by Id desc " +
                 $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
 
-                IEnumerable<Video>? videos = await _connection.ExecuteScalarAsync<IEnumerable<Video>>(query);
+                IEnumerable<Video>? videos = await _connection.ExecuteScalarAsync<IEnumerable<Video>>(query, @params);
 
                 return videos;
             }
@@ -118,7 +118,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
 
                 string query = "select * from videos where Id = @Id";
 
-                Video? video = await _connection.ExecuteScalarAsync<Video>(query);
+                Video? video = await _connection.ExecuteScalarAsync<Video>(query,@params);
 
                 return video;
             }
@@ -143,7 +143,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
 
                 string query = "select * from videos where CourseModulsId = @CourseModulsId";
 
-                IEnumerable<Video>? videos = await _connection.ExecuteScalarAsync<IEnumerable<Video>>(query);
+                IEnumerable<Video>? videos = await _connection.ExecuteScalarAsync<IEnumerable<Video>>(query, @params);
 
                 return videos;
             }
@@ -174,7 +174,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
                 string query = "update videos set Name = @Name,VideoPath = @VideoPath,Length = @Length,CourseModulsId = @CourseModulsId,AdminId = @AdminId" +
                     "UpdatedAt = @UpdatedAt";
 
-                int result = await _connection.ExecuteAsync(query);
+                int result = await _connection.ExecuteAsync(query,@params);
 
                 return result > 0;
             }

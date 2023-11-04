@@ -5,7 +5,7 @@ namespace StudyThink.DataAccess.Interfaces.Teachers;
 
 public interface ITeacherRepository : IRepository<Teacher>, IGetAll<Teacher>
 {
-    ValueTask<Teacher> GetByPhoneNumberAsyncz(string phoneNumber);
+    ValueTask<Teacher> GetByPhoneNumberAsync(string phoneNumber);
 
     ValueTask<bool> UpdateImageAsync(long teacherId, string imagePath);
 }
