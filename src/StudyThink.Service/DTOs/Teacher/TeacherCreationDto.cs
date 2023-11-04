@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StudyThink.Service.DTOs.Teachers;
 
-public class TeacherCreateDto
+public class TeacherCreationDto
 {
     public TeacherLevel Level { get; set; }
 

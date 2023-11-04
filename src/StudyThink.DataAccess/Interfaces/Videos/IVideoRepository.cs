@@ -5,6 +5,6 @@ namespace StudyThink.DataAccess.Interfaces.Videos
 {
     public interface IVideoRepository : IRepository<Video> , IGetAll<Video>
     {
-        ValueTask<IEnumerable<Video>> GetVideoByModulId(long modulId);
+        ValueTask<IEnumerable<Video>> GetVideoByModulIdAsync(long modulId);
     }
 }
