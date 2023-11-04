@@ -4,5 +4,5 @@ namespace StudyThink.DataAccess.Common;
 
 public interface IGetAll<T>
 {
-    public Task<IList<T>> GetALlAsync(PaginationParams @params);
+    public ValueTask<IEnumerable<T>> GetAllAsync(PaginationParams @params);
 }
