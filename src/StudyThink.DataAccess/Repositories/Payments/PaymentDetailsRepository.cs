@@ -49,9 +49,24 @@ public class PaymentDetailsRepository : BaseRepository2, IPaymentDetailsReposito
         }
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"DELETE FROM PaymentDetails WHERE Id={Id}";
+            var result = await _connection.ExecuteAsync(query);
+            return result > 0;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<PaymentDetails> GetByIdAsync(long Id)
