@@ -36,10 +36,9 @@ public class AdminRepository : BaseRepository, IAdminRepository
             string query = "INSERT INTO Admins(FirstName, LastName, PhoneNumber, Email, Password, Role, CreatedAt) " +
                 "VALUES (@FirstName, @LastName, @PhoneNumber, @Email, @Password, @Role, @CreatedAt)";
 
-            var result = await _connection.
+            var result = await _connection.ExecuteAsync(query, model);
 
-            return true;
-
+            return result > 0;
         }
         catch
         {
