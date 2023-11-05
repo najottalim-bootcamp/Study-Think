@@ -3,7 +3,7 @@ using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
 using StudyThink.Service.DTOs.Courses.Course;
 
-namespace StudyThink.Service.Interfaces.Corses;
+namespace StudyThink.Service.Interfaces.Courses;
 
 public interface ICourseService
 {
@@ -13,7 +13,7 @@ public interface ICourseService
     ValueTask<long> CountAsync();
     ValueTask<bool> UpdateAsync(CourseUpdateDto model);
     ValueTask<bool> DeleteAsync(long Id);
-    ValueTask<bool> UpdateImageAsync(long courseId, IFormFile imageCourse); 
-    ValueTask<bool> DeleteRangeAsync(List<long>  courseIds);
+    ValueTask<bool> UpdateImageAsync(long courseId, IFormFile imageCourse);
+    ValueTask<bool> DeleteRangeAsync(List<long> courseIds);
 
 }
