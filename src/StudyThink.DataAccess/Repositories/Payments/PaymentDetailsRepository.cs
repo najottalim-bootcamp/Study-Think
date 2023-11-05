@@ -28,9 +28,31 @@ public class PaymentDetailsRepository : BaseRepository, IPaymentRepository
         }
     }
 
-    public ValueTask<bool> CreateAsync(Payment model)
+    public async ValueTask<bool> CreateAsync(Payment model)
     {
-        throw new NotImplementedException();
+        return false;
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "";
+
+            var patametrs = new
+            {
+
+            };
+
+            var result = await _connection.ExecuteAsync(query, patametrs);
+
+            
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)
