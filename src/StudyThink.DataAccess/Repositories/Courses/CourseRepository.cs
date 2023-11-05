@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Utils;
+using StudyThink.Domain.Entities.Categories;
 using StudyThink.Domain.Entities.Courses;
 using StudyThink.Service.Interfaces.Courses;
 
@@ -33,27 +34,10 @@ public class CourseRepository : BaseRepository, ICourseRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "INSERT INTO Courses(Name, Description, CategoryId, Price, ImagePath, TotalPrice, Lessons, Duration, Language, DiscountPrice, CourseReqId, CreatedAt, UpdatedAt) " +
-                "VALUES (@Name, @Description, @CategoryId, @Price, @ImagePath, @TotalPrice, @Lessons, @Duration, @Language, @DiscountPrice, @CourseReqId, @CreatedAt, UpdatedAt)";
+            string query = $"INSERT INTO Courses(Name,Description,CategoryId,Price,ImagePath,TotalPrice,Lessons,Duration,Language,DiscountPrice,CourseReqId) " +
+                $"VALUES ('{model.Name}', '{model.Description}', '{model.CategoryId}', '{model.Price}', '{model.ImagePath}', '{model.TotalPrice}', '{model.Lessons}', '{model.Duration}', '{model.Language}','{model.DiscountPrice}', '{model.CourseReqId}')";
 
-            var patametrs = new
-            {
-                Name = model.Name,
-                Description = model.Description,
-                CategoryId = model.CategoryId,
-                Price = model.Price,
-                ImagePath = model.ImagePath,
-                TotalPrice = model.TotalPrice,
-                Lessons = model.Lessons,
-                Duration = model.Duration,
-                Language = model.Language,
-                DiscountPrice = model.DiscountPrice,
-                CourseReqId = model.CourseReqId,
-                CreatedAt = model.CreatedAt,
-                UpdatedAt = model.UpdatedAt
-            };
-
-            var result = await _connection.ExecuteAsync(query, patametrs);
+            var result = await _connection.ExecuteAsync(query, model);
 
             return result > 0;
         }
@@ -67,19 +51,68 @@ public class CourseRepository : BaseRepository, ICourseRepository
         }
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"DELETE FROM Courses WHERE Id={Id}";
+            var result = await _connection.ExecuteAsync(query);
+            return result > 0;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<IEnumerable<Course>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<Course>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM Courses order by Id desc " +
+               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+
+            IEnumerable<Course>? categories = await _connection.ExecuteScalarAsync<IEnumerable<Course>>(query, @params);
+
+            return categories;
+        }
+        catch (Exception)
+        {
+            return Enumerable.Empty<Course>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<Course> GetByIdAsync(long Id)
+    public async ValueTask<Course> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM Courses " +
+                $"WHERE Id = {Id}";
+            Course course = await _connection.ExecuteScalarAsync<Course>(query);
+            return course;
+
+        }
+        catch (Exception)
+        {
+            return new Course();
+
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<IEnumerable<Course>> GetByNameAsync(string name)
@@ -92,9 +125,26 @@ public class CourseRepository : BaseRepository, ICourseRepository
         throw new NotImplementedException();
     }
 
-    public ValueTask<bool> UpdateAsync(Course model)
+    public async ValueTask<bool> UpdateAsync(Course model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"Update Courses SET Name='{model.Name}',Description='{model.Description}',CategoryId={model.CategoryId},Price={model.Price},ImagePath='{model.ImagePath}'," +
+                $"TotalPrice={model.TotalPrice},Lessons={model.Lessons},Duration={model.Duration},Language='{model.Language}',DiscountPrice={model.DiscountPrice}," +
+                $"CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt}";
+            var result = await _connection.ExecuteAsync(query, model);
+            return result > 0;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> UpdateImageAsync(long categoryId, string imagePath)

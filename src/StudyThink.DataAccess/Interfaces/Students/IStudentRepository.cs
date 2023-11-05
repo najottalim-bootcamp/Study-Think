@@ -16,4 +16,5 @@ public interface IStudentRepository : IRepository<Student>,
     ValueTask<IEnumerable<Student>> GetByPhoneNumberAsync(string phoneNumber);
 
     public Task<bool> UpdateImageAsync(long studentId, string imagePath);
+
 }
