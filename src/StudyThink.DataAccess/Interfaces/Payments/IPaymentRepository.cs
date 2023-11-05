@@ -5,5 +5,5 @@ namespace StudyThink.DataAccess.Interfaces.Payments;
 
 public interface IPaymentRepository : IRepository<Payment>, IGetAll<Payment>
 {
-    //ValueTask<Payment> CreateAsync(Payment payment);
+
 }
