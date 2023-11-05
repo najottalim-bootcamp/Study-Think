@@ -1,4 +1,7 @@
-﻿namespace StudyThink.Api.Configurations.Layers;
+﻿using StudyThink.DataAccess.Interfaces.Teachers;
+using StudyThink.DataAccess.Repositories.Teachers;
+
+namespace StudyThink.Api.Configurations.Layers;
 
 public static class DataAccessConfiguration
 {
@@ -9,7 +12,7 @@ public static class DataAccessConfiguration
 
         // Database Configurations field
 
-        //builder.Services.AddScoped<>();
+        builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 
     }
 }
