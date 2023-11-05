@@ -66,11 +66,11 @@ namespace StudyThink.Service.Services.Teachers
             else
             {
                 bool image = await _fileService.DeleteImageAsync(teacher.ImagePath);
-                
+
                 if (image == false) throw new ImageNotFoundException();
 
                 bool res = await _teacherRepository.DeleteAsync(Id);
-                
+
                 return res;
             }
         }
@@ -84,6 +84,7 @@ namespace StudyThink.Service.Services.Teachers
                 if (teacher != null)
                 {
                     await _teacherRepository.DeleteAsync(i);
+                    await _fileService.DeleteImageAsync(teacher.ImagePath);
                 }
             }
 
@@ -104,11 +105,21 @@ namespace StudyThink.Service.Services.Teachers
             }
         }
 
+        public async ValueTask<Teacher> GetByEmailAsync(string email)
+        {
+            //Teacher teacher = await _teacherRepository.GetByEmailAsync(email);
+
+            //if (teacher == null) throw new TeacherNotFoundException();
+
+            throw new NotImplementedException();
+
+        }
+
         public async ValueTask<Teacher> GetByIdAsync(long Id)
         {
             Teacher teacher = await _teacherRepository.GetByIdAsync(Id);
 
-            if(teacher == null)
+            if (teacher == null)
             {
                 throw new TeacherNotFoundException();
             }
@@ -117,8 +128,31 @@ namespace StudyThink.Service.Services.Teachers
 
         public async ValueTask<bool> UpdateAsync(TeacherUpdateDto model)
         {
-            Teacher teacher = await _teacherRepository.GetByIdAsync(model.Id);
-        }
+            //Teacher resultTeacher = await _teacherRepository.GetByIdAsync(model.Id);
+
+            //Teacher teacher2 = new Teacher();
+            //teacher2.Email = model.Email;
+            //teacher2.PhoneNumber = model.PhoneNumber;
+
+
+            //if (resultTeacher == null)
+            //{
+            //    throw new TeacherNotFoundException();
+            //}
+
+            //if (model.ImagePath is not null)
+            //{
+            //    var image = await _fileService.DeleteImageAsync();
+            //    string
+            //    if (image == false) throw new ImageNotFoundException();
+
+            throw new NotImplementedException();
+
+                //string newImagePath = await _fileService.UploadAvatarAsync(userUpdateDto.UserAvatar);
+
+                //user.UserAvatar = newImagePath;
+
+            }
 
         public ValueTask<bool> UpdateImageAsync(long teacherId, IFormFile teacherImage)
         {
