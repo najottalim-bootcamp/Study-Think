@@ -1,4 +1,4 @@
-﻿using StudyThink.Service.Interfaces.Corses;
+﻿using StudyThink.Service.Interfaces.Courses;
 using StudyThink.Service.Services.Courses;
 
 namespace StudyThink.Api.Configurations.Layers;
