@@ -55,7 +55,6 @@ GO
 CREATE TABLE "CourseRequirments"(
     "Id" BIGINT PRIMARY KEY IDENTITY(1,1),
     "Requirments" TEXT ,
-    "CourseId" BIGINT  ,
     "CreatedAt" DATE DEFAULT GETDATE() ,
     "UpdatedAt" DATE 
 );

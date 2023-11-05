@@ -34,8 +34,8 @@ public class CourseRepository : BaseRepository, ICourseRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"INSERT INTO Courses(Name, Description, CategoryId, Price, ImagePath, TotalPrice, Lessons, Duration, Language, DiscountPrice, CourseReqId, CreatedAt, UpdatedAt) " +
-                $"VALUES (@Name, @Description, {model.CategoryId}, @Price, @ImagePath, @TotalPrice, @Lessons, @Duration, @Language, @DiscountPrice, {model.CourseReqId}, @CreatedAt, UpdatedAt)";
+            string query = $"INSERT INTO Courses(Name,Description,CategoryId,Price,ImagePath,TotalPrice,Lessons,Duration,Language,DiscountPrice,CourseReqId) " +
+                $"VALUES ('{model.Name}', '{model.Description}', '{model.CategoryId}', '{model.Price}', '{model.ImagePath}', '{model.TotalPrice}', '{model.Lessons}', '{model.Duration}', '{model.Language}','{model.DiscountPrice}', '{model.CourseReqId}')";
 
             var result = await _connection.ExecuteAsync(query, model);
 
