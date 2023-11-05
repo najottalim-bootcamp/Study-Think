@@ -1,4 +1,5 @@
-﻿using StudyThink.DataAccess.Interfaces.Admins;
+﻿using Dapper;
+using StudyThink.DataAccess.Interfaces.Admins;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Admins;
 
@@ -6,14 +7,47 @@ namespace StudyThink.DataAccess.Repositories.Admins;
 
 public class AdminRepository : BaseRepository, IAdminRepository
 {
-    public ValueTask<long> CountAsync()
+    public async ValueTask<long> CountAsync()
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT COUNT(*) FROM Admins";
+
+            long result = await _connection.QuerySingleAsync<long>(query);
+            return result;
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<bool> CreateAsync(Admin model)
+    public async ValueTask<bool> CreateAsync(Admin model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "INSERT INTO Admins(FirstName, LastName, PhoneNumber, Email, Password, Role, CreatedAt, UpdatedAt, DeletedAt) " +
+                "VALUES (@FirstName, @LastName, @PhoneNumber, @Email, @Password, @Role, @CreatedAt, @UpdatedAt, @DeletedAt)";
+
+            var result = await _connection.ExecuteAsync(query, model);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)

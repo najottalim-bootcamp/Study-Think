@@ -1,8 +1,8 @@
 ﻿using StudyThink.Domain.Enums;
 
-namespace StudyThink.Domain.Entities.Payments;
+namespace StudyThink.Service.DTOs.Payment;
 
-public class PaymentDetails : Auditable
+public class PaymentDetailsCretionDto
 {
     public string CardHolderName { get; set; } = string.Empty;
 
