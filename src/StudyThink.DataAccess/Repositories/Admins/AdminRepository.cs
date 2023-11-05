@@ -6,7 +6,7 @@ using static Dapper.SqlMapper;
 
 namespace StudyThink.DataAccess.Repositories.Admins;
 
-public class AdminRepository : BaseRepository, IAdminRepository
+public class AdminRepository : BaseRepository2, IAdminRepository
 {
     public async ValueTask<long> CountAsync()
     {

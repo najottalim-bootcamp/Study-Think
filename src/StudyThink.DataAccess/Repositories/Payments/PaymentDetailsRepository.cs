@@ -5,7 +5,7 @@ using StudyThink.Domain.Entities.Payments;
 
 namespace StudyThink.DataAccess.Repositories.Payments;
 
-public class PaymentDetailsRepository : BaseRepository, IPaymentRepository
+public class PaymentDetailsRepository : BaseRepository2, IPaymentRepository
 {
     public async ValueTask<long> CountAsync()
     {

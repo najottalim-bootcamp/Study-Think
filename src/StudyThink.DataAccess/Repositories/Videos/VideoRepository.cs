@@ -5,7 +5,7 @@ using StudyThink.Domain.Entities.Videos;
 
 namespace StudyThink.DataAccess.Repositories.Videos
 {
-    public class VideoRepository : BaseRepository, IVideoRepository
+    public class VideoRepository : BaseRepository2, IVideoRepository
     {
         public async ValueTask<long> CountAsync()
         {
@@ -45,7 +45,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
                 string query = "insert into videos (Name,VideoPath,Length,CourseModulsId,AdminId) values" +
                     "(@Name,@VideoPath,@Length,@CourseModulsId,@AdminId)";
 
-                int result = await _connection.ExecuteAsync(query, @params);
+                int result = await _connection.ExecuteAsync(query,@params);
 
                 return result > 0;
             }
@@ -118,7 +118,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
 
                 string query = "select * from videos where Id = @Id";
 
-                Video? video = await _connection.ExecuteScalarAsync<Video>(query, @params);
+                Video? video = await _connection.ExecuteScalarAsync<Video>(query,@params);
 
                 return video;
             }
@@ -174,7 +174,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
                 string query = "update videos set Name = @Name,VideoPath = @VideoPath,Length = @Length,CourseModulsId = @CourseModulsId,AdminId = @AdminId" +
                     "UpdatedAt = @UpdatedAt";
 
-                int result = await _connection.ExecuteAsync(query, @params);
+                int result = await _connection.ExecuteAsync(query,@params);
 
                 return result > 0;
             }
