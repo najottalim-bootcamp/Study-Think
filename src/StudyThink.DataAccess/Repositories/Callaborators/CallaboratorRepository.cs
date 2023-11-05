@@ -50,23 +50,89 @@ public class CallaboratorRepository : BaseRepository, ICalloboratorRepository
         }
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"DELETE FROM Callaborators WHERE Id={Id}";
+            var result = await _connection.ExecuteAsync(query);
+            return result > 0;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<IEnumerable<Callaborator>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<Callaborator>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM Callaborators order by Id desc " +
+               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+
+            IEnumerable<Callaborator>? callaborators = await _connection.ExecuteScalarAsync<IEnumerable<Callaborator>>(query, @params);
+
+            return callaborators;
+        }
+        catch (Exception)
+        {
+            return Enumerable.Empty<Callaborator>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<Callaborator> GetByIdAsync(long Id)
+    public async ValueTask<Callaborator> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM Callaborators " +
+                $"WHERE Id = {Id}";
+            Callaborator callaborator = await _connection.ExecuteScalarAsync<Callaborator>(query);
+            return callaborator;
+
+        }
+        catch (Exception)
+        {
+            return new Callaborator();
+
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<bool> UpdateAsync(Callaborator model)
+    public async ValueTask<bool> UpdateAsync(Callaborator model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"UPDATE Callaborators SET Name='{model.Name}',ImagePath='{model.ImagePath}'," +
+                $"Description='{model.Description}',Email='{model.Email}',PhoneNumber='{model.PhoneNumber}'";
+            var result = await _connection.ExecuteAsync(query, model);
+            return result > 0;
+
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 }
