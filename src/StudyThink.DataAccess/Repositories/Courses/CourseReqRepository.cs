@@ -28,7 +28,7 @@ public class CourseReqRepository : BaseRepository, ICourseReqRepository
         }
     }
 
-    public async ValueTask<bool> CreateAsync(CourseRequirments model)
+    public async ValueTask<bool> CreateAsync(CourseRequirment model)
     {
         try
         {
@@ -63,27 +63,27 @@ public class CourseReqRepository : BaseRepository, ICourseReqRepository
         throw new NotImplementedException();
     }
 
-    public ValueTask<IEnumerable<CourseRequirments>> GetAllAsync(PaginationParams @params)
+    public ValueTask<IEnumerable<CourseRequirment>> GetAllAsync(PaginationParams @params)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<CourseRequirments> GetByIdAsync(long Id)
+    public ValueTask<CourseRequirment> GetByIdAsync(long Id)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<CourseRequirments> GetByNameAsync(string name)
+    public ValueTask<CourseRequirment> GetByNameAsync(string name)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<(long ItemsCount, IEnumerable<CourseRequirments>)> SearchAsync(string search, PaginationParams @params)
+    public ValueTask<(long ItemsCount, IEnumerable<CourseRequirment>)> SearchAsync(string search, PaginationParams @params)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<bool> UpdateAsync(CourseRequirments model)
+    public ValueTask<bool> UpdateAsync(CourseRequirment model)
     {
         throw new NotImplementedException();
     }
