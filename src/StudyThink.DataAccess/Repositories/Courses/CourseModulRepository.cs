@@ -85,11 +85,6 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         throw new NotImplementedException();
     }
 
-    public ValueTask<bool> UpdateAsync(CourseRequirments model)
-    {
-        throw new NotImplementedException();
-    }
-
     public ValueTask<bool> UpdateAsync(CourseModul model)
     {
         throw new NotImplementedException();
