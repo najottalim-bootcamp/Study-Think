@@ -1,4 +1,4 @@
-﻿using StudyThink.Service.Interfaces.Courses;
+using StudyThink.Service.Interfaces.Courses;
 using StudyThink.Service.Interfaces.Teachers;
 using StudyThink.Service.Services.Courses;
 using StudyThink.Service.Services.Teachers;

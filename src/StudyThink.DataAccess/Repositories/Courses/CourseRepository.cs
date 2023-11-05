@@ -71,27 +71,26 @@ public class CourseRepository : BaseRepository, ICourseRepository
         }
     }
 
-    public async ValueTask<IEnumerable<Course>> GetAllAsync(PaginationParams @params)
+   public async ValueTask<IEnumerable<Course>> GetAllAsync(PaginationParams @params)
+{
+    try
     {
-        try
-        {
-            await _connection.OpenAsync();
-            string query = $"SELECT * FROM Courses order by Id desc " +
-               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+        await _connection.OpenAsync();
+        string query = $"SELECT * FROM Courses ORDER BY Id DESC " +
+            $"OFFSET {@params.GetSkipCount()} ROWS FETCH NEXT {@params.PageSize} ROWS ONLY";
 
-            IEnumerable<Course>? categories = await _connection.ExecuteScalarAsync<IEnumerable<Course>>(query, @params);
-
-            return categories;
-        }
-        catch (Exception)
-        {
-            return Enumerable.Empty<Course>();
-        }
-        finally
-        {
-            await _connection.CloseAsync();
-        }
+        var result = await _connection.QueryAsync<Course>(query);
+        return result;
     }
+    catch (Exception)
+    {
+        return Enumerable.Empty<Course>();
+    }
+    finally
+    {
+        _connection.Close();
+    }
+}
 
     public async ValueTask<Course> GetByIdAsync(long Id)
     {
@@ -100,7 +99,7 @@ public class CourseRepository : BaseRepository, ICourseRepository
             await _connection.OpenAsync();
             string query = $"SELECT * FROM Courses " +
                 $"WHERE Id = {Id}";
-            Course course = await _connection.ExecuteScalarAsync<Course>(query);
+            Course course = await _connection.QueryFirstOrDefaultAsync<Course>(query);
             return course;
 
         }
@@ -130,15 +129,42 @@ public class CourseRepository : BaseRepository, ICourseRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"Update Courses SET Name='{model.Name}',Description='{model.Description}',CategoryId={model.CategoryId},Price={model.Price},ImagePath='{model.ImagePath}'," +
-                $"TotalPrice={model.TotalPrice},Lessons={model.Lessons},Duration={model.Duration},Language='{model.Language}',DiscountPrice={model.DiscountPrice}," +
-                $"CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt}";
-            var result = await _connection.ExecuteAsync(query, model);
+            string query = "UPDATE Courses SET " +
+                "Name = @Name, " +
+                "Description = @Description, " +
+                "CategoryId = @CategoryId, " +
+                "Price = @Price, " +
+                "ImagePath = @ImagePath, " +
+                "TotalPrice = @TotalPrice, " +
+                "Lessons = @Lessons, " +
+                "Duration = @Duration, " +
+                "Language = @Language, " +
+                "DiscountPrice = @DiscountPrice, " +
+                "CreatedAt = @CreatedAt, " +
+                "UpdatedAt = @UpdatedAt " +
+                "WHERE Id = @Id";
+
+            var result = await _connection.ExecuteAsync(query, new
+            {
+                model.Name,
+                model.Description,
+                model.CategoryId,
+                model.Price,
+                model.ImagePath,
+                model.TotalPrice,
+                model.Lessons,
+                model.Duration,
+                model.Language,
+                model.DiscountPrice,
+                model.CreatedAt,
+                model.UpdatedAt,
+                model.Id
+            });
+
             return result > 0;
         }
-        catch (Exception)
+        catch
         {
-
             return false;
         }
         finally
