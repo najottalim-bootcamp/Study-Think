@@ -65,37 +65,27 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         throw new NotImplementedException();
     }
 
-    public ValueTask<IEnumerable<CourseRequirments>> GetAllAsync(PaginationParams @params)
+    public ValueTask<IEnumerable<CourseModul>> GetAllAsync(PaginationParams @params)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<CourseRequirments> GetByIdAsync(long Id)
+    public ValueTask<CourseModul> GetByIdAsync(long Id)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<CourseRequirments> GetByNameAsync(string name)
+    public ValueTask<CourseModul> GetByNameAsync(string name)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<(long ItemsCount, IEnumerable<CourseRequirments>)> SearchAsync(string search, PaginationParams @params)
-    {
-        throw new NotImplementedException();
-    }
-
-    public ValueTask<bool> UpdateAsync(CourseRequirments model)
+    public ValueTask<(long ItemsCount, IEnumerable<CourseModul>)> SearchAsync(string search, PaginationParams @params)
     {
         throw new NotImplementedException();
     }
 
     public ValueTask<bool> UpdateAsync(CourseModul model)
-    {
-        throw new NotImplementedException();
-    }
-
-    ValueTask<IEnumerable<CourseModul>> IGetAll<CourseModul>.GetAllAsync(PaginationParams @params)
     {
         throw new NotImplementedException();
     }
@@ -106,11 +96,6 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
     }
 
     ValueTask<CourseModul> ICourseModulRepository.GetByNameAsync(string name)
-    {
-        throw new NotImplementedException();
-    }
-
-    ValueTask<(long ItemsCount, IEnumerable<CourseModul>)> ISearchable<CourseModul>.SearchAsync(string search, PaginationParams @params)
     {
         throw new NotImplementedException();
     }
