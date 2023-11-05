@@ -13,7 +13,7 @@ public interface ICourseService
     ValueTask<long> CountAsync();
     ValueTask<bool> UpdateAsync(CourseUpdateDto model);
     ValueTask<bool> DeleteAsync(long Id);
-    ValueTask<bool> UpdateImageAsync(long courseId, IFormFile imageCourse); 
-    ValueTask<bool> DeleteRangeAsync(List<long>  courseIds);
+    ValueTask<bool> UpdateImageAsync(long courseId, IFormFile imageCourse);
+    ValueTask<bool> DeleteRangeAsync(List<long> courseIds);
 
 }
