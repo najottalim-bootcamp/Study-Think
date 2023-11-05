@@ -1,8 +1,8 @@
 ﻿namespace StudyThink.Domain.Exceptions.Student;
 
-public class StudentNotFound:NotFoundException
+public class StudentNotFoundExeption:NotFoundException
 {
-    public StudentNotFound()
+    public StudentNotFoundExeption()
     {
         TitleMessage = "Student not found";
     }

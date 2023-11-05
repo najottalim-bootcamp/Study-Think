@@ -1,4 +1,6 @@
-﻿using StudyThink.DataAccess.Repositories.Courses;
+﻿using StudyThink.DataAccess.Interfaces.Teachers;
+using StudyThink.DataAccess.Repositories.Courses;
+using StudyThink.DataAccess.Repositories.Teachers;
 using StudyThink.Service.Interfaces.Courses;
 
 namespace StudyThink.Api.Configurations.Layers;
