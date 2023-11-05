@@ -51,9 +51,25 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         }
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"DELETE FROM StudentRepository WHERE Id={Id}";
+            var result = await _connection.ExecuteAsync(query);
+            return result > 0;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<IEnumerable<Student>> GetAllAsync(PaginationParams @params)
