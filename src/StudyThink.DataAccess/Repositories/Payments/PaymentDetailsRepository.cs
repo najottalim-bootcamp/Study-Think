@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Interfaces.Payments;
+using StudyThink.Domain.Entities.Categories;
 using StudyThink.Domain.Entities.Payments;
+using StudyThink.Domain.Entities.Teachers;
 
 namespace StudyThink.DataAccess.Repositories.Payments;
 
@@ -69,9 +71,26 @@ public class PaymentDetailsRepository : BaseRepository2, IPaymentDetailsReposito
         }
     }
 
-    public ValueTask<PaymentDetails> GetByIdAsync(long Id)
+    public async ValueTask<PaymentDetails> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM PaymentDetails " +
+                $"WHERE Id = {Id}";
+            PaymentDetails paymentDetails = await _connection.ExecuteScalarAsync<PaymentDetails>(query);
+            return paymentDetails;
+
+        }
+        catch (Exception)
+        {
+            return new PaymentDetails();
+
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> UpdateAsync(PaymentDetails model)
