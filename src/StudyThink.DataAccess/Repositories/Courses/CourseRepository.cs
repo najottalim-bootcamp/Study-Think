@@ -132,7 +132,7 @@ public class CourseRepository : BaseRepository, ICourseRepository
             await _connection.OpenAsync();
             string query = $"Update Courses SET Name='{model.Name}',Description='{model.Description}',CategoryId={model.CategoryId},Price={model.Price},ImagePath='{model.ImagePath}'," +
                 $"TotalPrice={model.TotalPrice},Lessons={model.Lessons},Duration={model.Duration},Language='{model.Language}',DiscountPrice={model.DiscountPrice}," +
-                $"CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt},DeletedAt={model.DeletedAt}";
+                $"CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt}";
             var result = await _connection.ExecuteAsync(query, model);
             return result > 0;
         }
