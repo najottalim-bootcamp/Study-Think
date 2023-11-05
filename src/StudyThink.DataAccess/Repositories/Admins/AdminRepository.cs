@@ -15,7 +15,7 @@ public class AdminRepository : BaseRepository, IAdminRepository
 
             string query = "SELECT COUNT(*) FROM Admins";
 
-            long result = await _connection.ExecuteScalarAsync<long>(query);
+            long result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
         catch
@@ -28,9 +28,26 @@ public class AdminRepository : BaseRepository, IAdminRepository
         }
     }
 
-    public ValueTask<bool> CreateAsync(Admin model)
+    public async ValueTask<bool> CreateAsync(Admin model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "INSERT INTO Admins(FirstName, LastName, PhoneNumber, Email, Password, Role, CreatedAt, UpdatedAt, DeletedAt) " +
+                "VALUES (@FirstName, @LastName, @PhoneNumber, @Email, @Password, @Role, @CreatedAt, @UpdatedAt, @DeletedAt)";
+
+            var result = await _connection.ExecuteAsync(query, model);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)

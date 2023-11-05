@@ -15,7 +15,7 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
 
             string query = "SELECT COUNT(*) FROM Categories";
 
-            long result = await _connection.ExecuteScalarAsync<long>(query);
+            long result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
         catch
@@ -28,9 +28,26 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         }
     }
 
-    public ValueTask<bool> CreateAsync(Category model)
+    public async ValueTask<bool> CreateAsync(Category model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "INSERT INTO Categories(Name, Description) " +
+                "VALUES (@Name, @Description)";
+
+            var result = await _connection.ExecuteAsync(query, model);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)
