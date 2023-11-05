@@ -28,9 +28,24 @@ public class AdminRepository : BaseRepository, IAdminRepository
         }
     }
 
-    public ValueTask<bool> CreateAsync(Admin model)
+    public async ValueTask<bool> CreateAsync(Admin model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "";
+
+            return true;
+
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)
