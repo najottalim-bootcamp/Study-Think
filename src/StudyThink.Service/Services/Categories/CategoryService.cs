@@ -28,9 +28,12 @@ public class CategoryService : ICategoryService
         return await _repository.CreateAsync(category);
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        if (Id <= 0)
+            return false;
+
+        return await _repository.DeleteAsync(Id);
     }
 
     public ValueTask<bool> DeleteRangeAsync(List<long> categoryIds)
