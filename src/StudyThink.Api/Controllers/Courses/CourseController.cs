@@ -18,7 +18,7 @@ public class CourseController : ControllerBase
     [HttpGet]
     public async ValueTask<long> CountAsync()
     {
-        var result= await courseService.CountAsync();
+        var result = await courseService.CountAsync();
         return result;
     }
 
