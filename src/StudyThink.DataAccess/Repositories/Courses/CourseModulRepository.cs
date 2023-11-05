@@ -90,22 +90,12 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         throw new NotImplementedException();
     }
 
-    ValueTask<IEnumerable<CourseModul>> IGetAll<CourseModul>.GetAllAsync(PaginationParams @params)
-    {
-        throw new NotImplementedException();
-    }
-
     ValueTask<CourseModul> IRepository<CourseModul>.GetByIdAsync(long Id)
     {
         throw new NotImplementedException();
     }
 
     ValueTask<CourseModul> ICourseModulRepository.GetByNameAsync(string name)
-    {
-        throw new NotImplementedException();
-    }
-
-    ValueTask<(long ItemsCount, IEnumerable<CourseModul>)> ISearchable<CourseModul>.SearchAsync(string search, PaginationParams @params)
     {
         throw new NotImplementedException();
     }
