@@ -1,4 +1,6 @@
-﻿using StudyThink.DataAccess.Interfaces.Teachers;
+﻿using StudyThink.DataAccess.Interfaces.Categories;
+using StudyThink.DataAccess.Interfaces.Teachers;
+using StudyThink.DataAccess.Repositories.Categories;
 using StudyThink.DataAccess.Repositories.Courses;
 using StudyThink.DataAccess.Repositories.Teachers;
 using StudyThink.Service.Interfaces.Courses;
@@ -15,7 +17,7 @@ public static class DataAccessConfiguration
         // Database Configurations field
 
         builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
-        //builder.Services.AddScoped<>();
+        builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
         builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 
     }
