@@ -1,6 +1,6 @@
 ﻿namespace StudyThink.Domain.Entities.Callaborators;
 
-public class Callaborators : BaseEntity
+public class Callaborator : BaseEntity
 {
     public string Name { get; set; }
     public string? ImagePath { get; set; }

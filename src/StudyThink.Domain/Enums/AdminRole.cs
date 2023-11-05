@@ -1,6 +1,6 @@
 ﻿namespace StudyThink.Domain.Enums;
 
-public enum Role
+public enum AdminRole
 {
     Admin = 1,
     SuperAdmin

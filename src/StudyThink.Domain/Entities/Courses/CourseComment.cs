@@ -1,10 +1,10 @@
 ﻿namespace StudyThink.Domain.Entities.Course;
 
-public class CourseComment:Auditable
+public class CourseComment : Auditable
 {
-    public string Comment { get; set; }
-    public int StudentId { get; set; }
-    public int CourseId { get;set; }
-    public int AdminId { get; set;}
+    public string Comment { get; set; } = string.Empty;
+    public long StudentId { get; set; }
+    public long CourseId { get; set; }
+    public long AdminId { get; set; }
 
 }

@@ -1,12 +1,10 @@
-﻿namespace StudyThink.DataAccess.Interfaces
+﻿namespace StudyThink.DataAccess.Interfaces;
+
+public interface IRepository<T> where T : class
 {
-    public interface IRepository<T> where T : class
-    {
-        ValueTask<long> CountAsync();
-        ValueTask<T> GetByIdAsync(long Id);
-        ValueTask<IEnumerable<T>> GetAllAsync();
-        ValueTask<bool> Delete(int Id);
-        ValueTask<bool> Update(T model);
-        ValueTask<bool> Create(T model);
-    }
+    ValueTask<long> CountAsync();
+    ValueTask<T> GetByIdAsync(long Id);
+    ValueTask<bool> DeleteAsync(long Id);
+    ValueTask<bool> UpdateAsync(T model);
+    ValueTask<bool> CreateAsync(T model);
 }
