@@ -15,7 +15,7 @@ public class CourseCommentRepository : BaseRepository, ICourseCommentRepository
 
             string query = "SELECT COUNT(*) FROM CourseComments";
 
-            long result = await _connection.ExecuteScalarAsync<long>(query);
+            long result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
         catch
@@ -28,9 +28,36 @@ public class CourseCommentRepository : BaseRepository, ICourseCommentRepository
         }
     }
 
-    public ValueTask<bool> CreateAsync(CourseComment model)
+    public async ValueTask<bool> CreateAsync(CourseComment model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "INSERT INTO CourseComments(Comment, StudentId, CourseId, AdminId, CreatedAt, UpdatedAt) " +
+                "VALUES (@Comment, @StudentId, @CourseId, @AdminId, @CreatedAt, @UpdatedAt)";
+
+            var parametrs = new
+            {
+                Comment = model.Comment,
+                StudentId = model.StudentId,
+                CourseId = model.CourseId,
+                AdminId = model.AdminId,
+                CreatedAt = model.CreatedAt,
+                UpdatedAt = model.UpdatedAt
+            };
+
+            var result = await _connection.ExecuteAsync(query, parametrs);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)

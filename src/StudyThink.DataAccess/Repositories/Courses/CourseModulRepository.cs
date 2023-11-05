@@ -17,7 +17,7 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
 
             string query = "SELECT COUNT(*) FROM CourseModuls";
 
-            long result = await _connection.ExecuteScalarAsync<long>(query);
+            long result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
         catch
@@ -30,14 +30,34 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         }
     }
 
-    public ValueTask<bool> CreateAsync(CourseRequirments model)
+    public async ValueTask<bool> CreateAsync(CourseModul model)
     {
-        throw new NotImplementedException();
-    }
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "INSERT INTO CourseModuls(Name, CourseId, CreatedAt, UpdatedAt) " +
+                "VALUES (@Name, @CourseId, @CreatedAt, @UpdatedAt)";
 
-    public ValueTask<bool> CreateAsync(CourseModul model)
-    {
-        throw new NotImplementedException();
+            var patametrs = new
+            {
+                Name = model.Name,
+                CourseId = model.CourseId,
+                CreatedAt = model.CreatedAt,
+                UpdatedAt = model.UpdatedAt
+            };
+
+            var result = await _connection.ExecuteAsync(query, patametrs);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)
