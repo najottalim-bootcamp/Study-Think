@@ -223,5 +223,10 @@ namespace StudyThink.DataAccess.Repositories.Teachers
                 await _connection.CloseAsync();
             }
         }
+
+        public ValueTask<Teacher> GetByEmailAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
