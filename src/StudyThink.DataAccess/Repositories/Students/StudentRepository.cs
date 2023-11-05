@@ -73,26 +73,26 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         }
     }
 
-    public ValueTask<IEnumerable<Student>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<Student>> GetAllAsync(PaginationParams @params)
     {
-        //try
-        //{
-        //    await _connection.OpenAsync();
-        //    string query = $"SELECT * FROM Categories order by Id desc " +
-        //       $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM Students order by Id desc " +
+               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
 
-        //    IEnumerable<Category>? categories = await _connection.ExecuteScalarAsync<IEnumerable<Category>>(query, @params);
+            IEnumerable<Student>? students = await _connection.ExecuteScalarAsync<IEnumerable<Student>>(query, @params);
 
-        //    return categories;
-        //}
-        //catch (Exception)
-        //{
-        //    return Enumerable.Empty<Category>();
-        //}
-        //finally
-        //{
-        //    await _connection.CloseAsync();
-        //}
+            return students;
+        }
+        catch (Exception)
+        {
+            return Enumerable.Empty<Student>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<Student> GetByEmailAsync(string email)
