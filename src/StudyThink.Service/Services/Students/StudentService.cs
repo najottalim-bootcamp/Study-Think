@@ -137,7 +137,7 @@ public class StudentService : IStudentService
 
         //        return true;
             throw new StudentNotFoundExeption();
-        }
+        
     }
 
     public ValueTask<bool> UpdateImageAsync(long studentId, IFormFile imageStudent)
