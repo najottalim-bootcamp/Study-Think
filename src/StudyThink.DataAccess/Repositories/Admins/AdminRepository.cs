@@ -50,9 +50,26 @@ public class AdminRepository : BaseRepository, IAdminRepository
         }
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = $"DELETE FROM Admins WHERE Id = {Id}";
+
+            var result = await _connection.ExecuteAsync(query);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<IEnumerable<Admin>> GetAllAsync(PaginationParams @params)
