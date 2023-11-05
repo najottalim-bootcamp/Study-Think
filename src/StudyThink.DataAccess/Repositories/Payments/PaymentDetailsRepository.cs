@@ -1,11 +1,10 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Interfaces.Payments;
-using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Payments;
 
 namespace StudyThink.DataAccess.Repositories.Payments;
 
-public class PaymentDetailsRepository : BaseRepository2, IPaymentRepository
+public class PaymentDetailsRepository : BaseRepository2, IPaymentDetailsRepository
 {
     public async ValueTask<long> CountAsync()
     {
@@ -28,31 +27,9 @@ public class PaymentDetailsRepository : BaseRepository2, IPaymentRepository
         }
     }
 
-    public async ValueTask<bool> CreateAsync(Payment model)
+    public ValueTask<bool> CreateAsync(PaymentDetails model)
     {
-        return false;
-        try
-        {
-            await _connection.OpenAsync();
-            string query = "";
-
-            var patametrs = new
-            {
-
-            };
-
-            var result = await _connection.ExecuteAsync(query, patametrs);
-
-            
-        }
-        catch
-        {
-            return false;
-        }
-        finally
-        {
-            await _connection.CloseAsync();
-        }
+        throw new NotImplementedException();
     }
 
     public ValueTask<bool> DeleteAsync(long Id)
@@ -60,17 +37,12 @@ public class PaymentDetailsRepository : BaseRepository2, IPaymentRepository
         throw new NotImplementedException();
     }
 
-    public ValueTask<IEnumerable<Payment>> GetAllAsync(PaginationParams @params)
+    public ValueTask<PaymentDetails> GetByIdAsync(long Id)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<Payment> GetByIdAsync(long Id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public ValueTask<bool> UpdateAsync(Payment model)
+    public ValueTask<bool> UpdateAsync(PaymentDetails model)
     {
         throw new NotImplementedException();
     }
