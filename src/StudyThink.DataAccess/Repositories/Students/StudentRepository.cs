@@ -149,7 +149,7 @@ public class StudentRepository : BaseRepository, IStudentRepository
             await _connection.OpenAsync();
             string query = $"Update Students SET FirstName='{model.FirstName}',LastName='{model.LastName}',DateOfBirth={model.DateOfBirth},UserName='{model.Username}'," +
                 $"Password='{model.Password}',Email='{model.Email}',PhoneNumber='{model.PhoneNumber}',Gender='{model.Gender}'," +
-                $"CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt},DeltedAt={model.DeletedAt},ImagePath='{model.ImagePath}'";
+                $"CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt},ImagePath='{model.ImagePath}'";
             var result = await _connection.ExecuteAsync(query, model);
             return result > 0;
         }
