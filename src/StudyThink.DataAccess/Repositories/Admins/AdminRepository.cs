@@ -2,6 +2,7 @@
 using StudyThink.DataAccess.Interfaces.Admins;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Admins;
+using static Dapper.SqlMapper;
 
 namespace StudyThink.DataAccess.Repositories.Admins;
 
@@ -50,14 +51,48 @@ public class AdminRepository : BaseRepository, IAdminRepository
         }
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = $"DELETE FROM Admins WHERE Id = {Id}";
+
+            var result = await _connection.ExecuteAsync(query);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<IEnumerable<Admin>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<Admin>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM Admins ORDER BY Id DESC" +
+                $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+
+            var result = await _connection.QueryAsync<Admin>(query);
+
+            return result;
+        }
+        catch
+        {
+            return new List<Admin>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<Admin> GetByEmailAsync(string email)
@@ -65,9 +100,24 @@ public class AdminRepository : BaseRepository, IAdminRepository
         throw new NotImplementedException();
     }
 
-    public ValueTask<Admin> GetByIdAsync(long Id)
+    public async ValueTask<Admin> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM Admins WHERE Id = @Id";
+
+            var result = await _connection.QuerySingleAsync<Admin>(query, new { Id = Id });
+            return result;
+        }
+        catch
+        {
+            return new Admin();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<IEnumerable<Admin>> GetByPhoneNumberAsync(string phoneNumber)
@@ -80,8 +130,25 @@ public class AdminRepository : BaseRepository, IAdminRepository
         throw new NotImplementedException();
     }
 
-    public ValueTask<bool> UpdateAsync(Admin model)
+    public async ValueTask<bool> UpdateAsync(Admin model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"UPDATE Admins SET FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, Email = @Email," +
+                            $" Password = @Password Role=@Role, CreatedAt = @CreatedAt, UpdatedAt = @UpdatedAt " +
+                            $"WHERE Id = {model.Id}";
+
+            var result = await _connection.ExecuteAsync(query, model);
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 }

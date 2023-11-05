@@ -34,27 +34,10 @@ public class CourseRepository : BaseRepository, ICourseRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "INSERT INTO Courses(Name, Description, CategoryId, Price, ImagePath, TotalPrice, Lessons, Duration, Language, DiscountPrice, CourseReqId, CreatedAt, UpdatedAt) " +
-                "VALUES (@Name, @Description, @CategoryId, @Price, @ImagePath, @TotalPrice, @Lessons, @Duration, @Language, @DiscountPrice, @CourseReqId, @CreatedAt, UpdatedAt)";
+            string query = $"INSERT INTO Courses(Name, Description, CategoryId, Price, ImagePath, TotalPrice, Lessons, Duration, Language, DiscountPrice, CourseReqId, CreatedAt, UpdatedAt) " +
+                $"VALUES (@Name, @Description, {model.CategoryId}, @Price, @ImagePath, @TotalPrice, @Lessons, @Duration, @Language, @DiscountPrice, {model.CourseReqId}, @CreatedAt, UpdatedAt)";
 
-            var patametrs = new
-            {
-                Name = model.Name,
-                Description = model.Description,
-                CategoryId = model.CategoryId,
-                Price = model.Price,
-                ImagePath = model.ImagePath,
-                TotalPrice = model.TotalPrice,
-                Lessons = model.Lessons,
-                Duration = model.Duration,
-                Language = model.Language,
-                DiscountPrice = model.DiscountPrice,
-                CourseReqId = model.CourseReqId,
-                CreatedAt = model.CreatedAt,
-                UpdatedAt = model.UpdatedAt
-            };
-
-            var result = await _connection.ExecuteAsync(query, patametrs);
+            var result = await _connection.ExecuteAsync(query, model);
 
             return result > 0;
         }
