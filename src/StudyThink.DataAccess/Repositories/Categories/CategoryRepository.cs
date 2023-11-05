@@ -28,9 +28,26 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         }
     }
 
-    public ValueTask<bool> CreateAsync(Category model)
+    public async ValueTask<bool> CreateAsync(Category model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "INSERT INTO Categories(Name, Description) " +
+                "VALUES (@Name, @Description)";
+
+            var result = await _connection.ExecuteAsync(query, model);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)
