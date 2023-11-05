@@ -1,4 +1,3 @@
-﻿using StudyThink.Service.Interfaces.Corses;
 using StudyThink.Service.Interfaces.Courses;
 using StudyThink.Service.Interfaces.Teachers;
 using StudyThink.Service.Services.Courses;
@@ -15,6 +14,7 @@ public static class ServiceLayerConfiguration
         // builder.Services.AddScoped<>();
         builder.Services.AddScoped<ICourseService, CourseService>();
         builder.Services.AddScoped<ITeacherService, TeacherService>();
+
 
 
     }
