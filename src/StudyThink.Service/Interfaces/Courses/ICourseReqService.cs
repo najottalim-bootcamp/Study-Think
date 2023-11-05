@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using StudyThink.DataAccess.Utils;
-using StudyThink.Domain.Entities.Callaborators;
+﻿using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
 using StudyThink.Service.DTOs.Courses.CourseRequirment;
 
-namespace StudyThink.Service.Interfaces.Corses;
+namespace StudyThink.Service.Interfaces.Courses;
 
 public interface ICourseReqService
 {
