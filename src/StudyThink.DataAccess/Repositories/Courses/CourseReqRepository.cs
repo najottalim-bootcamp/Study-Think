@@ -28,7 +28,7 @@ public class CourseReqRepository : BaseRepository, ICourseReqRepository
         }
     }
 
-    public async ValueTask<bool> CreateAsync(CourseRequirments model)
+    public async ValueTask<bool> CreateAsync(CourseRequirment model)
     {
         try
         {
@@ -58,33 +58,98 @@ public class CourseReqRepository : BaseRepository, ICourseReqRepository
         }
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
+    {
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"DELETE FROM CourseRequirments WHERE Id={Id}";
+            var result = await _connection.ExecuteAsync(query);
+            return result > 0;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
+    }
+
+    public async ValueTask<IEnumerable<CourseRequirment>> GetAllAsync(PaginationParams @params)
+    {
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM CourseRequirments" +
+                $" order by Id desc " +
+               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+
+            IEnumerable<CourseRequirment>? courseRequirments = await _connection.ExecuteScalarAsync<IEnumerable<CourseRequirment>>(query, @params);
+
+            return courseRequirments;
+        }
+        catch (Exception)
+        {
+            return Enumerable.Empty<CourseRequirment>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
+    }
+
+    public async ValueTask<CourseRequirment> GetByIdAsync(long Id)
+    {
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM CourseRequirments " +
+                $"WHERE Id = {Id}";
+            CourseRequirment courseRequirment = await _connection.ExecuteScalarAsync<CourseRequirment>(query);
+            return courseRequirment;
+
+        }
+        catch (Exception)
+        {
+            return new CourseRequirment();
+
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
+    }
+
+    public ValueTask<CourseRequirment> GetByNameAsync(string name)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<IEnumerable<CourseRequirments>> GetAllAsync(PaginationParams @params)
+    public ValueTask<(long ItemsCount, IEnumerable<CourseRequirment>)> SearchAsync(string search, PaginationParams @params)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<CourseRequirments> GetByIdAsync(long Id)
+    public async ValueTask<bool> UpdateAsync(CourseRequirment model)
     {
-        throw new NotImplementedException();
-    }
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"Update CourseRequirments SET Requirments='{model.Requirments}', CourseId='{model.CourseId}',CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt}";
+            var result = await _connection.ExecuteAsync(query, model);
+            return result > 0;
+        }
+        catch (Exception)
+        {
 
-    public ValueTask<CourseRequirments> GetByNameAsync(string name)
-    {
-        throw new NotImplementedException();
-    }
-
-    public ValueTask<(long ItemsCount, IEnumerable<CourseRequirments>)> SearchAsync(string search, PaginationParams @params)
-    {
-        throw new NotImplementedException();
-    }
-
-    public ValueTask<bool> UpdateAsync(CourseRequirments model)
-    {
-        throw new NotImplementedException();
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 }

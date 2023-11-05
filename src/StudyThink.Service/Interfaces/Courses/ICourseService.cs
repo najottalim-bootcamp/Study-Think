@@ -3,7 +3,7 @@ using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
 using StudyThink.Service.DTOs.Courses.Course;
 
-namespace StudyThink.Service.Interfaces.Corses;
+namespace StudyThink.Service.Interfaces.Courses;
 
 public interface ICourseService
 {
