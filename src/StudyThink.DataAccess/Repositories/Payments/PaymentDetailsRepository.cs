@@ -93,8 +93,26 @@ public class PaymentDetailsRepository : BaseRepository2, IPaymentDetailsReposito
         }
     }
 
-    public ValueTask<bool> UpdateAsync(PaymentDetails model)
+    public async ValueTask<bool> UpdateAsync(PaymentDetails model)
     {
-        throw new NotImplementedException();
+
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"Update Categories SET CardHolderName='{model.CardHolderName}',CardNumber='{model.CardNumber}',ExpirationDate='{model.ExpirationDate}'," +
+                $"CardCodeCVV='{model.CardCodeCVV}',CardPhoneNumber='{model.CardPhoneNumber}',StudentId={model.StudentId},CreatedAt={model.CreatedAt}," +
+                $"IsPaid='{model.IsPaid}',CourseId={model.CourseId}";
+            var result = await _connection.ExecuteAsync(query, model);
+            return result > 0;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 }
