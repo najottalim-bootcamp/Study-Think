@@ -5,7 +5,7 @@ using StudyThink.Domain.Entities.Teachers;
 
 namespace StudyThink.DataAccess.Repositories.Teachers
 {
-    public class TeacherRepository : BaseRepository, ITeacherRepository
+    public class TeacherRepository : BaseRepository2, ITeacherRepository
     {
         public async ValueTask<bool> CreateAsync(Teacher model)
         {
@@ -169,7 +169,6 @@ namespace StudyThink.DataAccess.Repositories.Teachers
                 await _connection.OpenAsync();
 
                 DynamicParameters @params = new DynamicParameters();
-                @params.Add("@Id",model.Id);
                 @params.Add("@FirstName", model.FirstName);
                 @params.Add("@LastName", model.LastName);
                 @params.Add("@DataOfBirth", model.DateOfBirth);
@@ -181,10 +180,9 @@ namespace StudyThink.DataAccess.Repositories.Teachers
                 @params.Add("@PhoneNumber", model.PhoneNumber);
                 @params.Add("@Password", model.Password);
                 @params.Add("@UpdatedAt", model.UpdatedAt);
-                @params.Add("@CreatedAt", model.UpdatedAt);
 
                 string query = @"update teachers set FirstName = @FirstName,@LastName = LastName,DataOfBirth = @DataOfBirth,ImagePath = @ImagePath,Level = @Level" +
-                    "Description = @Description,Gender = @Gender,Email = @Email,PhoneNumber = @PhoneNumber,Password = @Password,UpdatedAt = @UpdatedAt,CreatedAt = @CreatedAt where Id = @Id";
+                    "Description = @Description,Gender = @Gender,Email = @Email,PhoneNumber = @PhoneNumber,Password = @Password,UpdatedAt = @UpdatedAt";
 
                 int result = await _connection.ExecuteAsync(query, @params);
 
@@ -219,31 +217,6 @@ namespace StudyThink.DataAccess.Repositories.Teachers
             catch
             {
                 return false;
-            }
-            finally
-            {
-                await _connection.CloseAsync();
-            }
-        }
-
-        public async ValueTask<Teacher> GetByEmailAsync(string email)
-        {
-            try
-            {
-                await _connection.OpenAsync();
-
-                DynamicParameters @params = new DynamicParameters();
-                @params.Add("email", email);
-
-                string query = "select * from teachers where email = @email";
-
-                Teacher? teacher = await _connection.ExecuteScalarAsync<Teacher>(query);
-
-                return teacher;
-            }
-            catch
-            {
-                return new Teacher();
             }
             finally
             {

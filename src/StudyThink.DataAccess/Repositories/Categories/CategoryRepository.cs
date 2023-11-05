@@ -5,7 +5,7 @@ using StudyThink.Domain.Entities.Categories;
 
 namespace StudyThink.DataAccess.Repositories.Categories;
 
-public class CategoryRepository : BaseRepository, ICategoryRepository
+public class CategoryRepository : BaseRepository2, ICategoryRepository
 {
     public async ValueTask<long> CountAsync()
     {
