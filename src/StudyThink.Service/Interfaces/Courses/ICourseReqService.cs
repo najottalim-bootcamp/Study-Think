@@ -10,11 +10,10 @@ public interface ICourseReqService
     ValueTask<bool> CreateAsync(CourseReqCretionDto model);
     ValueTask<bool> UpdateAsync(CourseReqUpdateDto model);
     ValueTask<bool> DeleteAsync(long id);
-    ValueTask<CourseRequirment> GetById(long id);
-    ValueTask<IEnumerable<CourseRequirment>> GetAll(PaginationParams @params);
+    ValueTask<CourseRequirment> GetByIdAsync(long id);
+    ValueTask<IEnumerable<CourseRequirment>> GetAllAsync(PaginationParams @params);
     ValueTask<long> CountAsync();
-    ValueTask<bool> DeleteRange(List<long> CourseReqIds);
-    ValueTask<bool> UpdateImageAsync(long courseId, IFormFile imageCourseReq);
+    ValueTask<bool> DeleteRangeAsync(List<long> CourseReqIds);
 
 
 }

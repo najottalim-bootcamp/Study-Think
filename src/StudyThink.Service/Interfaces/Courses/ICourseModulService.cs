@@ -9,10 +9,9 @@ public interface ICourseModulService
 {
     ValueTask<bool> CreateAsync(CourseModulCreationDto model);
     ValueTask<bool> UpdateAsync(CourseModulUpdateDto model);
-    ValueTask<IEnumerable<CourseModul>> GetAll(PaginationParams @params);
-    ValueTask<CourseModul> GetById(long id);
+    ValueTask<IEnumerable<CourseModul>> GetAllAsync(PaginationParams @params);
+    ValueTask<CourseModul> GetByIdAsync(long id);
     ValueTask<long> CountAsync();
     ValueTask<bool> DeleteAsync(long id);
-    ValueTask<bool> DeleteRange(List<long> CourseModulIds);
-    ValueTask<bool> UpdateImageAsync(long CourseModulId, IFormFile imageCourseModul);
+    ValueTask<bool> DeleteRangeAsync(List<long> CourseModulIds);
 }

@@ -9,11 +9,11 @@ public interface ICourseService
 {
     ValueTask<bool> CreateAsync(CourseCreationDto model);
     ValueTask<Course> GetByIdAsync(long Id);
-    ValueTask<IEnumerable<Course>> GetAll(PaginationParams @params);
+    ValueTask<IEnumerable<Course>> GetAllAsync(PaginationParams @params);
     ValueTask<long> CountAsync();
     ValueTask<bool> UpdateAsync(CourseUpdateDto model);
     ValueTask<bool> DeleteAsync(long Id);
     ValueTask<bool> UpdateImageAsync(long courseId, IFormFile imageCourse); 
-    ValueTask<bool> DeleteRange(List<long>  courseIds);
+    ValueTask<bool> DeleteRangeAsync(List<long>  courseIds);
 
 }
