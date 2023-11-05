@@ -31,9 +31,10 @@ public class CourseService : ICourseService
 
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        var result =await _courseService.DeleteAsync(Id);
+        return result;
     }
 
     public ValueTask<bool> DeleteRangeAsync(List<long> courseIds)
