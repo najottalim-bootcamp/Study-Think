@@ -14,6 +14,7 @@ public static class ServiceLayerConfiguration
         // builder.Services.AddScoped<>();
         builder.Services.AddScoped<ICourseService, CourseService>();
         builder.Services.AddScoped<ITeacherService, TeacherService>();
+        //builder.Services.AddScoped<>
 
 
 
