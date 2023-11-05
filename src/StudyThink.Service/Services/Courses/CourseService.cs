@@ -4,21 +4,19 @@ using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
 using StudyThink.Service.DTOs.Courses.Course;
 using StudyThink.Service.Interfaces.Courses;
-using StudyThink.Service.Interfaces.Courses;
-using System.Security.Cryptography.X509Certificates;
 
 namespace StudyThink.Service.Services.Courses;
 
 public class CourseService : ICourseService
 {
-    private readonly ICourseRepository courseRepository;
+    private readonly ICourseRepository _courseService;
     private readonly IMapper _mapper;
-    public CourseService(ICourseService courseService, IMapper mapper)
+    public CourseService(ICourseRepository repo, IMapper mapper)
     {
-        this.courseRepository = courseRepository;
+        this._courseService = repo;
         this._mapper = mapper;
     }
-    public async ValueTask<long>  CountAsync()=> await courseRepository.CountAsync();
+    public async ValueTask<long> CountAsync() => await _courseService.CountAsync();
 
 
 
@@ -27,7 +25,7 @@ public class CourseService : ICourseService
 
         Course course = _mapper.Map<Course>(model);
 
-        var result = await courseRepository.CreateAsync(course);
+        var result = await _courseService.CreateAsync(course);
 
         return result;
 
