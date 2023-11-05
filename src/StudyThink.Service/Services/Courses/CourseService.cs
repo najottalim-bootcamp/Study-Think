@@ -9,14 +9,14 @@ namespace StudyThink.Service.Services.Courses;
 
 public class CourseService : ICourseService
 {
-    private readonly ICourseRepository _courseService;
+    private readonly ICourseRepository _courseRepository;
     private readonly IMapper _mapper;
     public CourseService(ICourseRepository repo, IMapper mapper)
     {
-        this._courseService = repo;
+        this._courseRepository = repo;
         this._mapper = mapper;
     }
-    public async ValueTask<long> CountAsync() => await _courseService.CountAsync();
+    public async ValueTask<long> CountAsync() => await _courseRepository.CountAsync();
 
 
 
@@ -25,7 +25,7 @@ public class CourseService : ICourseService
 
         Course course = _mapper.Map<Course>(model);
 
-        var result = await _courseService.CreateAsync(course);
+        var result = await _courseRepository.CreateAsync(course);
 
         return result;
 
@@ -33,28 +33,34 @@ public class CourseService : ICourseService
 
     public async ValueTask<bool> DeleteAsync(long Id)
     {
-        var result =await _courseService.DeleteAsync(Id);
+        var result =await _courseRepository.DeleteAsync(Id);
         return result;
     }
 
-    public ValueTask<bool> DeleteRangeAsync(List<long> courseIds)
+    public async ValueTask<bool> DeleteRangeAsync(List<long> courseIds)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<IEnumerable<Course>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<Course>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        var result = await _courseRepository.GetAllAsync(@params);
+        return result;
     }
 
-    public ValueTask<Course> GetByIdAsync(long Id)
+    public async ValueTask<Course> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+        var result =await _courseRepository.GetByIdAsync(Id);
+        return result;
     }
 
     public ValueTask<bool> UpdateAsync(CourseUpdateDto model)
     {
-        throw new NotImplementedException();
+        Course course= _mapper.Map<Course>(model);
+        course.UpdatedAt = DateTime.UtcNow;
+        var result = _courseRepository.UpdateAsync(course);
+
+        return result;
     }
 
     public ValueTask<bool> UpdateImageAsync(long courseId, IFormFile imageCourse)
