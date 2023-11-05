@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Interfaces.Categories;
 using StudyThink.DataAccess.Utils;
-using StudyThink.Domain.Entities.Callaborators;
 using StudyThink.Domain.Entities.Categories;
 
 namespace StudyThink.DataAccess.Repositories.Categories;
