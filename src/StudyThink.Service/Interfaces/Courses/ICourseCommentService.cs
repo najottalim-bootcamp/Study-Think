@@ -13,7 +13,5 @@ public interface ICourseCommentService
     ValueTask<bool> DeleteRangeAsync(List<long> CourseCommentIds);
     ValueTask<CourseComment> GetById(long id);
     ValueTask<long> CountAsync();
-    ValueTask<IEnumerable<CourseComment>> GetAll(PaginationParams @params);
-    ValueTask<bool> UpdateImage(long CourseCommentId,IFormFile imageCourseComment);
-
+    ValueTask<IEnumerable<CourseComment>> GetAllAsync(PaginationParams @params);
 }
