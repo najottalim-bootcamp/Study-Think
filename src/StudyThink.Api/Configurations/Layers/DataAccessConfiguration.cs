@@ -12,6 +12,7 @@ public static class DataAccessConfiguration
 
         // Database Configurations field
 
+        builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
         //builder.Services.AddScoped<>();
         builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 
