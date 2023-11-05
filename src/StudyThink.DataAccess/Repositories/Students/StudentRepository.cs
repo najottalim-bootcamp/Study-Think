@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Interfaces.Students;
 using StudyThink.DataAccess.Utils;
+using StudyThink.Domain.Entities.Categories;
 using StudyThink.Domain.Entities.Students;
 using StudyThink.Domain.Enums;
 
@@ -57,7 +58,7 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"DELETE FROM StudentRepository WHERE Id={Id}";
+            string query = $"DELETE FROM Students WHERE Id={Id}";
             var result = await _connection.ExecuteAsync(query);
             return result > 0;
         }
@@ -74,7 +75,24 @@ public class StudentRepository : BaseRepository2, IStudentRepository
 
     public ValueTask<IEnumerable<Student>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        //try
+        //{
+        //    await _connection.OpenAsync();
+        //    string query = $"SELECT * FROM Categories order by Id desc " +
+        //       $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+
+        //    IEnumerable<Category>? categories = await _connection.ExecuteScalarAsync<IEnumerable<Category>>(query, @params);
+
+        //    return categories;
+        //}
+        //catch (Exception)
+        //{
+        //    return Enumerable.Empty<Category>();
+        //}
+        //finally
+        //{
+        //    await _connection.CloseAsync();
+        //}
     }
 
     public ValueTask<Student> GetByEmailAsync(string email)
