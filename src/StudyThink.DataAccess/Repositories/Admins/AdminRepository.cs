@@ -33,8 +33,8 @@ public class AdminRepository : BaseRepository, IAdminRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "INSERT INTO Admins(FirstName, LastName, PhoneNumber, Email, Password, Role, CreatedAt) " +
-                "VALUES (@FirstName, @LastName, @PhoneNumber, @Email, @Password, @Role, @CreatedAt)";
+            string query = "INSERT INTO Admins(FirstName, LastName, PhoneNumber, Email, Password, Role, CreatedAt, UpdatedAt, DeletedAt) " +
+                "VALUES (@FirstName, @LastName, @PhoneNumber, @Email, @Password, @Role, @CreatedAt, @UpdatedAt, @DeletedAt)";
 
             var result = await _connection.ExecuteAsync(query, model);
 

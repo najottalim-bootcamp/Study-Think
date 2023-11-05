@@ -33,8 +33,8 @@ public class CourseCommentRepository : BaseRepository, ICourseCommentRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "INSERT INTO CourseComments(Comment, StudentId, CourseId, AdminId, CreatedAt) " +
-                "VALUES (@Comment, @StudentId, @CourseId, @AdminId, @CreatedAt)";
+            string query = "INSERT INTO CourseComments(Comment, StudentId, CourseId, AdminId, CreatedAt, UpdatedAt) " +
+                "VALUES (@Comment, @StudentId, @CourseId, @AdminId, @CreatedAt, @UpdatedAt)";
 
             var parametrs = new
             {
@@ -42,7 +42,8 @@ public class CourseCommentRepository : BaseRepository, ICourseCommentRepository
                 StudentId = model.StudentId,
                 CourseId = model.CourseId,
                 AdminId = model.AdminId,
-                CreatedAt = model.CreatedAt
+                CreatedAt = model.CreatedAt,
+                UpdatedAt = model.UpdatedAt
             };
 
             var result = await _connection.ExecuteAsync(query, parametrs);

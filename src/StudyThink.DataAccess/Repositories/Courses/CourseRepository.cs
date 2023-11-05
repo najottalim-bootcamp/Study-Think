@@ -28,9 +28,43 @@ public class CourseRepository : BaseRepository, ICourseRepository
         }
     }
 
-    public ValueTask<bool> CreateAsync(Course model)
+    public async ValueTask<bool> CreateAsync(Course model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "INSERT INTO Courses(Name, Description, CategoryId, Price, ImagePath, TotalPrice, Lessons, Duration, Language, DiscountPrice, CourseReqId, CreatedAt, UpdatedAt) " +
+                "VALUES (@Name, @Description, @CategoryId, @Price, @ImagePath, @TotalPrice, @Lessons, @Duration, @Language, @DiscountPrice, @CourseReqId, @CreatedAt, UpdatedAt)";
+
+            var patametrs = new
+            {
+                Name = model.Name,
+                Description = model.Description,
+                CategoryId = model.CategoryId,
+                Price = model.Price,
+                ImagePath = model.ImagePath,
+                TotalPrice = model.TotalPrice,
+                Lessons = model.Lessons,
+                Duration = model.Duration,
+                Language = model.Language,
+                DiscountPrice = model.DiscountPrice,
+                CourseReqId = model.CourseReqId,
+                CreatedAt = model.CreatedAt,
+                UpdatedAt = model.UpdatedAt
+            };
+
+            var result = await _connection.ExecuteAsync(query, patametrs);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)

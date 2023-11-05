@@ -30,17 +30,17 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         }
     }
 
-    public async ValueTask<bool> CreateAsync(CourseRequirments model)
+    public async ValueTask<bool> CreateAsync(CourseModul model)
     {
         try
         {
             await _connection.OpenAsync();
-            string query = "INSERT INTO CourseRequirments(Requirments, CourseId, CreatedAt, UpdatedAt) " +
-                "VALUES (@Requirments, @CourseId, @CreatedAt, @UpdatedAt)";
+            string query = "INSERT INTO CourseModuls(Name, CourseId, CreatedAt, UpdatedAt) " +
+                "VALUES (@Name, @CourseId, @CreatedAt, @UpdatedAt)";
 
             var patametrs = new
             {
-                Requirments = model.Requirments,
+                Name = model.Name,
                 CourseId = model.CourseId,
                 CreatedAt = model.CreatedAt,
                 UpdatedAt = model.UpdatedAt
@@ -58,11 +58,6 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         {
             await _connection.CloseAsync();
         }
-    }
-
-    public ValueTask<bool> CreateAsync(CourseModul model)
-    {
-        throw new NotImplementedException();
     }
 
     public ValueTask<bool> DeleteAsync(long Id)
