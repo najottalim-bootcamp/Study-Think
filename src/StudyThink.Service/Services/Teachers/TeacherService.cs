@@ -50,7 +50,7 @@ namespace StudyThink.Service.Services.Teachers
 
                 if (dbResult)
                     return true;
-                return false;
+                throw new TeacherAlreadyExistsException();
             }
 
         }
@@ -115,9 +115,9 @@ namespace StudyThink.Service.Services.Teachers
             return teacher;
         }
 
-        public ValueTask<bool> UpdateAsync(TeacherUpdateDto model)
+        public async ValueTask<bool> UpdateAsync(TeacherUpdateDto model)
         {
-            throw new NotImplementedException();
+            Teacher teacher = await _teacherRepository.GetByIdAsync(model.Id);
         }
 
         public ValueTask<bool> UpdateImageAsync(long teacherId, IFormFile teacherImage)
