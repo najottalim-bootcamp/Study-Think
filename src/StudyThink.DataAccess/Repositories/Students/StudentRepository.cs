@@ -105,9 +105,26 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         throw new NotImplementedException();
     }
 
-    public ValueTask<Student> GetByIdAsync(long Id)
+    public async ValueTask<Student> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM Students " +
+                $"WHERE Id = {Id}";
+            Student student = await _connection.ExecuteScalarAsync<Student>(query);
+            return student;
+
+        }
+        catch (Exception)
+        {
+            return new Student();
+
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<IEnumerable<Student>> GetByPhoneNumberAsync(string phoneNumber)
