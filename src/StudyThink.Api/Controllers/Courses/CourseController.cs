@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudyThink.Service.DTOs.Courses.Course;
-using StudyThink.Service.Interfaces.Corses;
+using StudyThink.Service.Interfaces.Courses;
 
 namespace StudyThink.Api.Controllers.Courses;
 
@@ -18,7 +18,7 @@ public class CourseController : ControllerBase
     [HttpGet]
     public async ValueTask<long> CountAsync()
     {
-        var result= await courseService.CountAsync();
+        var result = await courseService.CountAsync();
         return result;
     }
 

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
 using StudyThink.Service.DTOs.Courses.Course;
-using StudyThink.Service.Interfaces.Corses;
+using StudyThink.Service.Interfaces.Courses;
 using StudyThink.Service.Interfaces.Courses;
 using System.Security.Cryptography.X509Certificates;
 
