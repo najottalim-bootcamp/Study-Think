@@ -28,9 +28,26 @@ public class PaymentRepository : BaseRepository, IPaymentRepository
         }
     }
 
-    public ValueTask<bool> CreateAsync(Payment model)
+    public async ValueTask<bool> CreateAsync(Payment model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"INSERT INTO Payment(Type, Status, Description, CourseId) " +
+                $"VALUES (@Type, @Status, @Description, {model.CourseId})";
+
+            var result = await _connection.ExecuteAsync(query, query);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)
