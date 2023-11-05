@@ -29,9 +29,26 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         }
     }
 
-    public ValueTask<bool> CreateAsync(Student model)
+    public async ValueTask<bool> CreateAsync(Student model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "INSERT INTO Students(FirstName, LastName,DateOfBirth,UserName,Password, Email,PhoneNumber, Gender, CreatedAt, UpdatedAt, DeletedAt) " +
+                "VALUES (@FirstName, @LastName,@DateOfBirth,@UserName,@Password,@ Email,@PhoneNumber,@ Gender, @CreatedAt,@ UpdatedAt,@ DeletedAt)";
+
+            var result = await _connection.ExecuteAsync(query, model);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)
