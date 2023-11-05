@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using StudyThink.DataAccess.Interfaces.Students;
 using StudyThink.DataAccess.Utils;
+using StudyThink.Domain.Entities.Courses;
 using StudyThink.Domain.Entities.Students;
 using StudyThink.Domain.Entities.Teachers;
 using StudyThink.Domain.Exceptions.Files;
@@ -120,24 +121,12 @@ public class StudentService : IStudentService
 
     public async ValueTask<bool> UpdateAsync(StudentUpdateDto model)
     {
-        //Student student = _mapper.Map<Student>(model);
 
-        //if (model.ImagePath == null)
-        //{
-        //    throw new ImageNotFoundException();
-        //}
-        //else
-        //{
-        //    student.ImagePath = await _fileService.UploadImageAsync(model.ImagePath);
-        //    student.Password = Hash512.GenerateHash512(model.Password);
+        Student student = _mapper.Map<Student>(model);
+        student.UpdatedAt = DateTime.UtcNow;
+        var result =await _studentRepository.UpdateAsync(student);
 
-        //    bool dbResult = await _studentRepository.UpdateAsync(student);
-
-        //    if (dbResult)
-
-        //        return true;
-            throw new StudentNotFoundExeption();
-        
+        return result;
     }
 
     public ValueTask<bool> UpdateImageAsync(long studentId, IFormFile imageStudent)
