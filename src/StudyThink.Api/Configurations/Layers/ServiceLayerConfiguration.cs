@@ -1,4 +1,7 @@
-﻿namespace StudyThink.Api.Configurations.Layers;
+﻿using StudyThink.Service.Interfaces.Corses;
+using StudyThink.Service.Services.Courses;
+
+namespace StudyThink.Api.Configurations.Layers;
 
 public static class ServiceLayerConfiguration
 {
@@ -7,6 +10,7 @@ public static class ServiceLayerConfiguration
         // Services Configurations field
 
         // builder.Services.AddScoped<>();
+        builder.Services.AddScoped<ICourseService, CourseService>();
 
     }
 }
