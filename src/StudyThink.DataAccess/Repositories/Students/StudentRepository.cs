@@ -142,9 +142,26 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         throw new NotImplementedException();
     }
 
-    public ValueTask<bool> UpdateAsync(Student model)
+    public async ValueTask<bool> UpdateAsync(Student model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"Update Categories SET FirstName='{model.FirstName}',LastName='{model.LastName}',DateOfBirth={model.DateOfBirth},UserName='{model.Username}'," +
+                $"Password='{model.Password}', Email='{model.Email}',PhoneNumber='{model.PhoneNumber}', Gender='{model.Gender}', CreatedAt={model.CreatedAt}, " +
+                $"UpdatedAt={model.UpdatedAt}, DeletedAt={model.DeletedAt}";
+            var result = await _connection.ExecuteAsync(query, model);
+            return result > 0;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public Task<bool> UpdateImageAsync(long studentId, string imagePath)
