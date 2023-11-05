@@ -1,11 +1,11 @@
 ﻿using Dapper;
-using StudyThink.DataAccess.Interfaces.Categories;
 using StudyThink.DataAccess.Utils;
-using StudyThink.Domain.Entities.Categories;
+using StudyThink.Domain.Entities.Course;
+using StudyThink.Service.Interfaces.Courses;
 
-namespace StudyThink.DataAccess.Repositories.Categories;
+namespace StudyThink.DataAccess.Repositories.Courses;
 
-public class CategoryRepository : BaseRepository, ICategoryRepository
+public class CourseCommentRepository : BaseRepository, ICourseCommentRepository
 {
     public async ValueTask<long> CountAsync()
     {
@@ -13,7 +13,7 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         {
             await _connection.OpenAsync();
 
-            string query = "SELECT COUNT(*) FROM Categories";
+            string query = "SELECT COUNT(*) FROM CourseComments";
 
             long result = await _connection.ExecuteScalarAsync<long>(query);
             return result;
@@ -28,7 +28,7 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         }
     }
 
-    public ValueTask<bool> CreateAsync(Category model)
+    public ValueTask<bool> CreateAsync(CourseComment model)
     {
         throw new NotImplementedException();
     }
@@ -38,27 +38,27 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         throw new NotImplementedException();
     }
 
-    public ValueTask<IEnumerable<Category>> GetAllAsync(PaginationParams @params)
+    public ValueTask<IEnumerable<CourseComment>> GetAllAsync(PaginationParams @params)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<Category> GetByIdAsync(long Id)
+    public ValueTask<CourseComment> GetByComment(string comment)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<(long ItemsCount, IEnumerable<Category>)> SearchAsync(string search, PaginationParams @params)
+    public ValueTask<CourseComment> GetByIdAsync(long Id)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask<bool> UpdateAsync(Category model)
+    public ValueTask<(long ItemsCount, IEnumerable<CourseComment>)> SearchAsync(string search, PaginationParams @params)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> UpdateImageAsync(long categoryId, string imagePath)
+    public ValueTask<bool> UpdateAsync(CourseComment model)
     {
         throw new NotImplementedException();
     }
