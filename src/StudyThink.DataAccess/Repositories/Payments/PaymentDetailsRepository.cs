@@ -27,9 +27,26 @@ public class PaymentDetailsRepository : BaseRepository2, IPaymentDetailsReposito
         }
     }
 
-    public ValueTask<bool> CreateAsync(PaymentDetails model)
+    public async ValueTask<bool> CreateAsync(PaymentDetails model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"INSERT INTO PaymentDetails(CardHolderName,CardNumber,ExpirationDate,CardCodeCVV," +
+                $"CardPoneNumber,StudentId,CreatedAt,IsPaid,CourseId) " +
+                $"VALUES(@CardHolderName,@CardNumber,@ExpirationDate,@CardCodeCVV,@CardPoneNumber,@StudentId,@CreatedAt," +
+                $"@IsPaid,@CourseId)";
+            var result = await _connection.ExecuteAsync(query, model);
+            return result > 0;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+        finally
+        { 
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> DeleteAsync(long Id)
