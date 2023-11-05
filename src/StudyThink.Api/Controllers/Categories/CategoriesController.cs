@@ -22,4 +22,12 @@ public class CategoriesController : ControllerBase
     [HttpPost]
     public async ValueTask<IActionResult> CreateAsync([FromForm] CategoryCreationDto dto)
         => Ok(await _service.CreateAsync(dto));
+
+    [HttpPut]
+    public async ValueTask<IActionResult> UpdateAsync(CategoryUpdateDto dto)
+        => Ok(await _service.UpdateAsync(dto));
+
+    [HttpDelete]
+    public async ValueTask<IActionResult> DeleteAsync(long id)
+        => Ok(await _service.DeleteAsync(id));
 }
