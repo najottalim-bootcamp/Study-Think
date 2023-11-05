@@ -5,7 +5,7 @@ namespace StudyThink.Service.Common.Hasher
 {
     public class Hash512
     {
-        public string GenerateHash512(string password)
+        public static string GenerateHash512(string password)
         {
             using (SHA512 sha512 = SHA512.Create())
             {
