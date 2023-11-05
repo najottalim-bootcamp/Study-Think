@@ -15,7 +15,7 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
 
             string query = "SELECT COUNT(*) FROM Categories";
 
-            long result = await _connection.ExecuteScalarAsync<long>(query);
+            long result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
         catch

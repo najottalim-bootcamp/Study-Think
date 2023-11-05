@@ -15,7 +15,7 @@ public class AdminRepository : BaseRepository, IAdminRepository
 
             string query = "SELECT COUNT(*) FROM Admins";
 
-            long result = await _connection.ExecuteScalarAsync<long>(query);
+            long result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
         catch
@@ -33,7 +33,10 @@ public class AdminRepository : BaseRepository, IAdminRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "";
+            string query = "INSERT INTO Admins(FirstName, LastName, PhoneNumber, Email, Password, Role, CreatedAt) " +
+                "VALUES (@FirstName, @LastName, @PhoneNumber, @Email, @Password, @Role, @CreatedAt)";
+
+            var result = await _connection.
 
             return true;
 

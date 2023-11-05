@@ -15,7 +15,7 @@ public class CallaboratorRepository : BaseRepository, ICalloboratorRepository
 
             string query = "SELECT COUNT(*) FROM Callaborators";
 
-            long result = await _connection.ExecuteScalarAsync<long>(query);
+            long result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
         catch

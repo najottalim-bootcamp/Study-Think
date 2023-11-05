@@ -15,7 +15,7 @@ public class CourseCommentRepository : BaseRepository, ICourseCommentRepository
 
             string query = "SELECT COUNT(*) FROM CourseComments";
 
-            long result = await _connection.ExecuteScalarAsync<long>(query);
+            long result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
         catch

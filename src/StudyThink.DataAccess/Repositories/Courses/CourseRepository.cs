@@ -15,7 +15,7 @@ public class CourseRepository : BaseRepository, ICourseRepository
 
             string query = "SELECT COUNT(*) FROM Courses";
 
-            long result = await _connection.ExecuteScalarAsync<long>(query);
+            long result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
         catch
