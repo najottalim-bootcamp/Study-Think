@@ -1,4 +1,5 @@
-﻿using StudyThink.Domain.Enums;
+﻿using Microsoft.AspNetCore.Http;
+using StudyThink.Domain.Enums;
 
 namespace StudyThink.Service.DTOs.Student;
 
@@ -13,5 +14,5 @@ public class StudentCreationDto
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public Gender Gender { get; set; }
-    public string ImagePath { get; set; }
+    public IFormFile ImagePath { get; set; }
 }

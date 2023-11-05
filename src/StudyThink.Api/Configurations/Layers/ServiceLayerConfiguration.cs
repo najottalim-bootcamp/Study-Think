@@ -1,6 +1,7 @@
-﻿using StudyThink.Service.Interfaces.Admins;
 using StudyThink.Service.Interfaces.Courses;
+using StudyThink.Service.Interfaces.Teachers;
 using StudyThink.Service.Services.Courses;
+using StudyThink.Service.Services.Teachers;
 
 namespace StudyThink.Api.Configurations.Layers;
 
