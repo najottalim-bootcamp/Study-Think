@@ -23,7 +23,6 @@ public class CategoryService : ICategoryService
 
     public async ValueTask<bool> CreateAsync(CategoryCreationDto model)
     {
-
         Category category = _mapper.Map<Category>(model);
 
         return await _repository.CreateAsync(category);
