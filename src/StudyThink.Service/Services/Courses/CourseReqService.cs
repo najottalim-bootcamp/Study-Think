@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
-using StudyThink.Domain.Exceptions;
+using StudyThink.Domain.Exceptions.Courses.CourseRequirements;
 using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Courses.CourseRequirment;
 using StudyThink.Service.Interfaces.Common;
@@ -40,7 +40,7 @@ public class CourseReqService : ICourseReqService
     public async ValueTask<bool> DeleteAsync(long id)
     {
         var courseReq = await _repository.GetByIdAsync(id);
-        if (courseReq is null) throw new NotFoundException();
+        if (courseReq is null) throw new CourseRequirementsNotFoundException();
 
         var result = await _repository.DeleteAsync(id);
         return result;
@@ -59,7 +59,7 @@ public class CourseReqService : ICourseReqService
     public async ValueTask<CourseRequirment> GetByIdAsync(long id)
     {
         var courseReq = await _repository.GetByIdAsync(id);
-        if (courseReq is null) throw new NotFoundException();
+        if (courseReq is null) throw new CourseRequirementsNotFoundException();
 
         return courseReq;
     }
@@ -67,7 +67,7 @@ public class CourseReqService : ICourseReqService
     public async ValueTask<bool> UpdateAsync(CourseReqUpdateDto model)
     {
         var courseReqExists = await _repository.GetByIdAsync(model.Id);
-        if (courseReqExists is null) throw new NotFoundException();
+        if (courseReqExists is null) throw new CourseRequirementsNotFoundException();
 
         var courseReq = _mapper.Map<CourseRequirment>(model);
 
