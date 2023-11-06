@@ -228,9 +228,29 @@ namespace StudyThink.DataAccess.Repositories.Teachers
             }
         }
 
-        public ValueTask<Teacher> GetByEmailAsync(string email)
+        public async ValueTask<Teacher> GetByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _connection.OpenAsync();
+
+                DynamicParameters @params = new DynamicParameters();
+                @params.Add("Email", email);
+
+                string query = "select * from teachers where Email = @email";
+
+                Teacher teacher = await _connection.ExecuteScalarAsync<Teacher>(query, @params);
+
+                return teacher;
+            }
+            catch
+            {
+                return new Teacher();
+            }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
         }
     }
 }
