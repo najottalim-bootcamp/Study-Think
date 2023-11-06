@@ -137,9 +137,28 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         throw new NotImplementedException();
     }
 
-    public ValueTask<Student> GetByUserNameAsync(string username)
+    public async ValueTask<Student> GetByUserNameAsync(string username)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM Students WHERE UserName = @Username";
+
+            var parameters = new { Username = username };
+
+            Student student = await _connection.QuerySingleOrDefaultAsync<Student>(query, parameters);
+
+            return student;
+        }
+        catch
+        {
+            return new Student();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<(long ItemsCount, IEnumerable<Student>)> SearchAsync(string search, PaginationParams @params)
