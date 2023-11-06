@@ -100,9 +100,30 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         }
     }
 
-    public ValueTask<Student> GetByEmailAsync(string email)
+    public async ValueTask<Student> GetByEmailAsync(string email)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM Students WHERE Email = @Email";
+
+            var parameters = new { Email = email };
+
+            Student student = await _connection.QuerySingleOrDefaultAsync<Student>(query, parameters);
+
+            return student;
+
+        }
+        catch (Exception)
+        {
+            return new Student();
+
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<IEnumerable<Student>> GetByGenderAsync(Gender gender)
