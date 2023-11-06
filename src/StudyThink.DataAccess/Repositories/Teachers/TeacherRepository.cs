@@ -2,6 +2,7 @@
 using StudyThink.DataAccess.Interfaces.Teachers;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Teachers;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudyThink.DataAccess.Repositories.Teachers
 {
@@ -18,22 +19,22 @@ namespace StudyThink.DataAccess.Repositories.Teachers
                 await _connection.OpenAsync();
 
                 DynamicParameters @params = new DynamicParameters();
-                @params.Add("@FirstName", model.FirstName);
-                @params.Add("@LastName", model.LastName);
-                @params.Add("@DataOfBirth", model.DateOfBirth);
-                @params.Add("@ImagePath", model.ImagePath);
-                @params.Add("@Level", model.Level);
-                @params.Add("@Description", model.Description);
-                @params.Add("@Gender");
-                @params.Add("@Email", model.Email);
-                @params.Add("@PhoneNumber", model.PhoneNumber);
-                @params.Add("@Password", model.Password);
+                //@params.Add("@FirstName", model.FirstName);
+                //@params.Add("@LastName", model.LastName);
+                //@params.Add("@DataOfBirth", model.DateOfBirth);
+                //@params.Add("@ImagePath", model.ImagePath);
+                //@params.Add("@Level", model.Level);
+                //@params.Add("@Description", model.Description);
+                //@params.Add("@Gender");
+                //@params.Add("@Email", model.Email);
+                //@params.Add("@PhoneNumber", model.PhoneNumber);
+                //@params.Add("@Password", model.Password);
 
                 //string query = @"insert into Teachers (FirstName,LastName,DataOfBirth,ImagePath,Level,Description,Gender,Email,PhoneNumber,Password)" +
                 //    "values (@FirstName,@LastName,@DataOfBirth,@ImagePath,@Level,@Description,@Email,@PhoneNumber,@Password)";
 
                 string query = "insert into teachers (FirstName,LastName,DataOfBirth,ImagePath,Level,Description,Gender,Email,PhoneNumber,Password)" +
-                    $"values('{model.FirstName}','{model.LastName}',{model.DateOfBirth},'{model.ImagePath}','{model.Level}','{model.Description}','{model.Gender}','{model.Email}','{model.PhoneNumber}','{model.Password}');";
+                    $"values('{model.FirstName}','{model.LastName}',GetDate(),'{model.ImagePath}','{model.Level}','{model.Description}','{model.Gender}','{model.Email}','{model.PhoneNumber}','{model.Password}');";
 
                 int result = await _connection.ExecuteAsync(query);
 
@@ -102,10 +103,12 @@ namespace StudyThink.DataAccess.Repositories.Teachers
             {
                 await _connection.OpenAsync();
 
-                string query = $"SELECT * FROM teachers order by Id desc " +
-                $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+                //string query = $"SELECT * FROM teachers order by Id desc " +
+                //$"offset {@params.GetSkipCount()} limit {@params.PageSize}";
 
-                IEnumerable<Teacher>? teachers = await _connection.ExecuteScalarAsync<IEnumerable<Teacher>>(query);
+                string query = "select * from teachers";
+
+                IEnumerable<Teacher> teachers = await _connection.QueryAsync<Teacher>(query);
 
                 return teachers;
             }
@@ -128,9 +131,9 @@ namespace StudyThink.DataAccess.Repositories.Teachers
                 DynamicParameters @params = new DynamicParameters();
                 @params.Add("@Id", Id);
 
-                string query = @$"select * from teachers where Id = @Id";
+                string query = $"select * from teachers where Id = {Id}";
 
-                Teacher? teacher = await _connection.ExecuteScalarAsync<Teacher>(query,@params);
+                Teacher? teacher = await _connection.QueryFirstOrDefaultAsync<Teacher>(query);
 
                 return teacher;
             }
