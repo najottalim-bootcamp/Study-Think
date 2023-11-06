@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Interfaces.Students;
 using StudyThink.DataAccess.Utils;
-using StudyThink.Domain.Entities.Categories;
 using StudyThink.Domain.Entities.Students;
 using StudyThink.Domain.Enums;
 
@@ -78,14 +77,20 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM Students order by Id desc " +
-               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+            string query = @"SELECT * FROM Students ORDER BY Id DESC 
+                         OFFSET @SkipCount ROWS FETCH NEXT @PageSize ROWS ONLY";
 
-            IEnumerable<Student>? students = await _connection.ExecuteScalarAsync<IEnumerable<Student>>(query, @params);
+            var parameters = new
+            {
+                SkipCount = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            IEnumerable<Student> students = await _connection.QueryAsync<Student>(query, parameters);
 
             return students;
         }
-        catch (Exception)
+        catch
         {
             return Enumerable.Empty<Student>();
         }
