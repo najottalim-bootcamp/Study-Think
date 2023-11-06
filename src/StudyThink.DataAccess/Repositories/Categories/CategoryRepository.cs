@@ -103,7 +103,7 @@ public class CategoryRepository : BaseRepository2, ICategoryRepository
             await _connection.OpenAsync();
             string query = $"SELECT * FROM Categories " +
                 $"WHERE Id = {Id}";
-            Category category = await _connection.ExecuteScalarAsync<Category>(query);
+            Category? category = await _connection.ExecuteScalarAsync<Category>(query);
             return category;
 
         }
