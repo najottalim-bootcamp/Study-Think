@@ -75,7 +75,7 @@ namespace StudyThink.Service.Services.Teachers
             }
         }
 
-        public async ValueTask<bool> DeleteRange(List<long> teacherIds)
+        public async ValueTask<bool> DeleteRangeAsync(List<long> teacherIds)
         {
             foreach (var i in teacherIds)
             {
@@ -91,7 +91,7 @@ namespace StudyThink.Service.Services.Teachers
             return true;
         }
 
-        public async ValueTask<IEnumerable<Teacher>> GetAll(PaginationParams @params)
+        public async ValueTask<IEnumerable<Teacher>> GetAllAsync(PaginationParams @params)
         {
             IEnumerable<Teacher> teachers = await _teacherRepository.GetAllAsync(@params);
 
@@ -123,7 +123,7 @@ namespace StudyThink.Service.Services.Teachers
         {
             Teacher teacher = await _teacherRepository.GetByIdAsync(Id);
 
-            if (teacher == null)
+            if (string.IsNullOrEmpty(teacher.FirstName))
             {
                 throw new TeacherNotFoundException();
             }
