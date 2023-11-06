@@ -4,7 +4,8 @@ using StudyThink.Domain.Entities.Courses;
 
 namespace StudyThink.Service.Interfaces.Courses;
 
-public interface ICourseReqRepository : IRepository<CourseRequirments>
+public interface ICourseReqRepository : IRepository<CourseRequirment>,
+    IGetAll<CourseRequirment>, ISearchable<CourseRequirment>
 {
-    ValueTask<CourseRequirments> GetByNameAsync(string name);
+    ValueTask<CourseRequirment> GetByNameAsync(string name);
 }

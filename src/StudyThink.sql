@@ -13,13 +13,13 @@ CREATE TABLE "Students"(
     "DeletedAt" DATE  ,
     "ImagePath" TEXT  
 );
-
+GO
 CREATE TABLE "Categories"(
     "Id" BIGINT  PRIMARY KEY IDENTITY(1,1),
     "Name" TEXT  ,
     "Description" TEXT  
 );
-
+Go
 CREATE TABLE "Admins"(
     "Id" BIGINT  PRIMARY KEY IDENTITY(1,1),
     "FirstName" nchar(255),
@@ -32,7 +32,7 @@ CREATE TABLE "Admins"(
     "DeletedAt" DATE  ,
     "Role" TEXT  
 );
-
+GO
 CREATE TABLE "Callaborators"(
     "Id" BIGINT  PRIMARY KEY IDENTITY(1,1),
     "Name" TEXT,
@@ -42,7 +42,7 @@ CREATE TABLE "Callaborators"(
     "PhoneNumber" NVARCHAR(255) UNIQUE  
 );
 
-
+GO
 CREATE TABLE "Payment"(
     "Id" BIGINT PRIMARY KEY IDENTITY(1,1), 
     "Type" TEXT  ,
@@ -51,15 +51,14 @@ CREATE TABLE "Payment"(
     "CourseId" BIGINT  
 );
 
-
+GO
 CREATE TABLE "CourseRequirments"(
     "Id" BIGINT PRIMARY KEY IDENTITY(1,1),
     "Requirments" TEXT ,
-    "CourseId" BIGINT  ,
     "CreatedAt" DATE DEFAULT GETDATE() ,
     "UpdatedAt" DATE 
 );
-
+GO
 CREATE TABLE "TeacherCourses"(
     "Id" BIGINT PRIMARY KEY IDENTITY(1,1),
     "TeacherId" BIGINT,
@@ -85,7 +84,7 @@ CREATE TABLE "Teachers"(
     "Password" nchar(255)
 );
 
-
+GO
 CREATE TABLE "CourseModuls"(
     "Id" BIGINT IDENTITY(1,1) PRIMARY KEY,
     "Name" TEXT  ,
@@ -93,7 +92,7 @@ CREATE TABLE "CourseModuls"(
     "CreatedAt" DATE DEFAULT GETDATE()  ,
     "UpdatedAt" DATE  
 );
-
+GO
 CREATE TABLE "CourseComments"(
     "Id" BIGINT  IDENTITY (1,1) PRIMARY KEY,
     "Comment" TEXT  ,
@@ -103,7 +102,7 @@ CREATE TABLE "CourseComments"(
     "UpdatedAt" DATE  ,
     "AdminId" BIGINT  
 );
-
+GO
 CREATE TABLE "Courses"(
     "Id" BIGINT IDENTITY(1,1) PRIMARY KEY,
     "Name" TEXT  ,
@@ -120,7 +119,7 @@ CREATE TABLE "Courses"(
     "UpdatedAt" DATE,
     "CourseReqId" BIGINT  
 );
-
+GO
 CREATE TABLE "PaymentDetails"(
     "CardHolderName" TEXT  ,
     "CardNumber" TEXT  ,
@@ -133,7 +132,7 @@ CREATE TABLE "PaymentDetails"(
     "CourseId" BIGINT,
     PRIMARY KEY ("StudentId", "CourseId")
 );
-
+GO
 CREATE TABLE "Videos"(
     "Id" BIGINT IDENTITY(1,1) PRIMARY KEY,
     "Name" TEXT ,
