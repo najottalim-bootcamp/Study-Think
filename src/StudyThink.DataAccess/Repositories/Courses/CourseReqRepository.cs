@@ -62,14 +62,59 @@ public class CourseReqRepository : BaseRepository2, ICourseReqRepository
         }
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "DELETE FROM CourseRequirements " +
+                "WHERE Id = @Id";
+
+            var parameters = new { Id };
+
+            int result = await _connection.ExecuteAsync(query, parameters);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<IEnumerable<CourseRequirment>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<CourseRequirment>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM CourseRequirements " +
+                "ORDER BY Id OFFSET @Offset ROWS " +
+                "FETCH NEXT @PageSize ROWS ONLY";
+
+            var parameters = new
+            {
+                Offset = (@params.PageNumber - 1) * @params.PageSize,
+                PageSize = @params.PageSize
+            };
+
+            var result = await _connection.QueryAsync<CourseRequirment>(query, parameters);
+
+            return result;
+        }
+        catch
+        {
+            return Enumerable.Empty<CourseRequirment>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<CourseRequirment> GetByIdAsync(long Id)
