@@ -1,5 +1,8 @@
-﻿using StudyThink.DataAccess.Utils;
+﻿using AutoMapper;
+using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
+using StudyThink.Domain.Exceptions.Courses.CourseRequirements;
+using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Courses.CourseRequirment;
 using StudyThink.Service.Interfaces.Common;
 using StudyThink.Service.Interfaces.Courses;
@@ -10,27 +13,37 @@ public class CourseReqService : ICourseReqService
 {
     private readonly ICourseReqRepository _repository;
     private readonly IFileService _fileService;
+    private readonly IMapper _mapper;
 
     public CourseReqService(ICourseReqRepository reqRepository,
-        IFileService fileService)
+        IFileService fileService, IMapper mapper)
     {
         this._repository = reqRepository;
         this._fileService = fileService;
+        this._mapper = mapper;
     }
 
-    public ValueTask<long> CountAsync()
+    public async ValueTask<long> CountAsync()
+        => await _repository.CountAsync();
+
+    public async ValueTask<bool> CreateAsync(CourseReqCretionDto model)
     {
-        throw new NotImplementedException();
+        var courseReq = _mapper.Map<CourseRequirment>(model);
+
+        courseReq.CreatedAt = TimeHelper.GetDateTime();
+        courseReq.UpdatedAt = TimeHelper.GetDateTime();
+
+        var result = await _repository.CreateAsync(courseReq);
+        return result;
     }
 
-    public ValueTask<bool> CreateAsync(CourseReqCretionDto model)
+    public async ValueTask<bool> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
-    }
+        var courseReq = await _repository.GetByIdAsync(id);
+        if (courseReq is null) throw new CourseRequirementsNotFoundException();
 
-    public ValueTask<bool> DeleteAsync(long id)
-    {
-        throw new NotImplementedException();
+        var result = await _repository.DeleteAsync(id);
+        return result;
     }
 
     public ValueTask<bool> DeleteRangeAsync(List<long> CourseReqIds)
@@ -38,18 +51,30 @@ public class CourseReqService : ICourseReqService
         throw new NotImplementedException();
     }
 
-    public ValueTask<IEnumerable<CourseRequirment>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<CourseRequirment>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        return await _repository.GetAllAsync(@params);
     }
 
-    public ValueTask<CourseRequirment> GetByIdAsync(long id)
+    public async ValueTask<CourseRequirment> GetByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        var courseReq = await _repository.GetByIdAsync(id);
+        if (courseReq is null) throw new CourseRequirementsNotFoundException();
+
+        return courseReq;
     }
 
-    public ValueTask<bool> UpdateAsync(CourseReqUpdateDto model)
+    public async ValueTask<bool> UpdateAsync(CourseReqUpdateDto model)
     {
-        throw new NotImplementedException();
+        var courseReqExists = await _repository.GetByIdAsync(model.Id);
+        if (courseReqExists is null) throw new CourseRequirementsNotFoundException();
+
+        var courseReq = _mapper.Map<CourseRequirment>(model);
+
+        courseReq.UpdatedAt = TimeHelper.GetDateTime();
+
+        var dbResult = await _repository.UpdateAsync(courseReq);
+
+        return dbResult;
     }
 }
