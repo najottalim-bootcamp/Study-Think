@@ -7,6 +7,10 @@ namespace StudyThink.DataAccess.Repositories.Courses;
 
 public class CourseRepository : BaseRepository2, ICourseRepository
 {
+    public CourseRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try

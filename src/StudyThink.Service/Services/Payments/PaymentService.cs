@@ -11,10 +11,10 @@ namespace StudyThink.Service.Services.Payments;
 
 public class PaymentService : IPaymentService
 {
-    private IPaymentDetailsRepository _paymentRepository;
+    private IPaymentRepository _paymentRepository;
     private IFileService _fileService;
     private IMapper _mapper;
-    public PaymentService(IPaymentDetailsRepository paymentRepository, IFileService fileService, IMapper mapper)
+    public PaymentService(IPaymentRepository paymentRepository, IFileService fileService, IMapper mapper)
     {
         _paymentRepository = paymentRepository;
         _fileService = fileService;

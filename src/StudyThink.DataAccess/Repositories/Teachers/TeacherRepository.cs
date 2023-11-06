@@ -7,6 +7,10 @@ namespace StudyThink.DataAccess.Repositories.Teachers
 {
     public class TeacherRepository : BaseRepository2, ITeacherRepository
     {
+        public TeacherRepository(string connectionString) : base(connectionString)
+        {
+        }
+
         public async ValueTask<bool> CreateAsync(Teacher model)
         {
             try

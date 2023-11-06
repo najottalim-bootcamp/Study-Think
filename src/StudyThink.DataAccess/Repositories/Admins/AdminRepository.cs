@@ -8,6 +8,10 @@ namespace StudyThink.DataAccess.Repositories.Admins;
 
 public class AdminRepository : BaseRepository2, IAdminRepository
 {
+    public AdminRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
