@@ -153,9 +153,28 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         }
     }
 
-    public ValueTask<IEnumerable<Student>> GetByPhoneNumberAsync(string phoneNumber)
+    public async ValueTask<IEnumerable<Student>> GetByPhoneNumberAsync(string phoneNumber)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM Students WHERE PhoneNumber = @PhoneNumber";
+
+            var parameters = new { PhoneNumber = phoneNumber };
+
+            IEnumerable<Student> students = await _connection.QueryAsync<Student>(query, parameters);
+
+            return students;
+        }
+        catch
+        {
+            return Enumerable.Empty<Student>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public async ValueTask<Student> GetByUserNameAsync(string username)
