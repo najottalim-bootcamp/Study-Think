@@ -1,13 +1,16 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Interfaces.Categories;
 using StudyThink.DataAccess.Utils;
-using StudyThink.Domain.Entities.Callaborators;
 using StudyThink.Domain.Entities.Categories;
 
 namespace StudyThink.DataAccess.Repositories.Categories;
 
-public class CategoryRepository : BaseRepository, ICategoryRepository
+public class CategoryRepository : BaseRepository2, ICategoryRepository
 {
+    public CategoryRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
@@ -76,10 +79,16 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM Categories order by Id desc " +
-               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+            string query = "SELECT * FROM Categories ORDER BY Id OFFSET" +
+                " @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
-            IEnumerable<Category>? categories = await _connection.ExecuteScalarAsync<IEnumerable<Category>>(query, @params);
+            var parameters = new
+            {
+                Offset = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            IEnumerable<Category> categories = await _connection.QueryAsync<Category>(query, parameters);
 
             return categories;
         }
@@ -100,7 +109,7 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
             await _connection.OpenAsync();
             string query = $"SELECT * FROM Categories " +
                 $"WHERE Id = {Id}";
-            Category category = await _connection.ExecuteScalarAsync<Category>(query);
+            Category? category = await _connection.ExecuteScalarAsync<Category>(query);
             return category;
 
         }

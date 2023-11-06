@@ -2,23 +2,23 @@
 using StudyThink.Domain.Entities.Teachers;
 using StudyThink.Service.Interfaces.Teachers;
 
-namespace StudyThink.Api.Controllers.Teachers
+namespace StudyThink.Api.Controllers.Teachers;
+
+[Route("api/[controller]/[action]")]
+[ApiController]
+public class TeachersController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[countroller]/[api]")]
-    public class TeachersController : ControllerBase
+    private readonly ITeacherService _teacherService;
+    public TeachersController(ITeacherService teacherService)
     {
-        private readonly ITeacherService _teacherService;
-        public TeachersController(ITeacherService teacherService)
-        {
-            _teacherService = teacherService;
-        }
+        _teacherService = teacherService;
+    }
 
-        public async ValueTask<IActionResult> GetById(long id)
-        {
-            Teacher teacher = await _teacherService.GetByIdAsync(id);
+    [HttpGet]
+    public async ValueTask<IActionResult> GetById(long id)
+    {
+        Teacher teacher = await _teacherService.GetByIdAsync(id);
 
-            return Ok(teacher);
-        }
+        return Ok(teacher);
     }
 }

@@ -5,8 +5,12 @@ using StudyThink.Service.Interfaces.Courses;
 
 namespace StudyThink.DataAccess.Repositories.Courses;
 
-public class CourseReqRepository : BaseRepository, ICourseReqRepository
+public class CourseReqRepository : BaseRepository2, ICourseReqRepository
 {
+    public CourseReqRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
@@ -63,13 +67,18 @@ public class CourseReqRepository : BaseRepository, ICourseReqRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"DELETE FROM CourseRequirments WHERE Id={Id}";
-            var result = await _connection.ExecuteAsync(query);
+
+            string query = "DELETE FROM CourseRequirements " +
+                "WHERE Id = @Id";
+
+            var parameters = new { Id };
+
+            int result = await _connection.ExecuteAsync(query, parameters);
+
             return result > 0;
         }
-        catch (Exception)
+        catch
         {
-
             return false;
         }
         finally
@@ -83,15 +92,22 @@ public class CourseReqRepository : BaseRepository, ICourseReqRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM CourseRequirments" +
-                $" order by Id desc " +
-               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
 
-            IEnumerable<CourseRequirment>? courseRequirments = await _connection.ExecuteScalarAsync<IEnumerable<CourseRequirment>>(query, @params);
+            string query = "SELECT * FROM CourseRequirements " +
+                "ORDER BY Id OFFSET @Offset ROWS " +
+                "FETCH NEXT @PageSize ROWS ONLY";
 
-            return courseRequirments;
+            var parameters = new
+            {
+                Offset = (@params.PageNumber - 1) * @params.PageSize,
+                PageSize = @params.PageSize
+            };
+
+            var result = await _connection.QueryAsync<CourseRequirment>(query, parameters);
+
+            return result;
         }
-        catch (Exception)
+        catch
         {
             return Enumerable.Empty<CourseRequirment>();
         }
@@ -106,16 +122,19 @@ public class CourseReqRepository : BaseRepository, ICourseReqRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM CourseRequirments " +
-                $"WHERE Id = {Id}";
-            CourseRequirment courseRequirment = await _connection.ExecuteScalarAsync<CourseRequirment>(query);
-            return courseRequirment;
 
+            string query = "SELECT * FROM CourseRequirements " +
+                "WHERE Id = @Id";
+
+            var parameters = new { Id };
+
+            var result = await _connection.QueryFirstOrDefaultAsync<CourseRequirment>(query, parameters);
+
+            return result;
         }
-        catch (Exception)
+        catch
         {
             return new CourseRequirment();
-
         }
         finally
         {
@@ -123,14 +142,70 @@ public class CourseReqRepository : BaseRepository, ICourseReqRepository
         }
     }
 
-    public ValueTask<CourseRequirment> GetByNameAsync(string name)
+    public async ValueTask<CourseRequirment> GetByNameAsync(string name)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM CourseRequirements " +
+                "WHERE Requirments = @Name";
+
+            var parameters = new { Name = name };
+
+            var result = await _connection
+                .QueryFirstOrDefaultAsync<CourseRequirment>(query, parameters);
+
+            return result;
+        }
+        catch
+        {
+            return new CourseRequirment();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<(long ItemsCount, IEnumerable<CourseRequirment>)> SearchAsync(string search, PaginationParams @params)
+    public async ValueTask<(long ItemsCount, IEnumerable<CourseRequirment>)> SearchAsync(string search, PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string countQuery = "SELECT COUNT(*) FROM CourseRequirements " +
+                "WHERE Requirments LIKE @Search";
+
+            var countParameters = new { Search = $"%{search}%" };
+
+            long totalCount = await _connection
+                .ExecuteScalarAsync<long>(countQuery, countParameters);
+
+            string searchQuery = "SELECT * FROM CourseRequirements " +
+                "WHERE Requirments LIKE @Search ORDER BY Id " +
+                "OFFSET @Offset ROWS FETCH NEXT @PageSize " +
+                "ROWS ONLY";
+
+            var searchParameters = new
+            {
+                Search = $"%{search}%",
+                Offset = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            var result = await _connection.QueryAsync<CourseRequirment>(searchQuery, searchParameters);
+
+            return (totalCount, result);
+        }
+        catch
+        {
+            return (0, Enumerable.Empty<CourseRequirment>());
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public async ValueTask<bool> UpdateAsync(CourseRequirment model)
@@ -138,13 +213,23 @@ public class CourseReqRepository : BaseRepository, ICourseReqRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"Update CourseRequirments SET Requirments='{model.Requirments}', CourseId='{model.CourseId}',CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt}";
-            var result = await _connection.ExecuteAsync(query, model);
-            return result > 0;
-        }
-        catch (Exception)
-        {
 
+            string query = "UPDATE CourseRequirements SET Requirments = @Requirments, CreatedAt = @CreatedAt, UpdatedAt = @UpdatedAt WHERE Id = @Id";
+
+            var parameters = new
+            {
+                model.Id,
+                model.Requirments,
+                model.CreatedAt,
+                model.UpdatedAt
+            };
+
+            int affectedRows = await _connection.ExecuteAsync(query, parameters);
+
+            return affectedRows > 0;
+        }
+        catch
+        {
             return false;
         }
         finally

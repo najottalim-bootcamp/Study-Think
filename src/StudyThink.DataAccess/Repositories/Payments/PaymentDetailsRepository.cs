@@ -1,12 +1,15 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Interfaces.Payments;
-using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Payments;
 
 namespace StudyThink.DataAccess.Repositories.Payments;
 
-public class PaymentDetailsRepository : BaseRepository, IPaymentRepository
+public class PaymentDetailsRepository : BaseRepository2, IPaymentDetailsRepository
 {
+    public PaymentDetailsRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
@@ -28,24 +31,19 @@ public class PaymentDetailsRepository : BaseRepository, IPaymentRepository
         }
     }
 
-    public async ValueTask<bool> CreateAsync(Payment model)
+    public async ValueTask<bool> CreateAsync(PaymentDetails model)
     {
-        return false;
         try
         {
             await _connection.OpenAsync();
-            string query = "";
-
-            var patametrs = new
-            {
-
-            };
-
-            var result = await _connection.ExecuteAsync(query, patametrs);
-
-            
+            string query = $"INSERT INTO PaymentDetails(CardHolderName,CardNumber,ExpirationDate,CardCodeCVV," +
+                $"CardPoneNumber,StudentId,CreatedAt,IsPaid,CourseId) " +
+                $"VALUES(@CardHolderName,@CardNumber,@ExpirationDate,@CardCodeCVV,@CardPoneNumber,@StudentId,@CreatedAt," +
+                $"@IsPaid,@CourseId)";
+            var result = await _connection.ExecuteAsync(query, model);
+            return result > 0;
         }
-        catch
+        catch (Exception)
         {
             return false;
         }
@@ -55,23 +53,68 @@ public class PaymentDetailsRepository : BaseRepository, IPaymentRepository
         }
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"DELETE FROM PaymentDetails WHERE Id={Id}";
+            var result = await _connection.ExecuteAsync(query);
+            return result > 0;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<IEnumerable<Payment>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<PaymentDetails> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM PaymentDetails " +
+                $"WHERE Id = {Id}";
+            PaymentDetails paymentDetails = await _connection.ExecuteScalarAsync<PaymentDetails>(query);
+            return paymentDetails;
+
+        }
+        catch (Exception)
+        {
+            return new PaymentDetails();
+
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<Payment> GetByIdAsync(long Id)
+    public async ValueTask<bool> UpdateAsync(PaymentDetails model)
     {
-        throw new NotImplementedException();
-    }
 
-    public ValueTask<bool> UpdateAsync(Payment model)
-    {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"Update Categories SET CardHolderName='{model.CardHolderName}',CardNumber='{model.CardNumber}',ExpirationDate='{model.ExpirationDate}'," +
+                $"CardCodeCVV='{model.CardCodeCVV}',CardPhoneNumber='{model.CardPhoneNumber}',StudentId={model.StudentId},CreatedAt={model.CreatedAt}," +
+                $"IsPaid='{model.IsPaid}',CourseId={model.CourseId}";
+            var result = await _connection.ExecuteAsync(query, model);
+            return result > 0;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 }

@@ -5,8 +5,12 @@ using StudyThink.Domain.Entities.Callaborators;
 
 namespace StudyThink.DataAccess.Repositories.Callaborators;
 
-public class CallaboratorRepository : BaseRepository, ICalloboratorRepository
+public class CallaboratorRepository : BaseRepository2, ICalloboratorRepository
 {
+    public CallaboratorRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
@@ -55,13 +59,17 @@ public class CallaboratorRepository : BaseRepository, ICalloboratorRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"DELETE FROM Callaborators WHERE Id={Id}";
-            var result = await _connection.ExecuteAsync(query);
+
+            string query = "DELETE FROM Callaborators WHERE Id = @Id";
+
+            var parameters = new { Id };
+
+            int result = await _connection.ExecuteAsync(query, parameters);
+
             return result > 0;
         }
-        catch (Exception)
+        catch
         {
-
             return false;
         }
         finally
@@ -75,14 +83,20 @@ public class CallaboratorRepository : BaseRepository, ICalloboratorRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM Callaborators order by Id desc " +
-               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
 
-            IEnumerable<Callaborator>? callaborators = await _connection.ExecuteScalarAsync<IEnumerable<Callaborator>>(query, @params);
+            string query = "SELECT * FROM Callaborators ORDER BY Id OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
+
+            var parameters = new
+            {
+                Offset = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            IEnumerable<Callaborator> callaborators = await _connection.QueryAsync<Callaborator>(query, parameters);
 
             return callaborators;
         }
-        catch (Exception)
+        catch
         {
             return Enumerable.Empty<Callaborator>();
         }
@@ -97,16 +111,19 @@ public class CallaboratorRepository : BaseRepository, ICalloboratorRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM Callaborators " +
-                $"WHERE Id = {Id}";
-            Callaborator callaborator = await _connection.ExecuteScalarAsync<Callaborator>(query);
+
+            string query = "SELECT * FROM Callaborators WHERE Id = @Id";
+
+            var parameters = new { Id };
+
+            Callaborator? callaborator = await _connection.QueryFirstOrDefaultAsync<Callaborator>(query, parameters);
+
             return callaborator;
 
         }
-        catch (Exception)
+        catch
         {
             return new Callaborator();
-
         }
         finally
         {
@@ -119,15 +136,26 @@ public class CallaboratorRepository : BaseRepository, ICalloboratorRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"UPDATE Callaborators SET Name='{model.Name}',ImagePath='{model.ImagePath}'," +
-                $"Description='{model.Description}',Email='{model.Email}',PhoneNumber='{model.PhoneNumber}'";
-            var result = await _connection.ExecuteAsync(query, model);
-            return result > 0;
 
+            string query = "UPDATE Callaborators SET Name = @Name, ImagePath = @ImagePath, Description = @Description," +
+                " Email = @Email, PhoneNumber = @PhoneNumber WHERE Id = @Id";
+
+            var parameters = new
+            {
+                model.Id,
+                model.Name,
+                model.ImagePath,
+                model.Description,
+                model.Email,
+                model.PhoneNumber
+            };
+
+            int affectedRows = await _connection.ExecuteAsync(query, parameters);
+
+            return affectedRows > 0;
         }
-        catch (Exception)
+        catch
         {
-
             return false;
         }
         finally

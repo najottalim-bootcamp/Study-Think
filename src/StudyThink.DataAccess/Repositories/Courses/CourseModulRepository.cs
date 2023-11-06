@@ -1,15 +1,17 @@
 ﻿using Dapper;
-using StudyThink.DataAccess.Common;
 using StudyThink.DataAccess.Interfaces;
 using StudyThink.DataAccess.Utils;
-using StudyThink.Domain.Entities.Course;
 using StudyThink.Domain.Entities.Courses;
 using StudyThink.Service.Interfaces.Courses;
 
 namespace StudyThink.DataAccess.Repositories.Courses;
 
-public class CourseModulRepository : BaseRepository, ICourseModulRepository
+public class CourseModulRepository : BaseRepository2, ICourseModulRepository
 {
+    public CourseModulRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
@@ -66,13 +68,17 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"DELETE FROM CourseModuls WHERE Id={Id}";
-            var result = await _connection.ExecuteAsync(query);
+
+            string query = "DELETE FROM CourseModuls WHERE Id = @Id";
+
+            var parameters = new { Id };
+
+            int result = await _connection.ExecuteAsync(query, parameters);
+
             return result > 0;
         }
-        catch (Exception)
+        catch
         {
-
             return false;
         }
         finally
@@ -86,14 +92,21 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM CourseModuls order by Id desc " +
-               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
 
-            IEnumerable<CourseModul>? courseModuls = await _connection.ExecuteScalarAsync<IEnumerable<CourseModul>>(query, @params);
+            string query = "SELECT * FROM CourseModuls ORDER BY Id " +
+                "OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
-            return courseModuls;
+            var parameters = new
+            {
+                Offset = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            var result = await _connection.QueryAsync<CourseModul>(query, parameters);
+
+            return result;
         }
-        catch (Exception)
+        catch
         {
             return Enumerable.Empty<CourseModul>();
         }
@@ -108,16 +121,19 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM CourseModuls " +
-                $"WHERE Id = {Id}";
-            CourseModul courseModul = await _connection.ExecuteScalarAsync<CourseModul>(query);
-            return courseModul;
 
+            string query = "SELECT * FROM CourseModuls " +
+                "WHERE Id = @Id";
+
+            var parameters = new { Id };
+
+            var result = await _connection.QueryFirstOrDefaultAsync<CourseModul>(query, parameters);
+
+            return result;
         }
-        catch (Exception)
+        catch
         {
             return new CourseModul();
-
         }
         finally
         {
@@ -125,14 +141,68 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         }
     }
 
-    public ValueTask<CourseModul> GetByNameAsync(string name)
+    public async ValueTask<CourseModul> GetByNameAsync(string name)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM CourseModuls " +
+                "WHERE Name = @Name";
+
+            var parameters = new { Name = name };
+
+            var result = await _connection.QueryFirstOrDefaultAsync<CourseModul>(query, parameters);
+
+            return result;
+        }
+        catch
+        {
+            return new CourseModul();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<(long ItemsCount, IEnumerable<CourseModul>)> SearchAsync(string search, PaginationParams @params)
+    public async ValueTask<(long ItemsCount, IEnumerable<CourseModul>)> SearchAsync(string search, PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string countQuery = "SELECT COUNT(*) FROM CourseModuls WHERE Name LIKE @Search";
+
+            var countParameters = new { Search = $"%{search}%" };
+
+            long totalCount = await _connection.ExecuteScalarAsync<long>(countQuery, countParameters);
+
+            string searchQuery = "SELECT * FROM CourseModuls " +
+                "WHERE Name LIKE @Search ORDER BY Id " +
+                "OFFSET @Offset ROWS FETCH NEXT @PageSize " +
+                "ROWS ONLY";
+
+            var searchParameters = new
+            {
+                Search = $"%{search}%",
+                Offset = (@params.PageNumber - 1) * @params.PageSize,
+                PageSize = @params.PageSize
+            };
+
+            var result = await _connection.QueryAsync<CourseModul>(searchQuery, searchParameters);
+
+            return (totalCount, result);
+
+        }
+        catch
+        {
+            return (0, Enumerable.Empty<CourseModul>());
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public async ValueTask<bool> UpdateAsync(CourseModul model)
@@ -140,13 +210,29 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"Update CourseModuls SET Name='{model.Name}', CourseId='{model.CourseId}',CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt}";
-            var result = await _connection.ExecuteAsync(query, model);
+
+            string query = "UPDATE CourseModuls " +
+                "SET Name = @Name, CourseId = @CourseId, " +
+                "CreatedAt = @CreatedAt, UpdatedAt = @UpdatedAt " +
+                "WHERE Id = @Id";
+
+            var parameters = new
+            {
+                model.Id,
+                model.Name,
+                model.CourseId,
+                model.CreatedAt,
+                model.UpdatedAt
+            };
+
+            int result = await _connection.ExecuteAsync(query, parameters);
+
+            _connection.Close();
+
             return result > 0;
         }
-        catch (Exception)
+        catch
         {
-
             return false;
         }
         finally
@@ -155,5 +241,13 @@ public class CourseModulRepository : BaseRepository, ICourseModulRepository
         }
     }
 
-  
+    ValueTask<CourseModul> IRepository<CourseModul>.GetByIdAsync(long Id)
+    {
+        throw new NotImplementedException();
+    }
+
+    ValueTask<CourseModul> ICourseModulRepository.GetByNameAsync(string name)
+    {
+        throw new NotImplementedException();
+    }
 }

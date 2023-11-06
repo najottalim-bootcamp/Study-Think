@@ -5,8 +5,12 @@ using StudyThink.Domain.Entities.Videos;
 
 namespace StudyThink.DataAccess.Repositories.Videos
 {
-    public class VideoRepository : BaseRepository, IVideoRepository
+    public class VideoRepository : BaseRepository2, IVideoRepository
     {
+        public VideoRepository(string connectionString) : base(connectionString)
+        {
+        }
+
         public async ValueTask<long> CountAsync()
         {
             try

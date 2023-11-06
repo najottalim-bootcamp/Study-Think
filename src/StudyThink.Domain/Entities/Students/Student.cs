@@ -14,4 +14,5 @@ public class Student : Human
 
     public string? ImagePath { get; set; }
 
+    public DateTime DeletedAt { get; set; }
 }

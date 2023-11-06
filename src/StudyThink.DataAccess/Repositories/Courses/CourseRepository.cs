@@ -1,13 +1,16 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Utils;
-using StudyThink.Domain.Entities.Categories;
 using StudyThink.Domain.Entities.Courses;
 using StudyThink.Service.Interfaces.Courses;
 
 namespace StudyThink.DataAccess.Repositories.Courses;
 
-public class CourseRepository : BaseRepository, ICourseRepository
+public class CourseRepository : BaseRepository2, ICourseRepository
 {
+    public CourseRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
@@ -34,8 +37,8 @@ public class CourseRepository : BaseRepository, ICourseRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"INSERT INTO Courses(Name,Description,CategoryId,Price,ImagePath,TotalPrice,Lessons,Duration,Language,DiscountPrice,CourseReqId) " +
-                $"VALUES ('{model.Name}', '{model.Description}', '{model.CategoryId}', '{model.Price}', '{model.ImagePath}', '{model.TotalPrice}', '{model.Lessons}', '{model.Duration}', '{model.Language}','{model.DiscountPrice}', '{model.CourseReqId}')";
+            string query = $"INSERT INTO Courses(Name, Description, CategoryId, Price, ImagePath, TotalPrice, Lessons, Duration, Language, DiscountPrice, CourseReqId, CreatedAt, UpdatedAt) " +
+                $"VALUES (@Name, @Description, {model.CategoryId}, @Price, @ImagePath, @TotalPrice, @Lessons, @Duration, @Language, @DiscountPrice, {model.CourseReqId}, @CreatedAt, UpdatedAt)";
 
             var result = await _connection.ExecuteAsync(query, model);
 
@@ -56,13 +59,18 @@ public class CourseRepository : BaseRepository, ICourseRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"DELETE FROM Courses WHERE Id={Id}";
-            var result = await _connection.ExecuteAsync(query);
+
+            string query = "DELETE FROM Courses " +
+                "WHERE Id = @Id";
+
+            var parameters = new { Id };
+
+            int result = await _connection.ExecuteAsync(query, parameters);
+
             return result > 0;
         }
-        catch (Exception)
+        catch
         {
-
             return false;
         }
         finally
@@ -76,14 +84,22 @@ public class CourseRepository : BaseRepository, ICourseRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM Courses order by Id desc " +
-               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
 
-            IEnumerable<Course>? categories = await _connection.ExecuteScalarAsync<IEnumerable<Course>>(query, @params);
+            string query = "SELECT * FROM Courses " +
+                "ORDER BY Id OFFSET @Offset ROWS " +
+                "FETCH NEXT @PageSize ROWS ONLY";
 
-            return categories;
+            var parameters = new
+            {
+                Offset = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            IEnumerable<Course> courses = await _connection.QueryAsync<Course>(query, parameters);
+
+            return courses;
         }
-        catch (Exception)
+        catch
         {
             return Enumerable.Empty<Course>();
         }
@@ -98,16 +114,45 @@ public class CourseRepository : BaseRepository, ICourseRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM Courses " +
-                $"WHERE Id = {Id}";
-            Course course = await _connection.ExecuteScalarAsync<Course>(query);
-            return course;
 
+            string query = "SELECT * FROM Courses " +
+                "WHERE Id = @Id";
+
+            var parameters = new { Id };
+
+            Course? course = await _connection
+                .QueryFirstOrDefaultAsync<Course>(query, parameters);
+
+            return course;
         }
-        catch (Exception)
+        catch
         {
             return new Course();
+        }
+        finally
+        {
+            await _connection.OpenAsync();
+        }
+    }
 
+    public async ValueTask<IEnumerable<Course>> GetByNameAsync(string name)
+    {
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM Courses " +
+                "WHERE Name = @Name";
+
+            var parameters = new { Name = name };
+
+            var result = await _connection.QueryAsync<Course>(query, parameters);
+
+            return result;
+        }
+        catch
+        {
+            return Enumerable.Empty<Course>();
         }
         finally
         {
@@ -115,14 +160,44 @@ public class CourseRepository : BaseRepository, ICourseRepository
         }
     }
 
-    public ValueTask<IEnumerable<Course>> GetByNameAsync(string name)
+    public async ValueTask<(long ItemsCount, IEnumerable<Course>)> SearchAsync(string search, PaginationParams @params)
     {
-        throw new NotImplementedException();
-    }
+        try
+        {
+            await _connection.OpenAsync();
 
-    public ValueTask<(long ItemsCount, IEnumerable<Course>)> SearchAsync(string search, PaginationParams @params)
-    {
-        throw new NotImplementedException();
+            string countQuery = "SELECT COUNT(*) FROM Courses " +
+                "WHERE Name LIKE @Search";
+
+            var countParameters = new { Search = $"%{search}%" };
+
+            long totalCount = await _connection
+                .ExecuteScalarAsync<long>(countQuery, countParameters);
+
+            string searchQuery = "SELECT * FROM Courses " +
+                "WHERE Name LIKE @Search ORDER BY Id " +
+                "OFFSET @Offset ROWS FETCH NEXT @PageSize " +
+                "ROWS ONLY";
+
+            var searchParameters = new
+            {
+                Search = $"%{search}%",
+                Offset = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            var result = await _connection.QueryAsync<Course>(searchQuery, searchParameters);
+
+            return (totalCount, result);
+        }
+        catch
+        {
+            return (0, Enumerable.Empty<Course>());
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public async ValueTask<bool> UpdateAsync(Course model)
@@ -130,15 +205,39 @@ public class CourseRepository : BaseRepository, ICourseRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"Update Courses SET Name='{model.Name}',Description='{model.Description}',CategoryId={model.CategoryId},Price={model.Price},ImagePath='{model.ImagePath}'," +
-                $"TotalPrice={model.TotalPrice},Lessons={model.Lessons},Duration={model.Duration},Language='{model.Language}',DiscountPrice={model.DiscountPrice}," +
-                $"CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt}";
-            var result = await _connection.ExecuteAsync(query, model);
+
+            string query = "UPDATE Courses " +
+                "SET Name = @Name, Description = @Description, " +
+                "CategoryId = @CategoryId, Price = @Price, ImagePath = @ImagePath, " +
+                "TotalPrice = @TotalPrice, Lessons = @Lessons, Duration = @Duration, " +
+                "Language = @Language, DiscountPrice = @DiscountPrice, CreatedAt = @CreatedAt, " +
+                "UpdatedAt = @UpdatedAt, CourseReqId = @CourseReqId " +
+                "WHERE Id = @Id";
+
+            var parameters = new
+            {
+                model.Id,
+                model.Name,
+                model.Description,
+                model.CategoryId,
+                model.Price,
+                model.ImagePath,
+                model.TotalPrice,
+                model.Lessons,
+                model.Duration,
+                model.Language,
+                model.DiscountPrice,
+                model.CreatedAt,
+                model.UpdatedAt,
+                model.CourseReqId
+            };
+
+            int result = await _connection.ExecuteAsync(query, parameters);
+
             return result > 0;
         }
-        catch (Exception)
+        catch
         {
-
             return false;
         }
         finally
