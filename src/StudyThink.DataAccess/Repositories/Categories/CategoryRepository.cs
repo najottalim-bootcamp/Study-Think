@@ -79,10 +79,16 @@ public class CategoryRepository : BaseRepository2, ICategoryRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM Categories order by Id desc " +
-               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+            string query = "SELECT * FROM Categories ORDER BY Id OFFSET" +
+                " @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
-            IEnumerable<Category>? categories = await _connection.ExecuteScalarAsync<IEnumerable<Category>>(query, @params);
+            var parameters = new
+            {
+                Offset = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            IEnumerable<Category> categories = await _connection.QueryAsync<Category>(query, parameters);
 
             return categories;
         }
