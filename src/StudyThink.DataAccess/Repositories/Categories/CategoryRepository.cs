@@ -109,7 +109,7 @@ public class CategoryRepository : BaseRepository2, ICategoryRepository
             await _connection.OpenAsync();
             string query = $"SELECT * FROM Categories " +
                 $"WHERE Id = {Id}";
-            Category? category = await _connection.ExecuteScalarAsync<Category>(query);
+            Category? category = await _connection.QueryFirstOrDefaultAsync<Category>(query);
             return category;
 
         }
@@ -134,7 +134,9 @@ public class CategoryRepository : BaseRepository2, ICategoryRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"Update Categories SET Name='{model.Name}',Description='{model.Description}'";
+            string query = $"Update Categories SET Name=@Name,Description=@Description " +
+                $"Where Id = @Id";
+
             var result = await _connection.ExecuteAsync(query, model);
             return result > 0;
         }
