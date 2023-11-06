@@ -1,7 +1,9 @@
 ﻿using StudyThink.DataAccess.Interfaces.Categories;
+using StudyThink.DataAccess.Interfaces.Payments;
 using StudyThink.DataAccess.Interfaces.Teachers;
 using StudyThink.DataAccess.Repositories.Categories;
 using StudyThink.DataAccess.Repositories.Courses;
+using StudyThink.DataAccess.Repositories.Payments;
 using StudyThink.DataAccess.Repositories.Teachers;
 using StudyThink.Service.Interfaces.Common;
 using StudyThink.Service.Interfaces.Courses;
@@ -22,6 +24,7 @@ public static class DataAccessConfiguration
         builder.Services.AddScoped<ITeacherRepository>(x => new TeacherRepository(ConnectionString));
         builder.Services.AddScoped<ICategoryRepository>(x => new CategoryRepository(ConnectionString));
         builder.Services.AddScoped<ICourseRepository>(x => new CourseRepository(ConnectionString));
+        builder.Services.AddScoped<IPaymentRepository>(x => new PaymentRepository(ConnectionString));
 
     }
 }
