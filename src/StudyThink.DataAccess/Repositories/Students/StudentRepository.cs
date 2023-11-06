@@ -35,7 +35,7 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         {
             await _connection.OpenAsync();
             string query = "INSERT INTO Students(FirstName, LastName,DateOfBirth,UserName,Password, Email,PhoneNumber, Gender, CreatedAt, UpdatedAt, DeletedAt) " +
-                "VALUES (@FirstName, @LastName,@DateOfBirth,@UserName,@Password,@ Email,@PhoneNumber,@ Gender, @CreatedAt,@ UpdatedAt,@ DeletedAt)";
+                "VALUES (@FirstName, @LastName,@DateOfBirth,@UserName,@Password,@Email,@PhoneNumber,@Gender, @CreatedAt,@UpdatedAt,@DeletedAt)";
 
             var result = await _connection.ExecuteAsync(query, model);
 
@@ -152,15 +152,26 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"Update Categories SET FirstName='{model.FirstName}',LastName='{model.LastName}',DateOfBirth={model.DateOfBirth},UserName='{model.Username}'," +
-                $"Password='{model.Password}', Email='{model.Email}',PhoneNumber='{model.PhoneNumber}', Gender='{model.Gender}', CreatedAt={model.CreatedAt}, " +
-                $"UpdatedAt={model.UpdatedAt}, DeletedAt={model.DeletedAt}";
+
+            string query = @"UPDATE Students SET 
+                            FirstName = @FirstName,
+                            LastName = @LastName,
+                            DateOfBirth = @DateOfBirth,
+                            UserName = @UserName,
+                            Password = @Password,
+                            Email = @Email,
+                            PhoneNumber = @PhoneNumber,
+                            Gender = @Gender,
+                            CreatedAt = @CreatedAt,
+                            UpdatedAt = @UpdatedAt,
+                            DeletedAt = @DeletedAt 
+                            WHERE Id = @Id";
+
             var result = await _connection.ExecuteAsync(query, model);
             return result > 0;
         }
-        catch (Exception)
+        catch
         {
-
             return false;
         }
         finally
