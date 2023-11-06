@@ -33,7 +33,7 @@ public class CourseService : ICourseService
 
     public async ValueTask<bool> DeleteAsync(long Id)
     {
-        var result =await _courseRepository.DeleteAsync(Id);
+        var result = await _courseRepository.DeleteAsync(Id);
         return result;
     }
 
@@ -50,13 +50,13 @@ public class CourseService : ICourseService
 
     public async ValueTask<Course> GetByIdAsync(long Id)
     {
-        var result =await _courseRepository.GetByIdAsync(Id);
+        var result = await _courseRepository.GetByIdAsync(Id);
         return result;
     }
 
     public ValueTask<bool> UpdateAsync(CourseUpdateDto model)
     {
-        Course course= _mapper.Map<Course>(model);
+        Course course = _mapper.Map<Course>(model);
         course.UpdatedAt = DateTime.UtcNow;
         var result = _courseRepository.UpdateAsync(course);
 

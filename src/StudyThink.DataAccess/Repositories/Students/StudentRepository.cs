@@ -6,8 +6,12 @@ using StudyThink.Domain.Enums;
 
 namespace StudyThink.DataAccess.Repositories.Students;
 
-public class StudentRepository : BaseRepository, IStudentRepository
+public class StudentRepository : BaseRepository2, IStudentRepository
 {
+    public StudentRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
@@ -34,9 +38,8 @@ public class StudentRepository : BaseRepository, IStudentRepository
         try
         {
             await _connection.OpenAsync();
-
-            string query = "INSERT INTO Students(FirstName, LasntName, DateOfBith, UserName, Password, Email, PhoneNumber, Gender, CreatedAt, UpdatedAt, DeletedAt, ImagePath) " +
-                "VALUES (@FirstName, @LasntName, @DateOfBith, @UserName, @Password, @Email, @PhoneNumber, @Gender, @CreatedAt, @UpdatedAt, @DeletedAt, @ImagePath)";
+            string query = "INSERT INTO Students(FirstName, LastName,DateOfBirth,UserName,Password, Email,PhoneNumber, Gender, CreatedAt, UpdatedAt, DeletedAt) " +
+                "VALUES (@FirstName, @LastName,@DateOfBirth,@UserName,@Password,@Email,@PhoneNumber,@Gender, @CreatedAt,@UpdatedAt,@DeletedAt)";
 
             var result = await _connection.ExecuteAsync(query, model);
 
@@ -78,14 +81,20 @@ public class StudentRepository : BaseRepository, IStudentRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM Students order by Id desc " +
-               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+            string query = @"SELECT * FROM Students ORDER BY Id DESC 
+                         OFFSET @SkipCount ROWS FETCH NEXT @PageSize ROWS ONLY";
 
-            IEnumerable<Student>? students = await _connection.ExecuteScalarAsync<IEnumerable<Student>>(query, @params);
+            var parameters = new
+            {
+                SkipCount = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            IEnumerable<Student> students = await _connection.QueryAsync<Student>(query, parameters);
 
             return students;
         }
-        catch (Exception)
+        catch
         {
             return Enumerable.Empty<Student>();
         }
@@ -95,9 +104,30 @@ public class StudentRepository : BaseRepository, IStudentRepository
         }
     }
 
-    public ValueTask<Student> GetByEmailAsync(string email)
+    public async ValueTask<Student> GetByEmailAsync(string email)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM Students WHERE Email = @Email";
+
+            var parameters = new { Email = email };
+
+            Student student = await _connection.QuerySingleOrDefaultAsync<Student>(query, parameters);
+
+            return student;
+
+        }
+        catch (Exception)
+        {
+            return new Student();
+
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<IEnumerable<Student>> GetByGenderAsync(Gender gender)
@@ -112,8 +142,8 @@ public class StudentRepository : BaseRepository, IStudentRepository
             await _connection.OpenAsync();
             string query = $"SELECT * FROM Students " +
                 $"WHERE Id = {Id}";
-            Student students = await _connection.ExecuteScalarAsync<Student>(query);
-            return students;
+            Student student = await _connection.ExecuteScalarAsync<Student>(query);
+            return student;
 
         }
         catch (Exception)
@@ -127,14 +157,52 @@ public class StudentRepository : BaseRepository, IStudentRepository
         }
     }
 
-    public ValueTask<IEnumerable<Student>> GetByPhoneNumberAsync(string phoneNumber)
+    public async ValueTask<IEnumerable<Student>> GetByPhoneNumberAsync(string phoneNumber)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM Students WHERE PhoneNumber = @PhoneNumber";
+
+            var parameters = new { PhoneNumber = phoneNumber };
+
+            IEnumerable<Student> students = await _connection.QueryAsync<Student>(query, parameters);
+
+            return students;
+        }
+        catch
+        {
+            return Enumerable.Empty<Student>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<Student> GetByUserNameAsync(string username)
+    public async ValueTask<Student> GetByUserNameAsync(string username)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM Students WHERE UserName = @Username";
+
+            var parameters = new { Username = username };
+
+            Student student = await _connection.QuerySingleOrDefaultAsync<Student>(query, parameters);
+
+            return student;
+        }
+        catch
+        {
+            return new Student();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<(long ItemsCount, IEnumerable<Student>)> SearchAsync(string search, PaginationParams @params)
@@ -147,15 +215,26 @@ public class StudentRepository : BaseRepository, IStudentRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"Update Students SET FirstName='{model.FirstName}',LastName='{model.LastName}',DateOfBirth={model.DateOfBirth},UserName='{model.Username}'," +
-                $"Password='{model.Password}',Email='{model.Email}',PhoneNumber='{model.PhoneNumber}',Gender='{model.Gender}'," +
-                $"CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt},ImagePath='{model.ImagePath}'";
+
+            string query = @"UPDATE Students SET 
+                            FirstName = @FirstName,
+                            LastName = @LastName,
+                            DateOfBirth = @DateOfBirth,
+                            UserName = @UserName,
+                            Password = @Password,
+                            Email = @Email,
+                            PhoneNumber = @PhoneNumber,
+                            Gender = @Gender,
+                            CreatedAt = @CreatedAt,
+                            UpdatedAt = @UpdatedAt,
+                            DeletedAt = @DeletedAt 
+                            WHERE Id = @Id";
+
             var result = await _connection.ExecuteAsync(query, model);
             return result > 0;
         }
-        catch (Exception)
+        catch
         {
-
             return false;
         }
         finally

@@ -3,13 +3,13 @@ using System.Data.SqlClient;
 
 namespace StudyThink.DataAccess.Repositories;
 
-public class BaseRepository
+public class BaseRepository2
 {
     protected readonly SqlConnection _connection;
 
-    public BaseRepository()
+    public BaseRepository2(string connectionString)
     {
         DefaultTypeMap.MatchNamesWithUnderscores = true;
-        this._connection = new SqlConnection("Server=(localdb)\\MSSQLLocalDB;Database=StudyThink;Trusted_Connection=True;TrustServerCertificate=true;");
+        this._connection = new SqlConnection(connectionString);
     }
 }

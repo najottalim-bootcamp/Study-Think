@@ -5,8 +5,12 @@ using StudyThink.Service.Interfaces.Courses;
 
 namespace StudyThink.DataAccess.Repositories.Courses;
 
-public class CourseReqRepository : BaseRepository, ICourseReqRepository
+public class CourseReqRepository : BaseRepository2, ICourseReqRepository
 {
+    public CourseReqRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
@@ -58,69 +62,19 @@ public class CourseReqRepository : BaseRepository, ICourseReqRepository
         }
     }
 
-    public async ValueTask<bool> DeleteAsync(long Id)
+    public ValueTask<bool> DeleteAsync(long Id)
     {
-        try
-        {
-            await _connection.OpenAsync();
-            string query = $"DELETE FROM CourseRequirments WHERE Id={Id}";
-            var result = await _connection.ExecuteAsync(query);
-            return result > 0;
-        }
-        catch (Exception)
-        {
-
-            return false;
-        }
-        finally
-        {
-            await _connection.CloseAsync();
-        }
+        throw new NotImplementedException();
     }
 
-    public async ValueTask<IEnumerable<CourseRequirment>> GetAllAsync(PaginationParams @params)
+    public ValueTask<IEnumerable<CourseRequirment>> GetAllAsync(PaginationParams @params)
     {
-        try
-        {
-            await _connection.OpenAsync();
-            string query = $"SELECT * FROM CourseRequirments" +
-                $" order by Id desc " +
-               $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
-
-            IEnumerable<CourseRequirment>? courseRequirments = await _connection.ExecuteScalarAsync<IEnumerable<CourseRequirment>>(query, @params);
-
-            return courseRequirments;
-        }
-        catch (Exception)
-        {
-            return Enumerable.Empty<CourseRequirment>();
-        }
-        finally
-        {
-            await _connection.CloseAsync();
-        }
+        throw new NotImplementedException();
     }
 
-    public async ValueTask<CourseRequirment> GetByIdAsync(long Id)
+    public ValueTask<CourseRequirment> GetByIdAsync(long Id)
     {
-        try
-        {
-            await _connection.OpenAsync();
-            string query = $"SELECT * FROM CourseRequirments " +
-                $"WHERE Id = {Id}";
-            CourseRequirment courseRequirment = await _connection.ExecuteScalarAsync<CourseRequirment>(query);
-            return courseRequirment;
-
-        }
-        catch (Exception)
-        {
-            return new CourseRequirment();
-
-        }
-        finally
-        {
-            await _connection.CloseAsync();
-        }
+        throw new NotImplementedException();
     }
 
     public ValueTask<CourseRequirment> GetByNameAsync(string name)
@@ -133,23 +87,8 @@ public class CourseReqRepository : BaseRepository, ICourseReqRepository
         throw new NotImplementedException();
     }
 
-    public async ValueTask<bool> UpdateAsync(CourseRequirment model)
+    public ValueTask<bool> UpdateAsync(CourseRequirment model)
     {
-        try
-        {
-            await _connection.OpenAsync();
-            string query = $"Update CourseRequirments SET Requirments='{model.Requirments}', CourseId='{model.CourseId}',CreatedAt={model.CreatedAt},UpdatedAt={model.UpdatedAt}";
-            var result = await _connection.ExecuteAsync(query, model);
-            return result > 0;
-        }
-        catch (Exception)
-        {
-
-            return false;
-        }
-        finally
-        {
-            await _connection.CloseAsync();
-        }
+        throw new NotImplementedException();
     }
 }
