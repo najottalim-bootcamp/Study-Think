@@ -208,8 +208,33 @@ public class CourseReqRepository : BaseRepository2, ICourseReqRepository
         }
     }
 
-    public ValueTask<bool> UpdateAsync(CourseRequirment model)
+    public async ValueTask<bool> UpdateAsync(CourseRequirment model)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "UPDATE CourseRequirements SET Requirments = @Requirments, CreatedAt = @CreatedAt, UpdatedAt = @UpdatedAt WHERE Id = @Id";
+
+            var parameters = new
+            {
+                model.Id,
+                model.Requirments,
+                model.CreatedAt,
+                model.UpdatedAt
+            };
+
+            int affectedRows = await _connection.ExecuteAsync(query, parameters);
+
+            return affectedRows > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 }
