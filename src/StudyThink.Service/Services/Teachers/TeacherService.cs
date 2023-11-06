@@ -107,12 +107,16 @@ namespace StudyThink.Service.Services.Teachers
 
         public async ValueTask<Teacher> GetByEmailAsync(string email)
         {
-            //Teacher teacher = await _teacherRepository.GetByEmailAsync(email);
+            Teacher teacher = await _teacherRepository.GetByEmailAsync(email);
 
-            //if (teacher == null) throw new TeacherNotFoundException();
-
-            throw new NotImplementedException();
-
+            if (teacher == null)
+            {
+                throw new TeacherNotFoundException();
+            }
+            else
+            {
+                return teacher;
+            }
         }
 
         public async ValueTask<Teacher> GetByIdAsync(long Id)
