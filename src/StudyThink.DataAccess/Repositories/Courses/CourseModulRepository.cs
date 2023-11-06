@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using StudyThink.DataAccess.Common;
 using StudyThink.DataAccess.Interfaces;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
@@ -9,6 +8,10 @@ namespace StudyThink.DataAccess.Repositories.Courses;
 
 public class CourseModulRepository : BaseRepository2, ICourseModulRepository
 {
+    public CourseModulRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try

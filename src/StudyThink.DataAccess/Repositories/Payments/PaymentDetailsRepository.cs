@@ -1,13 +1,15 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Interfaces.Payments;
-using StudyThink.Domain.Entities.Categories;
 using StudyThink.Domain.Entities.Payments;
-using StudyThink.Domain.Entities.Teachers;
 
 namespace StudyThink.DataAccess.Repositories.Payments;
 
 public class PaymentDetailsRepository : BaseRepository2, IPaymentDetailsRepository
 {
+    public PaymentDetailsRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
@@ -46,7 +48,7 @@ public class PaymentDetailsRepository : BaseRepository2, IPaymentDetailsReposito
             return false;
         }
         finally
-        { 
+        {
             await _connection.CloseAsync();
         }
     }

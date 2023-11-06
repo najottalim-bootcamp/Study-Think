@@ -7,6 +7,10 @@ namespace StudyThink.DataAccess.Repositories.Categories;
 
 public class CategoryRepository : BaseRepository2, ICategoryRepository
 {
+    public CategoryRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try

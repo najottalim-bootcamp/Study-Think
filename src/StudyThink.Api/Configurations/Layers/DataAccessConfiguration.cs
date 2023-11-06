@@ -13,14 +13,15 @@ public static class DataAccessConfiguration
 {
     public static void ConfigureDataAccess(this WebApplicationBuilder builder)
     {
+        string ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         // AutoMapping
         builder.Services.AddAutoMapper(typeof(MapperConfiguration));
 
         // Database Configurations field
         builder.Services.AddScoped<IFileService, FileService>();
-        builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
-        builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-        builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+        builder.Services.AddScoped<ITeacherRepository>(x => new TeacherRepository(ConnectionString));
+        builder.Services.AddScoped<ICategoryRepository>(x => new CategoryRepository(ConnectionString));
+        builder.Services.AddScoped<ICourseRepository>(x => new CourseRepository(ConnectionString));
 
     }
 }

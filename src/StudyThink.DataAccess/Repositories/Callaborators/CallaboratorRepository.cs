@@ -7,6 +7,10 @@ namespace StudyThink.DataAccess.Repositories.Callaborators;
 
 public class CallaboratorRepository : BaseRepository2, ICalloboratorRepository
 {
+    public CallaboratorRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
