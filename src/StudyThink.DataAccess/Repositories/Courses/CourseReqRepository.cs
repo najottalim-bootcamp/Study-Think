@@ -117,19 +117,95 @@ public class CourseReqRepository : BaseRepository2, ICourseReqRepository
         }
     }
 
-    public ValueTask<CourseRequirment> GetByIdAsync(long Id)
+    public async ValueTask<CourseRequirment> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM CourseRequirements " +
+                "WHERE Id = @Id";
+
+            var parameters = new { Id };
+
+            var result = await _connection.QueryFirstOrDefaultAsync<CourseRequirment>(query, parameters);
+
+            return result;
+        }
+        catch
+        {
+            return new CourseRequirment();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<CourseRequirment> GetByNameAsync(string name)
+    public async ValueTask<CourseRequirment> GetByNameAsync(string name)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM CourseRequirements " +
+                "WHERE Requirments = @Name";
+
+            var parameters = new { Name = name };
+
+            var result = await _connection
+                .QueryFirstOrDefaultAsync<CourseRequirment>(query, parameters);
+
+            return result;
+        }
+        catch
+        {
+            return new CourseRequirment();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<(long ItemsCount, IEnumerable<CourseRequirment>)> SearchAsync(string search, PaginationParams @params)
+    public async ValueTask<(long ItemsCount, IEnumerable<CourseRequirment>)> SearchAsync(string search, PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string countQuery = "SELECT COUNT(*) FROM CourseRequirements " +
+                "WHERE Requirments LIKE @Search";
+
+            var countParameters = new { Search = $"%{search}%" };
+
+            long totalCount = await _connection
+                .ExecuteScalarAsync<long>(countQuery, countParameters);
+
+            string searchQuery = "SELECT * FROM CourseRequirements " +
+                "WHERE Requirments LIKE @Search ORDER BY Id " +
+                "OFFSET @Offset ROWS FETCH NEXT @PageSize " +
+                "ROWS ONLY";
+
+            var searchParameters = new
+            {
+                Search = $"%{search}%",
+                Offset = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            var result = await _connection.QueryAsync<CourseRequirment>(searchQuery, searchParameters);
+
+            return (totalCount, result);
+        }
+        catch
+        {
+            return (0, Enumerable.Empty<CourseRequirment>());
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<bool> UpdateAsync(CourseRequirment model)
