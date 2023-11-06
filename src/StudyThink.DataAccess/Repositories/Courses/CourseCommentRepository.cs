@@ -64,14 +64,56 @@ public class CourseCommentRepository : BaseRepository2, ICourseCommentRepository
         }
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "DELETE FROM CourseComments WHERE Id = @Id";
+
+            var parameters = new { Id };
+
+            int result = await _connection.ExecuteAsync(query, parameters);
+
+            return result > 0;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public ValueTask<IEnumerable<CourseComment>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<CourseComment>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM CourseComments ORDER BY Id OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
+
+            var parameters = new
+            {
+                Offset = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            IEnumerable<CourseComment> courseComments = await _connection.QueryAsync<CourseComment>(query, parameters);
+
+            return courseComments;
+        }
+        catch
+        {
+            return Enumerable.Empty<CourseComment>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public ValueTask<CourseComment> GetByComment(string comment)

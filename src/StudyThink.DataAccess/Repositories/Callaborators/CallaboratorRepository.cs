@@ -88,7 +88,7 @@ public class CallaboratorRepository : BaseRepository2, ICalloboratorRepository
 
             var parameters = new
             {
-                Offset = (@params.PageNumber - 1) * @params.PageSize,
+                Offset = @params.GetSkipCount(),
                 PageSize = @params.PageSize
             };
 
