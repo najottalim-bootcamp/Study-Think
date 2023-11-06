@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudyThink.DataAccess.Utils;
-using StudyThink.Domain.Entities.Courses;
 using StudyThink.Service.DTOs.Courses.Course;
 using StudyThink.Service.Interfaces.Courses;
 
@@ -46,17 +45,17 @@ public class CourseController : ControllerBase
     [HttpGet]
     public async ValueTask<IActionResult> GetByIdAsync(long id)
     {
-        var result =await courseService.GetByIdAsync(id);
+        var result = await courseService.GetByIdAsync(id);
         return Ok(result);
     }
     [HttpPut]
-    public async ValueTask<IActionResult> UpdateAsync([FromForm]CourseUpdateDto courseUpdateDto)
+    public async ValueTask<IActionResult> UpdateAsync([FromForm] CourseUpdateDto courseUpdateDto)
     {
-        var result =await courseService.UpdateAsync(courseUpdateDto);
+        var result = await courseService.UpdateAsync(courseUpdateDto);
         return Ok(result);
     }
 
 
-    
+
 
 }

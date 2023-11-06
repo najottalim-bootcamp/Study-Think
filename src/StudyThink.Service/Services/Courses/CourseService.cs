@@ -16,9 +16,8 @@ public class CourseService : ICourseService
         this._courseRepository = repo;
         this._mapper = mapper;
     }
+
     public async ValueTask<long> CountAsync() => await _courseRepository.CountAsync();
-
-
 
     public async ValueTask<bool> CreateAsync(CourseCreationDto model)
     {
