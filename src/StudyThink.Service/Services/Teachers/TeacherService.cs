@@ -92,6 +92,7 @@ namespace StudyThink.Service.Services.Teachers
             return true;
         }
 
+        // Done
         public async ValueTask<IEnumerable<Teacher>> GetAllAsync(PaginationParams @params)
         {
             IEnumerable<Teacher> teachers = await _teacherRepository.GetAllAsync(@params);
@@ -120,6 +121,7 @@ namespace StudyThink.Service.Services.Teachers
             }
         }
 
+        // Done
         public async ValueTask<Teacher> GetByIdAsync(long Id)
         {
             Teacher teacher = await _teacherRepository.GetByIdAsync(Id);
@@ -130,6 +132,7 @@ namespace StudyThink.Service.Services.Teachers
             }
             return teacher;
         }
+
 
         public async ValueTask<bool> UpdateAsync(TeacherUpdateDto model)
         {
