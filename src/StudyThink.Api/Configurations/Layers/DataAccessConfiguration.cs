@@ -25,6 +25,8 @@ public static class DataAccessConfiguration
         builder.Services.AddScoped<ICategoryRepository>(x => new CategoryRepository(ConnectionString));
         builder.Services.AddScoped<ICourseRepository>(x => new CourseRepository(ConnectionString));
         builder.Services.AddScoped<IPaymentRepository>(x => new PaymentRepository(ConnectionString));
+        builder.Services.AddScoped<IPaymentDetailsRepository>(x => new PaymentDetailsRepository(ConnectionString));
+
 
     }
 }
