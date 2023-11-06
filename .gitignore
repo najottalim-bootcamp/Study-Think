@@ -400,3 +400,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /src/StudyThink.DataAccess/Repositories/BaseRepository.cs
+/src/StudyThink.Api/appsettings.json
