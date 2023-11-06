@@ -20,7 +20,7 @@ public class TeachersController : ControllerBase
     }
 
     [HttpGet]
-    public async ValueTask<IActionResult> GetById(long id)
+    public async ValueTask<IActionResult> GetByIdAsync(long id)
     {
         Teacher teacher = await _teacherService.GetByIdAsync(id);
 
@@ -28,7 +28,7 @@ public class TeachersController : ControllerBase
     }
 
     [HttpPost]
-    public async ValueTask<IActionResult> PostTeacher([FromForm]TeacherCreationDto teacher)
+    public async ValueTask<IActionResult> PostTeacherAsync([FromForm]TeacherCreationDto teacher)
     {
         bool result = await _teacherService.CreateAsync(teacher);
 
@@ -36,10 +36,18 @@ public class TeachersController : ControllerBase
     }
 
     [HttpGet]
-    public async ValueTask<IActionResult> GetAll([FromForm] int page)
+    public async ValueTask<IActionResult> GetAllAsync([FromQuery] int page)
     {
         IEnumerable<Teacher> teachers = await _teacherService.GetAllAsync(new PaginationParams(page, _maxPageSize));
 
         return Ok(teachers);
+    }
+
+    [HttpGet]
+    public async ValueTask<IActionResult> CountAsync()
+    {
+        long result = await _teacherService.CountAsync();
+
+        return Ok(result);
     }
 }
