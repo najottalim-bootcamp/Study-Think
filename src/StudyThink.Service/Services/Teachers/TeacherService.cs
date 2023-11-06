@@ -148,11 +148,11 @@ namespace StudyThink.Service.Services.Teachers
 
             throw new NotImplementedException();
 
-                //string newImagePath = await _fileService.UploadAvatarAsync(userUpdateDto.UserAvatar);
+            //string newImagePath = await _fileService.UploadAvatarAsync(userUpdateDto.UserAvatar);
 
-                //user.UserAvatar = newImagePath;
+            //user.UserAvatar = newImagePath;
 
-            }
+        }
 
         public ValueTask<bool> UpdateImageAsync(long teacherId, IFormFile teacherImage)
         {

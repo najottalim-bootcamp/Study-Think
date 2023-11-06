@@ -2,12 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using StudyThink.DataAccess.Interfaces.Students;
 using StudyThink.DataAccess.Utils;
-using StudyThink.Domain.Entities.Courses;
 using StudyThink.Domain.Entities.Students;
-using StudyThink.Domain.Entities.Teachers;
 using StudyThink.Domain.Exceptions.Files;
 using StudyThink.Domain.Exceptions.Student;
-using StudyThink.Domain.Exceptions.Teachers;
 using StudyThink.Service.Common.Hasher;
 using StudyThink.Service.DTOs.Student;
 using StudyThink.Service.Interfaces.Common;
@@ -38,7 +35,7 @@ public class StudentService : IStudentService
 
     public async ValueTask<bool> CreateAsync(StudentCreationDto model)
     {
-        Student student=_mapper.Map<Student>(model);
+        Student student = _mapper.Map<Student>(model);
 
         if (model.ImagePath == null)
         {
@@ -46,13 +43,13 @@ public class StudentService : IStudentService
         }
         else
         {
-            student.ImagePath=await _fileService.UploadImageAsync(model.ImagePath);
-            student.Password=Hash512.GenerateHash512(model.Password);
+            student.ImagePath = await _fileService.UploadImageAsync(model.ImagePath);
+            student.Password = Hash512.GenerateHash512(model.Password);
 
             bool dbResult = await _studentRepository.CreateAsync(student);
 
             if (dbResult)
-            
+
                 return true;
             throw new StudentNotFoundExeption();
         }
@@ -124,7 +121,7 @@ public class StudentService : IStudentService
 
         Student student = _mapper.Map<Student>(model);
         student.UpdatedAt = DateTime.UtcNow;
-        var result =await _studentRepository.UpdateAsync(student);
+        var result = await _studentRepository.UpdateAsync(student);
 
         return result;
     }

@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
 using StudyThink.DataAccess.Interfaces.Coloborators;
-using StudyThink.DataAccess.Interfaces.Students;
-using StudyThink.DataAccess.Repositories.Callaborators;
-using StudyThink.DataAccess.Repositories.Students;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Callaborators;
-using StudyThink.Domain.Entities.Students;
 using StudyThink.Domain.Exceptions.Callaborator;
 using StudyThink.Domain.Exceptions.Files;
-using StudyThink.Domain.Exceptions.Student;
-using StudyThink.Service.Common.Hasher;
 using StudyThink.Service.DTOs.Callaborators;
 using StudyThink.Service.DTOs.CallaboratorsDTO;
 using StudyThink.Service.Interfaces.Collobarators;
@@ -19,12 +13,12 @@ namespace StudyThink.Service.Services.Callaborators;
 
 public class CallaboratorService : ICallaboratorsService
 {
-    private ICalloboratorRepository _calloboratorRepository ;
+    private ICalloboratorRepository _calloboratorRepository;
     private IFileService _fileService;
     private IMapper _mapper;
     public CallaboratorService(ICalloboratorRepository callaboratorRepository, IFileService fileService, IMapper mapper)
     {
-       _calloboratorRepository = callaboratorRepository;
+        _calloboratorRepository = callaboratorRepository;
         _fileService = fileService;
         _mapper = mapper;
     }
