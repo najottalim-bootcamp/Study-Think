@@ -66,7 +66,7 @@ public class CourseCommnetService : ICourseCommentService
         return result;
     }
 
-    public async ValueTask<CourseComment> GetById(long id)
+    public async ValueTask<CourseComment> GetByIdAsync(long id)
     {
         var result =await _repository.GetByIdAsync(id);
         if(result is null)
