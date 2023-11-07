@@ -37,13 +37,12 @@ public class CourseReqRepository : BaseRepository2, ICourseReqRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "INSERT INTO CourseRequirments(Requirments, CourseId, CreatedAt, UpdatedAt) " +
-                "VALUES (@Requirments, @CourseId, @CreatedAt, @UpdatedAt)";
+            string query = "INSERT INTO CourseRequirments(Requirments, CreatedAt, UpdatedAt) " +
+                "VALUES (@Requirments, @CreatedAt, @UpdatedAt)";
 
             var patametrs = new
             {
                 Requirments = model.Requirments,
-                CourseId = model.CourseId,
                 CreatedAt = model.CreatedAt,
                 UpdatedAt = model.UpdatedAt
             };
