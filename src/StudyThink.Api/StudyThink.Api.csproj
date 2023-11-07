@@ -17,11 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\media\audios\" />
-    <Folder Include="wwwroot\media\avatars\" />
-    <Folder Include="wwwroot\media\documents\" />
     <Folder Include="wwwroot\media\images\" />
-    <Folder Include="wwwroot\media\videos\" />
   </ItemGroup>
 
 </Project>
