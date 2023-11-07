@@ -24,7 +24,8 @@ public class CourseService : ICourseService
     public async ValueTask<bool> CreateAsync(CourseCreationDto model)
     {
         var existCourse = await _courseRepository.GetByNameAsync(model.Name);
-        if (existCourse is not null)
+
+        if (existCourse is null)
         {
             throw new CourseAlreadyExistsException();
         }

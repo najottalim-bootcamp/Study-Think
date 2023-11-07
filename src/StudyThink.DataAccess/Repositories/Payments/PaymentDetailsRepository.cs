@@ -35,11 +35,12 @@ public class PaymentDetailsRepository : BaseRepository2, IPaymentDetailsReposito
     {
         try
         {
+            string isPaid = Convert.ToString(model.IsPaid);
             await _connection.OpenAsync();
             string query = $"INSERT INTO PaymentDetails(CardHolderName,CardNumber,ExpirationDate,CardCodeCVV," +
-                $"CardPoneNumber,StudentId,CreatedAt,IsPaid,CourseId) " +
-                $"VALUES(@CardHolderName,@CardNumber,@ExpirationDate,@CardCodeCVV,@CardPoneNumber,@StudentId,@CreatedAt," +
-                $"@IsPaid,@CourseId)";
+                $"CardPhoneNumber,StudentId,CreatedAt,IsPaid,CourseId) " +
+                $"VALUES(@CardHolderName,@CardNumber,@ExpirationDate,@CardCodeCVV,@CardPhoneNumber,@StudentId,@CreatedAt," +
+                $"{isPaid},@CourseId)";
             var result = await _connection.ExecuteAsync(query, model);
             return result > 0;
         }

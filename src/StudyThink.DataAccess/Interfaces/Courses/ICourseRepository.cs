@@ -9,6 +9,6 @@ namespace StudyThink.Service.Interfaces.Courses;
 public  interface ICourseRepository:IRepository<Course>
 {
     ValueTask<IEnumerable<Course>> GetAllAsync(PaginationParams @params);
-    ValueTask<IEnumerable<Course>> GetByNameAsync (string name);
+    ValueTask<Course> GetByNameAsync (string name);
 
 }
