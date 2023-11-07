@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using StudyThink.DataAccess.Interfaces.Payments;
-using StudyThink.DataAccess.Repositories.Payments;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Payments;
-using StudyThink.Domain.Entities.Students;
 using StudyThink.Domain.Exceptions.Payment;
 using StudyThink.Service.DTOs.Payment;
 using StudyThink.Service.Interfaces.Common;
@@ -18,7 +16,7 @@ public class PaymentDetailService : IPaymentDetailsService
     private readonly IMapper _mapper;
 
     public PaymentDetailService(IPaymentDetailsRepository repository,
-        IFileService fileService,IMapper mapper)
+        IFileService fileService, IMapper mapper)
     {
         this._repository = repository;
         this._fileService = fileService;
@@ -26,22 +24,26 @@ public class PaymentDetailService : IPaymentDetailsService
     }
 
     public async ValueTask<long> CountAsync()
-    {
-
-
-        long count = await _repository.CountAsync();
-
-        if (count == 0)
-            throw new PaymentDetailsNotFoundExeption();
-        return count;
-    }
+        =>await _repository.CountAsync();
+        
 
     public async ValueTask<bool> CreateAsync(PaymentDetailsCretionDto model)
     {
-        PaymentDetails paymentDetails = _mapper.Map<PaymentDetails>(model);
-        bool dbResult = await _repository.CreateAsync(paymentDetails);
+        var paymentDetails=_mapper.Map<PaymentDetails>(model);
+        paymentDetails.CardHolderName = model.CardHolderName;
+        paymentDetails.CardPhoneNumber = model.CardPhoneNumber;
+        paymentDetails.CardNumber = model.CardNumber;
+        paymentDetails.CourseId = model.CourseId;
+        paymentDetails.CardCodeCVV = model.CardCodeCVV;
+        paymentDetails.ExpirationDate = model.ExpirationDate;
+        paymentDetails.IsPaid = model.IsPaid;
+        paymentDetails.StudentId = model.StudentId;
+        var result = await _repository.CreateAsync(paymentDetails);
+        return result;
+        //PaymentDetails paymentDetails = _mapper.Map<PaymentDetails>(model);
+        //bool dbResult = await _repository.CreateAsync(paymentDetails);
 
-        return dbResult;
+        //return dbResult;
     }
 
     public async ValueTask<bool> DeleteRangeAsync(List<long> paymenDetailsIds)
@@ -76,7 +78,7 @@ public class PaymentDetailService : IPaymentDetailsService
         return payment;
     }
 
-    public async ValueTask<bool> UpdateAsync(PaymentUpdateDto model)
+    public async ValueTask<bool> UpdateAsync(PaymentDetailsUpdateDto model)
     {
         PaymentDetails payment = _mapper.Map<PaymentDetails>(model);
         var result = await _repository.UpdateAsync(payment);
