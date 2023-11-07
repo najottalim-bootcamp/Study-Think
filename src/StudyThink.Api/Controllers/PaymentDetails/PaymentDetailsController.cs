@@ -14,4 +14,7 @@ public class PaymentDetailsController : ControllerBase
     {
         this._paymentDetailsService = paymentDetailsService;
     }
+    [HttpGet]
+    public async ValueTask<IActionResult> CountAsync()
+        => Ok(await _paymentDetailsService.CountAsync());
 }
