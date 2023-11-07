@@ -76,8 +76,11 @@ public class PaymentDetailService : IPaymentDetailsService
         return payment;
     }
 
-    public ValueTask<bool> UpdateAsync(PaymentUpdateDto model)
+    public async ValueTask<bool> UpdateAsync(PaymentUpdateDto model)
     {
-        throw new NotImplementedException();
+        PaymentDetails payment = _mapper.Map<PaymentDetails>(model);
+        var result = await _repository.UpdateAsync(payment);
+
+        return result;
     }
 }
