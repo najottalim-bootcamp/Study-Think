@@ -24,9 +24,13 @@ public class PaymentDetailsController : ControllerBase
     [HttpPut]
     public async ValueTask<IActionResult> UpdateAsync([FromForm] PaymentDetailsUpdateDto dto)
         => Ok(await _paymentDetailsService.UpdateAsync(dto));
-    [HttpGet]
-    public async ValueTask<IActionResult> GetAllAsync([FromQuery] int page = 1)
-        => Ok(await _paymentDetailsService.GetAllAsync(new PaginationParams(page, _maxPageSize)));
+    [HttpDelete]
+    public async ValueTask<IActionResult> DeleteRangeAsync(List<long> paymentIds)
+        => Ok(await _paymentDetailsService.DeleteRangeAsync(paymentIds));
+
+    //[HttpGet]
+    //public async ValueTask<IActionResult> GetAllAsync([FromQuery] int page = 1)
+    //    => Ok(await _paymentDetailsService.GetAllAsync(new PaginationParams(page, _maxPageSize)));
     [HttpGet]
     public async ValueTask<IActionResult> GetByIdAsync(long id)
         => Ok(await _paymentDetailsService.GetByIdAsync(id));

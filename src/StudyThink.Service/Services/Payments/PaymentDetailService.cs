@@ -24,22 +24,26 @@ public class PaymentDetailService : IPaymentDetailsService
     }
 
     public async ValueTask<long> CountAsync()
-    {
-
-
-        long count = await _repository.CountAsync();
-
-        if (count == 0)
-            throw new PaymentDetailsNotFoundExeption();
-        return count;
-    }
+        =>await _repository.CountAsync();
+        
 
     public async ValueTask<bool> CreateAsync(PaymentDetailsCretionDto model)
     {
-        PaymentDetails paymentDetails = _mapper.Map<PaymentDetails>(model);
-        bool dbResult = await _repository.CreateAsync(paymentDetails);
+        var paymentDetails=_mapper.Map<PaymentDetails>(model);
+        paymentDetails.CardHolderName = model.CardHolderName;
+        paymentDetails.CardPhoneNumber = model.CardPhoneNumber;
+        paymentDetails.CardNumber = model.CardNumber;
+        paymentDetails.CourseId = model.CourseId;
+        paymentDetails.CardCodeCVV = model.CardCodeCVV;
+        paymentDetails.ExpirationDate = model.ExpirationDate;
+        paymentDetails.IsPaid = model.IsPaid;
+        paymentDetails.StudentId = model.StudentId;
+        var result = await _repository.CreateAsync(paymentDetails);
+        return result;
+        //PaymentDetails paymentDetails = _mapper.Map<PaymentDetails>(model);
+        //bool dbResult = await _repository.CreateAsync(paymentDetails);
 
-        return dbResult;
+        //return dbResult;
     }
 
     public async ValueTask<bool> DeleteRangeAsync(List<long> paymenDetailsIds)
