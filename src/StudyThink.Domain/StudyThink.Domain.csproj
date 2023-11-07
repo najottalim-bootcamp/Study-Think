@@ -6,10 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Exceptions\Courses\CourseException\" />
-    <Folder Include="Exceptions\Courses\CourseModuls\" />
-    <Folder Include="Exceptions\Courses\CourseComments\" />
-  </ItemGroup>
-
 </Project>
