@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.SqlServer.Server;
-using Newtonsoft.Json.Linq;
 using StudyThink.DataAccess.Interfaces.Students;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Students;
@@ -12,7 +10,6 @@ using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Student;
 using StudyThink.Service.Interfaces.Common;
 using StudyThink.Service.Interfaces.Studentsk;
-using System.Data.SqlTypes;
 
 namespace StudyThink.Service.Services.Students;
 
