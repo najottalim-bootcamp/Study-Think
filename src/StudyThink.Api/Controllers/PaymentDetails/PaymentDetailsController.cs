@@ -9,4 +9,9 @@ public class PaymentDetailsController : ControllerBase
 {
     private readonly IPaymentDetailsService _paymentDetailsService;
     private readonly int _maxPageSize = 30;
+
+    public PaymentDetailsController(IPaymentDetailsService paymentDetailsService)
+    {
+        this._paymentDetailsService = paymentDetailsService;
+    }
 }
