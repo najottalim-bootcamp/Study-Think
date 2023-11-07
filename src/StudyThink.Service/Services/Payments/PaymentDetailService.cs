@@ -1,6 +1,8 @@
 ﻿using StudyThink.DataAccess.Interfaces.Payments;
+using StudyThink.DataAccess.Repositories.Payments;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Payments;
+using StudyThink.Domain.Exceptions.Payment;
 using StudyThink.Service.DTOs.Payment;
 using StudyThink.Service.Interfaces.Common;
 using StudyThink.Service.Interfaces.Payments;
@@ -19,9 +21,15 @@ public class PaymentDetailService : IPaymentDetailsService
         this._fileService = fileService;
     }
 
-    public ValueTask<long> CountAsync()
+    public async ValueTask<long> CountAsync()
     {
-        throw new NotImplementedException();
+
+
+        long count = await _repository.CountAsync();
+
+        if (count == 0)
+            throw new PaymentTypeException();
+        return count;
     }
 
     public ValueTask<bool> CreateAsync(PaymentDetailsCretionDto model)
