@@ -155,8 +155,6 @@ ALTER TABLE
 ALTER TABLE
     "TeacherCourses" ADD CONSTRAINT "teachercourses_courseid_foreign" FOREIGN KEY("CourseId") REFERENCES "Courses"("Id");
 ALTER TABLE
-    "CourseRequirments" ADD CONSTRAINT "courserequirments_courseid_foreign" FOREIGN KEY("CourseId") REFERENCES "Courses"("Id");
-ALTER TABLE
     "Videos" ADD CONSTRAINT "videos_adminid_foreign" FOREIGN KEY("AdminId") REFERENCES "Admins"("Id");
 ALTER TABLE
     "CourseComments" ADD CONSTRAINT "coursecomments_courseid_foreign" FOREIGN KEY("CourseId") REFERENCES "Courses"("Id");
