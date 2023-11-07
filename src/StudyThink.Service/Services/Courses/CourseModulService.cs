@@ -1,5 +1,8 @@
-﻿using StudyThink.DataAccess.Utils;
+﻿using AutoMapper;
+using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
+using StudyThink.Domain.Exceptions.Courses.CourseModuls;
+using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Courses.CourseModel;
 using StudyThink.Service.Interfaces.Common;
 using StudyThink.Service.Interfaces.Courses;
@@ -10,27 +13,44 @@ public class CourseModulService : ICourseModulService
 {
     private readonly ICourseModulRepository _repository;
     private readonly IFileService _fileService;
+    private readonly IMapper _mapper;
 
     public CourseModulService(ICourseModulRepository repository,
-        IFileService fileService)
+        IFileService fileService,IMapper mapper)
     {
         this._repository = repository;
         this._fileService = fileService;
+        this._mapper = mapper;
     }
 
-    public ValueTask<long> CountAsync()
+    public async ValueTask<long> CountAsync()
     {
-        throw new NotImplementedException();
+        var result=await _repository.CountAsync();
+
+        return result;
     }
 
-    public ValueTask<bool> CreateAsync(CourseModulCreationDto model)
+    public async ValueTask<bool> CreateAsync(CourseModulCreationDto model)
     {
-        throw new NotImplementedException();
+        var existCourseModul = await _repository.GetByNameAsync(model.Name);
+        if (existCourseModul is null) 
+        {
+            throw new CourseModulsNotFoundException();
+        }
+        CourseModul courseModul=_mapper.Map<CourseModul>(existCourseModul);
+        var result= await _repository.CreateAsync(courseModul);
+        return result;
     }
 
-    public ValueTask<bool> DeleteAsync(long id)
+    public async ValueTask<bool> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        var existCourseModul=await _repository.GetByIdAsync(id);
+        if(existCourseModul is null)
+        {
+            throw new CourseModulsNotFoundException();
+        }
+        var result=await _repository.DeleteAsync(id);
+        return result;
     }
 
     public ValueTask<bool> DeleteRangeAsync(List<long> CourseModulIds)
@@ -38,18 +58,35 @@ public class CourseModulService : ICourseModulService
         throw new NotImplementedException();
     }
 
-    public ValueTask<IEnumerable<CourseModul>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<CourseModul>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        var result = await _repository.GetAllAsync(@params);
+        if(result is null)
+        {
+            throw new CourseModulsNotFoundException();
+        }
+        return result;
+
     }
 
-    public ValueTask<CourseModul> GetByIdAsync(long id)
+    public async ValueTask<CourseModul> GetByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        var result= await _repository.GetByIdAsync(@id);
+        if( result is null)
+        {
+            throw new CourseModulsNotFoundException();
+        }
+        return result;
     }
 
-    public ValueTask<bool> UpdateAsync(CourseModulUpdateDto model)
+    public async ValueTask<bool> UpdateAsync(CourseModulUpdateDto model)
     {
-        throw new NotImplementedException();
+        var existCourseModul=await _repository.GetByIdAsync(model.Id);
+        if(existCourseModul is null)
+            throw new CourseModulsNotFoundException();
+        CourseModul courseModul=_mapper.Map<CourseModul>(existCourseModul);
+        courseModul.UpdatedAt = TimeHelper.GetDateTime();
+        var result=await _repository.UpdateAsync(courseModul);
+        return result;
     }
 }
