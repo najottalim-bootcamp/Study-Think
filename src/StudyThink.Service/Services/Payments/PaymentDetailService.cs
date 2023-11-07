@@ -38,7 +38,7 @@ public class PaymentDetailService : IPaymentDetailsService
     public async ValueTask<bool> CreateAsync(PaymentDetailsCretionDto model)
     {
         PaymentDetails paymentDetails = _mapper.Map<PaymentDetails>(model);
-        bool dbResult = await _paymentRepository.CreateAsync(payment);
+        bool dbResult = await _repository.CreateAsync(paymentDetails);
 
         return dbResult;
     }
