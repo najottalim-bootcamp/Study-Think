@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\PaymentDetails\" />
     <Folder Include="wwwroot\media\audios\" />
     <Folder Include="wwwroot\media\avatars\" />
     <Folder Include="wwwroot\media\documents\" />
