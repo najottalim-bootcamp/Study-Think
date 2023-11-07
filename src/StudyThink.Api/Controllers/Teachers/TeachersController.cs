@@ -50,4 +50,12 @@ public class TeachersController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpDelete]
+    public async ValueTask<IActionResult> DeleteAsync(long Id)
+    {
+        bool res = await _teacherService.DeleteAsync(Id);
+
+        return Ok(res);
+    }
 }
