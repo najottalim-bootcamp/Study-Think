@@ -1,4 +1,5 @@
-﻿using StudyThink.DataAccess.Interfaces.Payments;
+﻿using AutoMapper;
+using StudyThink.DataAccess.Interfaces.Payments;
 using StudyThink.DataAccess.Repositories.Payments;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Payments;
@@ -13,12 +14,14 @@ public class PaymentDetailService : IPaymentDetailsService
 {
     private readonly IPaymentDetailsRepository _repository;
     private readonly IFileService _fileService;
+    private readonly IMapper _mapper;
 
     public PaymentDetailService(IPaymentDetailsRepository repository,
-        IFileService fileService)
+        IFileService fileService,IMapper mapper)
     {
         this._repository = repository;
         this._fileService = fileService;
+        this._mapper = mapper;
     }
 
     public async ValueTask<long> CountAsync()
@@ -32,9 +35,12 @@ public class PaymentDetailService : IPaymentDetailsService
         return count;
     }
 
-    public ValueTask<bool> CreateAsync(PaymentDetailsCretionDto model)
+    public async ValueTask<bool> CreateAsync(PaymentDetailsCretionDto model)
     {
-        throw new NotImplementedException();
+        PaymentDetails paymentDetails = _mapper.Map<PaymentDetails>(model);
+        bool dbResult = await _paymentRepository.CreateAsync(payment);
+
+        return dbResult;
     }
 
     public ValueTask<bool> DeleteRangeAsync(List<long> paymenDetailsIds)
