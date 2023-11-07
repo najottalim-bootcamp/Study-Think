@@ -24,6 +24,7 @@ namespace StudyThink.Service.Services.Teachers
             _mapper = mapper;
         }
 
+        // Done
         public async ValueTask<long> CountAsync()
         {
             long count = await _teacherRepository.CountAsync();
@@ -33,6 +34,7 @@ namespace StudyThink.Service.Services.Teachers
             return count;
         }
 
+        // Done
         public async ValueTask<bool> CreateAsync(TeacherCreationDto model)
         {
             Teacher teacher = _mapper.Map<Teacher>(model);
@@ -75,7 +77,7 @@ namespace StudyThink.Service.Services.Teachers
             }
         }
 
-        public async ValueTask<bool> DeleteRange(List<long> teacherIds)
+        public async ValueTask<bool> DeleteRangeAsync(List<long> teacherIds)
         {
             foreach (var i in teacherIds)
             {
@@ -91,7 +93,8 @@ namespace StudyThink.Service.Services.Teachers
             return true;
         }
 
-        public async ValueTask<IEnumerable<Teacher>> GetAll(PaginationParams @params)
+        // Done
+        public async ValueTask<IEnumerable<Teacher>> GetAllAsync(PaginationParams @params)
         {
             IEnumerable<Teacher> teachers = await _teacherRepository.GetAllAsync(@params);
 
@@ -107,24 +110,30 @@ namespace StudyThink.Service.Services.Teachers
 
         public async ValueTask<Teacher> GetByEmailAsync(string email)
         {
-            //Teacher teacher = await _teacherRepository.GetByEmailAsync(email);
-
-            //if (teacher == null) throw new TeacherNotFoundException();
-
-            throw new NotImplementedException();
-
-        }
-
-        public async ValueTask<Teacher> GetByIdAsync(long Id)
-        {
-            Teacher teacher = await _teacherRepository.GetByIdAsync(Id);
+            Teacher teacher = await _teacherRepository.GetByEmailAsync(email);
 
             if (teacher == null)
             {
                 throw new TeacherNotFoundException();
             }
+            else
+            {
+                return teacher;
+            }
+        }
+
+        // Done
+        public async ValueTask<Teacher> GetByIdAsync(long Id)
+        {
+            Teacher teacher = await _teacherRepository.GetByIdAsync(Id);
+
+            if (string.IsNullOrEmpty(teacher.FirstName))
+            {
+                throw new TeacherNotFoundException();
+            }
             return teacher;
         }
+
 
         public async ValueTask<bool> UpdateAsync(TeacherUpdateDto model)
         {
