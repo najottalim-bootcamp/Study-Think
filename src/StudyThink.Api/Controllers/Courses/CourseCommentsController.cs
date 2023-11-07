@@ -25,13 +25,13 @@ public class CourseCommentsController : ControllerBase
         return Ok(result);
     }
     [HttpPost]
-    public async ValueTask<IActionResult> CreateAsync(CourseCommentCreationDto dto)
+    public async ValueTask<IActionResult> CreateAsync([FromForm] CourseCommentCreationDto dto)
     {
         var result = await _courseCommentService.CreateAsync(dto);
         return Ok(result);
     }
     [HttpPut]
-    public async ValueTask<IActionResult> UpdateAsync(CourseCommentUpdateDto dto)
+    public async ValueTask<IActionResult> UpdateAsync([FromForm] CourseCommentUpdateDto dto)
     {
         var result=await _courseCommentService.UpdateAsync(dto);
         return Ok(result);

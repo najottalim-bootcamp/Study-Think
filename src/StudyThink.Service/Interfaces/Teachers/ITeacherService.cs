@@ -11,7 +11,7 @@ namespace StudyThink.Service.Interfaces.Teachers
         ValueTask<bool> CreateAsync(TeacherCreationDto model);
         // Get
         ValueTask<Teacher> GetByIdAsync(long Id);
-        ValueTask<IEnumerable<Teacher>> GetAll(PaginationParams @params);
+        ValueTask<IEnumerable<Teacher>> GetAllAsync(PaginationParams @params);
         ValueTask<Teacher> GetByEmailAsync(string email);
         ValueTask<long> CountAsync();
         // Update
@@ -19,6 +19,6 @@ namespace StudyThink.Service.Interfaces.Teachers
         ValueTask<bool> UpdateImageAsync(long teacherId, IFormFile teacherImage);
         // Delete
         ValueTask<bool> DeleteAsync(long Id);
-        ValueTask<bool> DeleteRange(List<long> teacherIds);
+        ValueTask<bool> DeleteRangeAsync(List<long> teacherIds);
     }
 }

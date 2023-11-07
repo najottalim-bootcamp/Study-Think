@@ -6,6 +6,7 @@ using StudyThink.Domain.Entities.Students;
 using StudyThink.Domain.Exceptions.Files;
 using StudyThink.Domain.Exceptions.Student;
 using StudyThink.Service.Common.Hasher;
+using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Student;
 using StudyThink.Service.Interfaces.Common;
 using StudyThink.Service.Interfaces.Studentsk;
@@ -25,34 +26,30 @@ public class StudentService : IStudentService
     }
 
     public async ValueTask<long> CountAsync()
-    {
-        long count = await _studentRepository.CountAsync();
-
-        if (count == 0)
-            throw new StudentNotFoundExeption();
-        return count;
-    }
+        => await _studentRepository.CountAsync();
 
     public async ValueTask<bool> CreateAsync(StudentCreationDto model)
     {
-        Student student = _mapper.Map<Student>(model);
+        var exits = await _studentRepository.GetByEmailAsync(model.Email);
 
-        if (model.ImagePath == null)
-        {
-            throw new ImageNotFoundException();
-        }
-        else
-        {
-            student.ImagePath = await _fileService.UploadImageAsync(model.ImagePath);
-            student.Password = Hash512.GenerateHash512(model.Password);
+        if (exits is not null)
+            throw new StudentAlreadyExistsException();
 
-            bool dbResult = await _studentRepository.CreateAsync(student);
+        string imagePath = await _fileService.UploadImageAsync(model.ImagePath);
 
-            if (dbResult)
+        var student = _mapper.Map<Student>(model);
 
-                return true;
-            throw new StudentNotFoundExeption();
-        }
+        student.DateOfBirth = student.DateOfBirth.Date.Add(new TimeSpan(11, 11, 11));
+        student.DeletedAt = student.DateOfBirth.Date.Add(new TimeSpan(11, 11, 11));
+
+        student.ImagePath = imagePath;
+        student.Password = Hash512.GenerateHash512(student.Password);
+
+        student.UpdatedAt = TimeHelper.GetDateTime();
+
+        var result = await _studentRepository.CreateAsync(student);
+
+        return result;
     }
 
     public async ValueTask<bool> DeleteAsync(long Id)
