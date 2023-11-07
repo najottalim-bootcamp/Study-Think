@@ -1,6 +1,10 @@
-﻿using StudyThink.DataAccess.Interfaces.Payments;
+﻿using AutoMapper;
+using StudyThink.DataAccess.Interfaces.Payments;
+using StudyThink.DataAccess.Repositories.Payments;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Payments;
+using StudyThink.Domain.Entities.Students;
+using StudyThink.Domain.Exceptions.Payment;
 using StudyThink.Service.DTOs.Payment;
 using StudyThink.Service.Interfaces.Common;
 using StudyThink.Service.Interfaces.Payments;
@@ -11,27 +15,48 @@ public class PaymentDetailService : IPaymentDetailsService
 {
     private readonly IPaymentDetailsRepository _repository;
     private readonly IFileService _fileService;
+    private readonly IMapper _mapper;
 
     public PaymentDetailService(IPaymentDetailsRepository repository,
-        IFileService fileService)
+        IFileService fileService,IMapper mapper)
     {
         this._repository = repository;
         this._fileService = fileService;
+        this._mapper = mapper;
     }
 
-    public ValueTask<long> CountAsync()
+    public async ValueTask<long> CountAsync()
     {
-        throw new NotImplementedException();
+
+
+        long count = await _repository.CountAsync();
+
+        if (count == 0)
+            throw new PaymentDetailsNotFoundExeption();
+        return count;
     }
 
-    public ValueTask<bool> CreateAsync(PaymentDetailsCretionDto model)
+    public async ValueTask<bool> CreateAsync(PaymentDetailsCretionDto model)
     {
-        throw new NotImplementedException();
+        PaymentDetails paymentDetails = _mapper.Map<PaymentDetails>(model);
+        bool dbResult = await _repository.CreateAsync(paymentDetails);
+
+        return dbResult;
     }
 
-    public ValueTask<bool> DeleteRangeAsync(List<long> paymenDetailsIds)
+    public async ValueTask<bool> DeleteRangeAsync(List<long> paymenDetailsIds)
     {
-        throw new NotImplementedException();
+        foreach (var i in paymenDetailsIds)
+        {
+            PaymentDetails payment = await _repository.GetByIdAsync(i);
+
+            if (payment != null)
+            {
+                await _repository.DeleteAsync(i);
+            }
+        }
+
+        return true;
     }
 
     public ValueTask<IEnumerable<PaymentDetails>> GetAllAsync(PaginationParams @params)
@@ -39,13 +64,23 @@ public class PaymentDetailService : IPaymentDetailsService
         throw new NotImplementedException();
     }
 
-    public ValueTask<PaymentDetails> GetByIdAsync(long Id)
+    public async ValueTask<PaymentDetails> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+
+        PaymentDetails payment = await _repository.GetByIdAsync(Id);
+
+        if (payment == null)
+        {
+            throw new PaymentDetailsNotFoundExeption();
+        }
+        return payment;
     }
 
-    public ValueTask<bool> UpdateAsync(PaymentUpdateDto model)
+    public async ValueTask<bool> UpdateAsync(PaymentUpdateDto model)
     {
-        throw new NotImplementedException();
+        PaymentDetails payment = _mapper.Map<PaymentDetails>(model);
+        var result = await _repository.UpdateAsync(payment);
+
+        return result;
     }
 }
