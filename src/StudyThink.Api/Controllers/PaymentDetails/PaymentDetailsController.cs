@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using StudyThink.Service.DTOs.Payment;
-using StudyThink.Service.DTOs.Student;
 using StudyThink.Service.Interfaces.Payments;
 
 namespace StudyThink.Api.Controllers.PaymentDetails;
@@ -22,4 +20,7 @@ public class PaymentDetailsController : ControllerBase
     [HttpPost]
     public async ValueTask<IActionResult> CreateAsync([FromForm] PaymentDetailsCretionDto dto)
         => Ok(await _paymentDetailsService.CreateAsync(dto));
+    [HttpPut]
+    public async ValueTask<IActionResult> UpdateAsync([FromForm] PaymentDetailsUpdateDto dto)
+        => Ok(await _paymentDetailsService.UpdateAsync(dto));
 }
