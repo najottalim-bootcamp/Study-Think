@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
+using StudyThink.Domain.Entities.Students;
 using StudyThink.Domain.Exceptions.Courses.CourseModuls;
 using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Courses.CourseModel;
@@ -38,6 +39,9 @@ public class CourseModulService : ICourseModulService
             throw new CourseModulsNotFoundException();
         }
         CourseModul courseModul=_mapper.Map<CourseModul>(existCourseModul);
+
+        courseModul.CreatedAt = courseModul.CreatedAt.Date.Add(new TimeSpan(11, 11, 11));
+        courseModul.UpdatedAt = courseModul.UpdatedAt.Date.Add(new TimeSpan(11, 11, 11));
         var result= await _repository.CreateAsync(courseModul);
         return result;
     }
