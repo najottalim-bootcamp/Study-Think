@@ -3,6 +3,7 @@ using StudyThink.DataAccess.Interfaces.Payments;
 using StudyThink.DataAccess.Repositories.Payments;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Payments;
+using StudyThink.Domain.Entities.Students;
 using StudyThink.Domain.Exceptions.Payment;
 using StudyThink.Service.DTOs.Payment;
 using StudyThink.Service.Interfaces.Common;
@@ -43,9 +44,19 @@ public class PaymentDetailService : IPaymentDetailsService
         return dbResult;
     }
 
-    public ValueTask<bool> DeleteRangeAsync(List<long> paymenDetailsIds)
+    public async ValueTask<bool> DeleteRangeAsync(List<long> paymenDetailsIds)
     {
-        throw new NotImplementedException();
+        foreach (var i in paymenDetailsIds)
+        {
+            PaymentDetails payment = await _repository.GetByIdAsync(i);
+
+            if (payment != null)
+            {
+                await _repository.DeleteAsync(i);
+            }
+        }
+
+        return true;
     }
 
     public ValueTask<IEnumerable<PaymentDetails>> GetAllAsync(PaginationParams @params)
