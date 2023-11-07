@@ -2,6 +2,7 @@
 using StudyThink.DataAccess.Interfaces.Categories;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Categories;
+using StudyThink.Domain.Exceptions.CategoryExceptions;
 using StudyThink.Service.DTOs.Category;
 using StudyThink.Service.Interfaces.Categories;
 
@@ -22,7 +23,6 @@ public class CategoryService : ICategoryService
 
     public async ValueTask<bool> CreateAsync(CategoryCreationDto model)
     {
-
         Category category = _mapper.Map<Category>(model);
 
         return await _repository.CreateAsync(category);
@@ -41,18 +41,30 @@ public class CategoryService : ICategoryService
         throw new NotImplementedException();
     }
 
-    public ValueTask<IEnumerable<Category>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<Category>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        var result = await _repository.GetAllAsync(@params);
+        return result;
     }
 
-    public ValueTask<Category> GetByIdAsync(long Id)
+    public async ValueTask<Category> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+        var result = await _repository.GetByIdAsync(Id);
+
+        if (result == null) throw new CategoryNotFound();
+
+        return result;
     }
 
-    public ValueTask<bool> UpdateAsync(CategoryUpdateDto model)
+    public async ValueTask<bool> UpdateAsync(CategoryUpdateDto model)
     {
-        throw new NotImplementedException();
+        var category = await _repository.GetByIdAsync(model.Id);
+        if (category is null) throw new CategoryNotFound();
+
+        category.Name = model.Name;
+        category.Description = model.Description;
+
+        //_mapper.Map(category, model);
+        return await _repository.UpdateAsync(category);
     }
 }

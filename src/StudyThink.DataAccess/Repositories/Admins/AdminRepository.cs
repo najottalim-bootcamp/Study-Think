@@ -8,6 +8,10 @@ namespace StudyThink.DataAccess.Repositories.Admins;
 
 public class AdminRepository : BaseRepository2, IAdminRepository
 {
+    public AdminRepository(string connectionString) : base(connectionString)
+    {
+    }
+
     public async ValueTask<long> CountAsync()
     {
         try
@@ -78,10 +82,16 @@ public class AdminRepository : BaseRepository2, IAdminRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM Admins ORDER BY Id DESC" +
-                $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+            string query = "SELECT * FROM Admins ORDER BY Id OFFSET " +
+                "@Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
-            var result = await _connection.QueryAsync<Admin>(query);
+            var parameters = new
+            {
+                Offset = @params.GetSkipCount(),
+                PageSize = @params.PageSize
+            };
+
+            var result = await _connection.QueryAsync<Admin>(query, parameters);
 
             return result;
         }

@@ -7,6 +7,10 @@ namespace StudyThink.DataAccess.Repositories.Videos
 {
     public class VideoRepository : BaseRepository2, IVideoRepository
     {
+        public VideoRepository(string connectionString) : base(connectionString)
+        {
+        }
+
         public async ValueTask<long> CountAsync()
         {
             try
@@ -45,7 +49,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
                 string query = "insert into videos (Name,VideoPath,Length,CourseModulsId,AdminId) values" +
                     "(@Name,@VideoPath,@Length,@CourseModulsId,@AdminId)";
 
-                int result = await _connection.ExecuteAsync(query,@params);
+                int result = await _connection.ExecuteAsync(query, @params);
 
                 return result > 0;
             }
@@ -90,12 +94,18 @@ namespace StudyThink.DataAccess.Repositories.Videos
             {
                 await _connection.OpenAsync();
 
-                string query = $"SELECT * FROM videos order by Id desc " +
-                $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+                string query = "SELECT * FROM Teachers ORDER BY Id " +
+                        "OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
-                IEnumerable<Video>? videos = await _connection.ExecuteScalarAsync<IEnumerable<Video>>(query, @params);
+                var parameters = new
+                {
+                    Offset = @params.GetSkipCount(),
+                    PageSize = @params.PageSize
+                };
 
-                return videos;
+                IEnumerable<Video> result = await _connection.QueryAsync<Video>(query, parameters);
+
+                return result;
             }
             catch
             {
@@ -118,7 +128,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
 
                 string query = "select * from videos where Id = @Id";
 
-                Video? video = await _connection.ExecuteScalarAsync<Video>(query,@params);
+                Video? video = await _connection.ExecuteScalarAsync<Video>(query, @params);
 
                 return video;
             }
@@ -174,7 +184,7 @@ namespace StudyThink.DataAccess.Repositories.Videos
                 string query = "update videos set Name = @Name,VideoPath = @VideoPath,Length = @Length,CourseModulsId = @CourseModulsId,AdminId = @AdminId" +
                     "UpdatedAt = @UpdatedAt";
 
-                int result = await _connection.ExecuteAsync(query,@params);
+                int result = await _connection.ExecuteAsync(query, @params);
 
                 return result > 0;
             }

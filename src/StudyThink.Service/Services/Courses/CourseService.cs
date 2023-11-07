@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Courses;
+using StudyThink.Domain.Exceptions.Courses.CourseException;
+using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Courses.Course;
 using StudyThink.Service.Interfaces.Courses;
 
@@ -16,12 +18,16 @@ public class CourseService : ICourseService
         this._courseRepository = repo;
         this._mapper = mapper;
     }
+
     public async ValueTask<long> CountAsync() => await _courseRepository.CountAsync();
-
-
 
     public async ValueTask<bool> CreateAsync(CourseCreationDto model)
     {
+        var existCourse = await _courseRepository.GetByNameAsync(model.Name);
+        if (existCourse is not null)
+        {
+            throw new CourseAlreadyExistsException();
+        }
 
         Course course = _mapper.Map<Course>(model);
 
@@ -33,6 +39,11 @@ public class CourseService : ICourseService
 
     public async ValueTask<bool> DeleteAsync(long Id)
     {
+        var existCourse= await _courseRepository.GetByIdAsync(Id);
+        if (existCourse is null)
+        {
+            throw new CourseNotFoundException();
+        }
         var result = await _courseRepository.DeleteAsync(Id);
         return result;
     }
@@ -45,20 +56,33 @@ public class CourseService : ICourseService
     public async ValueTask<IEnumerable<Course>> GetAllAsync(PaginationParams @params)
     {
         var result = await _courseRepository.GetAllAsync(@params);
+        if(result is null)
+        {
+            throw new CourseNotFoundException();
+        }
         return result;
     }
 
     public async ValueTask<Course> GetByIdAsync(long Id)
     {
         var result = await _courseRepository.GetByIdAsync(Id);
+        if(result is null)
+        {
+            throw new CourseNotFoundException();
+        }
         return result;
     }
 
-    public ValueTask<bool> UpdateAsync(CourseUpdateDto model)
+    public async ValueTask<bool> UpdateAsync(CourseUpdateDto model)
     {
+        var existCourse=await _courseRepository.GetByIdAsync(model.Id);
+        if(existCourse is null)
+        {
+            throw new CourseNotFoundException();
+        }
         Course course = _mapper.Map<Course>(model);
-        course.UpdatedAt = DateTime.UtcNow;
-        var result = _courseRepository.UpdateAsync(course);
+        course.UpdatedAt = TimeHelper.GetDateTime();
+        var result = await _courseRepository.UpdateAsync(course);
 
         return result;
     }

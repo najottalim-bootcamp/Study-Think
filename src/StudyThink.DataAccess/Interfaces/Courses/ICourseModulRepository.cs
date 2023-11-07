@@ -7,5 +7,5 @@ namespace StudyThink.Service.Interfaces.Courses;
 public interface ICourseModulRepository : IRepository<CourseModul>,
     IGetAll<CourseModul>, ISearchable<CourseModul>
 {
-    ValueTask<CourseModul> GetByNameAsync(string name);
+    public ValueTask<CourseModul> GetByNameAsync(string name);
 }

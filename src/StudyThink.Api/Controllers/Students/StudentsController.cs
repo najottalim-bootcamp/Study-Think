@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudyThink.DataAccess.Utils;
-using StudyThink.Service.DTOs.Category;
-using StudyThink.Service.Interfaces.Categories;
+using StudyThink.Service.DTOs.Student;
+using StudyThink.Service.Interfaces.Studentsk;
 
-namespace StudyThink.Api.Controllers.Categories;
+namespace StudyThink.Api.Controllers.Students;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class CategoriesController : ControllerBase
+public class StudentsController : ControllerBase
 {
-    private readonly ICategoryService _service;
+    private readonly IStudentService _service;
     private readonly int _maxPageSize = 30;
 
-    public CategoriesController(ICategoryService service)
+    public StudentsController(IStudentService service)
     {
         this._service = service;
     }
@@ -22,11 +22,11 @@ public class CategoriesController : ControllerBase
         => Ok(await _service.CountAsync());
 
     [HttpPost]
-    public async ValueTask<IActionResult> CreateAsync([FromForm] CategoryCreationDto dto)
+    public async ValueTask<IActionResult> CreateAsync([FromForm] StudentCreationDto dto)
         => Ok(await _service.CreateAsync(dto));
 
     [HttpPut]
-    public async ValueTask<IActionResult> UpdateAsync([FromForm] CategoryUpdateDto dto)
+    public async ValueTask<IActionResult> UpdateAsync([FromForm] StudentUpdateDto dto)
         => Ok(await _service.UpdateAsync(dto));
 
     [HttpDelete]
@@ -35,7 +35,7 @@ public class CategoriesController : ControllerBase
 
     [HttpGet]
     public async ValueTask<IActionResult> GetAllAsync([FromQuery] int page = 1)
-        => Ok(await _service.GetAllAsync(new PaginationParams(page, _maxPageSize)));
+        => Ok(await _service.GetAll(new PaginationParams(page, _maxPageSize)));
 
     [HttpGet]
     public async ValueTask<IActionResult> GetByIdAsync(long id)
