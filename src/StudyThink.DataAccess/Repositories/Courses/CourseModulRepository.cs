@@ -241,13 +241,26 @@ public class CourseModulRepository : BaseRepository2, ICourseModulRepository
         }
     }
 
-    ValueTask<CourseModul> IRepository<CourseModul>.GetByIdAsync(long Id)
+    async ValueTask<CourseModul> IRepository<CourseModul>.GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
-    }
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "Select * from CourseMudul" +
+                "where Id=@Id";
+            var parametrs = new { Id };
+            CourseModul? courseModul = await _connection
+                .QueryFirstOrDefaultAsync<CourseModul>(query, parametrs);
 
-    ValueTask<CourseModul> ICourseModulRepository.GetByNameAsync(string name)
-    {
-        throw new NotImplementedException();
+            return courseModul;
+        }
+        catch
+        {
+            return new CourseModul();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 }
