@@ -36,7 +36,7 @@ public class TeachersController : ControllerBase
     }
 
     [HttpGet]
-    public async ValueTask<IActionResult> GetAllAsync([FromQuery] int page)
+    public async ValueTask<IActionResult> GetAllAsync([FromQuery] int page = 1)
     {
         IEnumerable<Teacher> teachers = await _teacherService.GetAllAsync(new PaginationParams(page, _maxPageSize));
 
