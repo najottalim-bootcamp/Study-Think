@@ -42,12 +42,8 @@ public class StudentService : IStudentService
 
         var student = _mapper.Map<Student>(model);
 
-        //student.DateOfBirth = Convert.ToDateTime(model.DateOfBirth);
-        //student.DateOfBirth = Convert.ToDateTime(model.DateOfBirth.ToString());
-
         student.DateOfBirth = student.DateOfBirth.Date.Add(new TimeSpan(11, 11, 11));
         student.DeletedAt = student.DateOfBirth.Date.Add(new TimeSpan(11, 11, 11));
-
 
         student.ImagePath = imagePath;
         student.Password = Hash512.GenerateHash512(student.Password);
