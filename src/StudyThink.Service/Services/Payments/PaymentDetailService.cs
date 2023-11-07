@@ -64,9 +64,16 @@ public class PaymentDetailService : IPaymentDetailsService
         throw new NotImplementedException();
     }
 
-    public ValueTask<PaymentDetails> GetByIdAsync(long Id)
+    public async ValueTask<PaymentDetails> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+
+        PaymentDetails payment = await _repository.GetByIdAsync(Id);
+
+        if (payment == null)
+        {
+            throw new PaymentDetailsNotFoundExeption();
+        }
+        return payment;
     }
 
     public ValueTask<bool> UpdateAsync(PaymentUpdateDto model)
