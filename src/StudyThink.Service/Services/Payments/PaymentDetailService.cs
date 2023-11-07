@@ -28,7 +28,7 @@ public class PaymentDetailService : IPaymentDetailsService
         long count = await _repository.CountAsync();
 
         if (count == 0)
-            throw new PaymentTypeException();
+            throw new PaymentDetailsNotFoundExeption();
         return count;
     }
 
