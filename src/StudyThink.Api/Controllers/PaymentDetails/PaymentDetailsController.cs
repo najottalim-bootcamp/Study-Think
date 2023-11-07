@@ -27,6 +27,9 @@ public class PaymentDetailsController : ControllerBase
     [HttpGet]
     public async ValueTask<IActionResult> GetAllAsync([FromQuery] int page = 1)
         => Ok(await _paymentDetailsService.GetAllAsync(new PaginationParams(page, _maxPageSize)));
+    [HttpGet]
+    public async ValueTask<IActionResult> GetByIdAsync(long id)
+        => Ok(await _paymentDetailsService.GetByIdAsync(id));
 
 
 }
