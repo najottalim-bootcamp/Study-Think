@@ -2,15 +2,15 @@ CREATE TABLE "Students"(
     "Id" BIGINT PRIMARY KEY IDENTITY(1,1),
     "FirstName" nchar(255),
     "LastName" nchar(255) NULL,
-    "DateOfBirth" DATE NULL,
+    "DateOfBirth" DATETIME2 NULL,
     "UserName" nchar(255) UNIQUE,
     "Password" nchar(255),
     "Email" nchar(255) UNIQUE,
     "PhoneNumber" nchar(255) UNIQUE ,
     "Gender" TEXT  ,
-    "CreatedAt" DATE  DEFAULT GETDATE(),
-    "UpdatedAt" DATE  ,
-    "DeletedAt" DATE  ,
+    "CreatedAt" DATETIME2  DEFAULT GETDATE(),
+    "UpdatedAt" DATETIME2  ,
+    "DeletedAt" DATETIME2  ,
     "ImagePath" TEXT  
 );
 GO
