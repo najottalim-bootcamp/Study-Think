@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StudyThink.DataAccess.Utils;
 using StudyThink.Service.DTOs.Payment;
 using StudyThink.Service.Interfaces.Payments;
 
@@ -23,4 +24,9 @@ public class PaymentDetailsController : ControllerBase
     [HttpPut]
     public async ValueTask<IActionResult> UpdateAsync([FromForm] PaymentDetailsUpdateDto dto)
         => Ok(await _paymentDetailsService.UpdateAsync(dto));
+    [HttpGet]
+    public async ValueTask<IActionResult> GetAllAsync([FromQuery] int page = 1)
+        => Ok(await _paymentDetailsService.GetAllAsync(new PaginationParams(page, _maxPageSize)));
+
+
 }
