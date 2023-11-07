@@ -94,12 +94,18 @@ namespace StudyThink.DataAccess.Repositories.Videos
             {
                 await _connection.OpenAsync();
 
-                string query = $"SELECT * FROM videos order by Id desc " +
-                $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+                string query = "SELECT * FROM Teachers ORDER BY Id " +
+                        "OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
-                IEnumerable<Video>? videos = await _connection.ExecuteScalarAsync<IEnumerable<Video>>(query, @params);
+                var parameters = new
+                {
+                    Offset = @params.GetSkipCount(),
+                    PageSize = @params.PageSize
+                };
 
-                return videos;
+                IEnumerable<Video> result = await _connection.QueryAsync<Video>(query, parameters);
+
+                return result;
             }
             catch
             {

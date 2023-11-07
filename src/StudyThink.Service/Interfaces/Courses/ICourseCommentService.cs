@@ -11,7 +11,7 @@ public interface ICourseCommentService
     ValueTask<bool> UpdateAsync(CourseCommentUpdateDto model);
     ValueTask<bool> DeleteAsync(long id);
     ValueTask<bool> DeleteRangeAsync(List<long> CourseCommentIds);
-    ValueTask<CourseComment> GetById(long id);
+    ValueTask<CourseComment> GetByIdAsync(long id);
     ValueTask<long> CountAsync();
     ValueTask<IEnumerable<CourseComment>> GetAllAsync(PaginationParams @params);
 }

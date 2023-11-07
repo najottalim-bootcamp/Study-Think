@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Interfaces.Teachers;
 using StudyThink.DataAccess.Utils;
+using StudyThink.Domain.Entities.Course;
 using StudyThink.Domain.Entities.Teachers;
 using System.ComponentModel.DataAnnotations;
 
@@ -103,14 +104,18 @@ namespace StudyThink.DataAccess.Repositories.Teachers
             {
                 await _connection.OpenAsync();
 
-                //string query = $"SELECT * FROM teachers order by Id desc " +
-                //$"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+                string query = "SELECT * FROM teachers ORDER BY Id " +
+                "OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
-                string query = "select * from teachers";
+                var parameters = new
+                {
+                    Offset = @params.GetSkipCount(),
+                    PageSize = @params.PageSize
+                };
 
-                IEnumerable<Teacher> teachers = await _connection.QueryAsync<Teacher>(query);
+                IEnumerable<Teacher> result = await _connection.QueryAsync<Teacher>(query, parameters);
 
-                return teachers;
+                return result;
             }
             catch
             {
