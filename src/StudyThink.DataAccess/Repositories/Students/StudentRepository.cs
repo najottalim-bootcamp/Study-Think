@@ -38,8 +38,8 @@ public class StudentRepository : BaseRepository2, IStudentRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"INSERT INTO Students(FirstName, LastName,DateOfBirth,UserName,Password, Email,PhoneNumber, Gender, CreatedAt, UpdatedAt, DeletedAt) " +
-                $"VALUES (@FirstName, @LastName,@DateOfBirth,@UserName,@Password,@Email,@PhoneNumber,@Gender, @CreatedAt,@UpdatedAt,@DeletedAt)";
+            string query = "INSERT INTO Students(FirstName, LastName,DateOfBirth,UserName,Password, Email,PhoneNumber, Gender, CreatedAt, UpdatedAt) " +
+                $"VALUES (@FirstName, @LastName,'{model.DateOfBirth}',@UserName,@Password,@Email,@PhoneNumber,'{model.Gender}', @CreatedAt,@UpdatedAt)";
 
             var result = await _connection.ExecuteAsync(query, model);
 
