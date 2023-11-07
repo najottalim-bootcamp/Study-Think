@@ -24,6 +24,7 @@ namespace StudyThink.Service.Services.Teachers
             _mapper = mapper;
         }
 
+        // Done
         public async ValueTask<long> CountAsync()
         {
             long count = await _teacherRepository.CountAsync();
