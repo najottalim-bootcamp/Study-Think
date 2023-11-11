@@ -12,7 +12,7 @@ public class Student : Human
 
     public DateTime DateOfBirth { get; set; }
 
-    public string? ImagePath { get; set; }
+    public string ImagePath { get; set; } = string.Empty;
 
     public DateTime DeletedAt { get; set; }
 }
