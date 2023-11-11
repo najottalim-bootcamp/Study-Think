@@ -18,6 +18,7 @@ public class StudentService : IStudentService
     private IStudentRepository _studentRepository;
     private IFileService _fileService;
     private IMapper _mapper;
+
     public StudentService(IStudentRepository studentRepository, IFileService fileService, IMapper mapper)
     {
         _studentRepository = studentRepository;
@@ -39,8 +40,8 @@ public class StudentService : IStudentService
 
         var student = _mapper.Map<Student>(model);
 
-        student.DateOfBirth = student.DateOfBirth.Date.Add(new TimeSpan(11, 11, 11));
-        student.DeletedAt = student.DateOfBirth.Date.Add(new TimeSpan(11, 11, 11));
+        student.DateOfBirth = student.DateOfBirth.Date.Add(new TimeSpan(00, 00, 00));
+        student.DeletedAt = student.DateOfBirth.Date.Add(new TimeSpan(00, 00, 00));
 
         student.ImagePath = imagePath;
         student.Password = Hash512.GenerateHash512(student.Password);
@@ -115,9 +116,33 @@ public class StudentService : IStudentService
 
     public async ValueTask<bool> UpdateAsync(StudentUpdateDto model)
     {
+        var student = await _studentRepository.GetByIdAsync(model.Id);
+        if (student is null)
+            throw new StudentNotFoundExeption();
 
-        Student student = _mapper.Map<Student>(model);
-        student.UpdatedAt = DateTime.UtcNow;
+        var usernameResult = await _studentRepository.GetByUserNameAsync(model.UserName);
+        if (usernameResult is not null)
+            throw new StudentAlreadyExistsException();
+
+        string newImagePath = student.ImagePath;
+
+        if (model.ImagePath is not null)
+        {
+            // Delete old image 
+            var deleteResult = await _fileService.DeleteImageAsync(student.ImagePath);
+            if (!deleteResult)
+                throw new ImageNotFoundException();
+
+            // Upload new Image
+            newImagePath = await _fileService.UploadImageAsync(model.ImagePath);
+        }
+        // else student old image have to save
+
+        _mapper.Map(model, student);
+
+        student.UpdatedAt = TimeHelper.GetDateTime();
+        student.ImagePath = newImagePath;
+
         var result = await _studentRepository.UpdateAsync(student);
 
         return result;
