@@ -6,6 +6,7 @@ using StudyThink.Domain.Entities.Teachers;
 using StudyThink.Domain.Exceptions.Files;
 using StudyThink.Domain.Exceptions.Teachers;
 using StudyThink.Service.Common.Hasher;
+using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Teachers;
 using StudyThink.Service.Interfaces.Common;
 using StudyThink.Service.Interfaces.Teachers;
@@ -134,32 +135,38 @@ namespace StudyThink.Service.Services.Teachers
             return teacher;
         }
 
-
+        // Done
         public async ValueTask<bool> UpdateAsync(TeacherUpdateDto model)
         {
-            //Teacher resultTeacher = await _teacherRepository.GetByIdAsync(model.Id);
+            var teacher = await _teacherRepository.GetByIdAsync(model.Id);
+            if (teacher is null)
+                throw new TeacherNotFoundException();
 
-            //Teacher teacher2 = new Teacher();
-            //teacher2.Email = model.Email;
-            //teacher2.PhoneNumber = model.PhoneNumber;
+            var teacherEmail = await _teacherRepository.GetByEmailAsync(model.Email);
+            if (teacherEmail is not null)
+                throw new TeacherAlreadyExistsException();
 
+            string newImagePath = teacher.ImagePath;
+            if (model.ImagePath is not null)
+            {
+                // Delete old image
+                var deleteResult = await _fileService.DeleteImageAsync(teacher.ImagePath);
+                if (!deleteResult)
+                    throw new ImageNotFoundException();
 
-            //if (resultTeacher == null)
-            //{
-            //    throw new TeacherNotFoundException();
-            //}
+                // Upload new image
+                newImagePath = await _fileService.UploadImageAsync(model.ImagePath);
+            }
+            // else teacher old image have to save
 
-            //if (model.ImagePath is not null)
-            //{
-            //    var image = await _fileService.DeleteImageAsync();
-            //    string
-            //    if (image == false) throw new ImageNotFoundException();
+            _mapper.Map(model, teacher);
 
-            throw new NotImplementedException();
+            teacher.ImagePath = newImagePath;
+            teacher.UpdatedAt = TimeHelper.GetDateTime();
 
-            //string newImagePath = await _fileService.UploadAvatarAsync(userUpdateDto.UserAvatar);
+            var result = await _teacherRepository.UpdateAsync(teacher);
 
-            //user.UserAvatar = newImagePath;
+            return result;
 
         }
 
