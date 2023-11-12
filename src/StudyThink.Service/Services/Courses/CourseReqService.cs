@@ -46,9 +46,19 @@ public class CourseReqService : ICourseReqService
         return result;
     }
 
-    public ValueTask<bool> DeleteRangeAsync(List<long> CourseReqIds)
+    public async ValueTask<bool> DeleteRangeAsync(List<long> CourseReqIds)
     {
-        throw new NotImplementedException();
+        foreach (var i in CourseReqIds)
+        {
+            CourseRequirment coursereq = await _repository.GetByIdAsync(i);
+
+            if (coursereq != null)
+            {
+                await _repository.DeleteAsync(i);
+            }
+        }
+
+        return true;
     }
 
     public async ValueTask<IEnumerable<CourseRequirment>> GetAllAsync(PaginationParams @params)

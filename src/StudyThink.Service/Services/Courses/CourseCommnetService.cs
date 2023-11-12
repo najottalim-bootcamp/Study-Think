@@ -16,7 +16,7 @@ public class CourseCommnetService : ICourseCommentService
     private readonly IMapper _mapper;
 
     public CourseCommnetService(ICourseCommentRepository repository,
-        IFileService fileService,IMapper mapper)
+        IFileService fileService, IMapper mapper)
     {
         this._repository = repository;
         this._fileService = fileService;
@@ -24,17 +24,17 @@ public class CourseCommnetService : ICourseCommentService
     }
 
     public async ValueTask<long> CountAsync()
-        =>await _repository.CountAsync();
+        => await _repository.CountAsync();
 
-    
+
 
     public async ValueTask<bool> CreateAsync(CourseCommentCreationDto model)
     {
-        var courseComment= _mapper.Map<CourseComment>(model);
+        var courseComment = _mapper.Map<CourseComment>(model);
 
         courseComment.CreatedAt = TimeHelper.GetDateTime();
         courseComment.UpdatedAt = TimeHelper.GetDateTime();
-        
+
         var result = await _repository.CreateAsync(courseComment);
         return result;
 
@@ -42,7 +42,7 @@ public class CourseCommnetService : ICourseCommentService
 
     public async ValueTask<bool> DeleteAsync(long id)
     {
-        var existCourseComment=await _repository.GetByIdAsync(id);
+        var existCourseComment = await _repository.GetByIdAsync(id);
         if (existCourseComment is null)
         {
             throw new CourseCommentsAlreadyExistsException();
@@ -68,8 +68,8 @@ public class CourseCommnetService : ICourseCommentService
 
     public async ValueTask<CourseComment> GetByIdAsync(long id)
     {
-        var result =await _repository.GetByIdAsync(id);
-        if(result is null)
+        var result = await _repository.GetByIdAsync(id);
+        if (result is null)
         {
             throw new CourseCommentsNotFoundException();
         }
@@ -79,11 +79,11 @@ public class CourseCommnetService : ICourseCommentService
     public async ValueTask<bool> UpdateAsync(CourseCommentUpdateDto model)
     {
         var existCpurseComment = await _repository.GetByIdAsync(model.Id);
-        if(existCpurseComment is null)
+        if (existCpurseComment is null)
         {
             throw new CourseCommentsNotFoundException();
         }
-        CourseComment courseComment =_mapper.Map<CourseComment>(existCpurseComment);
+        CourseComment courseComment = _mapper.Map<CourseComment>(existCpurseComment);
         courseComment.UpdatedAt = TimeHelper.GetDateTime();
         var result = await _repository.UpdateAsync(courseComment);
         return result;
