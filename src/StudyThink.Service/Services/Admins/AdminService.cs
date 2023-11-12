@@ -4,7 +4,6 @@ using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Admins;
 using StudyThink.Domain.Exceptions.Admin;
 using StudyThink.Domain.Exceptions.AdminExseptions;
-using StudyThink.Domain.Exceptions.Student;
 using StudyThink.Service.Common.Hasher;
 using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Admin;
@@ -92,13 +91,27 @@ public class AdminService : IAdminService
 
         if (admin == null)
         {
-            throw new StudentNotFoundExeption();
+            throw new AdminNotFound();
         }
         return admin;
     }
 
-    public ValueTask<bool> UpdateAsync(AdminUpdateDto model)
+    public async ValueTask<bool> UpdateAsync(AdminUpdateDto model)
     {
-        throw new NotImplementedException();
+        var admin = await _repository.GetByIdAsync(model.Id);
+        if (admin is null)
+            throw new AdminNotFound();
+
+        var emailResult = await _repository.GetByEmailAsync(model.Email);
+        if (emailResult is not null)
+            throw new AdminAlreadyExistsException();
+
+        _mapper.Map(model, admin);
+
+        admin.UpdatedAt = TimeHelper.GetDateTime();
+
+        var result = await _repository.UpdateAsync(admin);
+
+        return result;
     }
 }
