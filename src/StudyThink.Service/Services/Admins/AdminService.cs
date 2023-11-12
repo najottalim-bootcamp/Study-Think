@@ -19,10 +19,8 @@ public class AdminService : IAdminService
         this._fileService = fileService;
     }
 
-    public ValueTask<long> CountAsync()
-    {
-        throw new NotImplementedException();
-    }
+    public async ValueTask<long> CountAsync()
+        => await _repository.CountAsync();
 
     public ValueTask<bool> CreateAsync(AdminCreationDto model)
     {
