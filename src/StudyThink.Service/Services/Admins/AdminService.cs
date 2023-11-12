@@ -4,6 +4,7 @@ using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Admins;
 using StudyThink.Domain.Exceptions.Admin;
 using StudyThink.Domain.Exceptions.AdminExseptions;
+using StudyThink.Domain.Exceptions.Student;
 using StudyThink.Service.Common.Hasher;
 using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Admin;
@@ -85,9 +86,15 @@ public class AdminService : IAdminService
         return admins;
     }
 
-    public ValueTask<Admin> GetByIdAsync(long Id)
+    public async ValueTask<Admin> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+        Admin admin = await _repository.GetByIdAsync(Id);
+
+        if (admin == null)
+        {
+            throw new StudentNotFoundExeption();
+        }
+        return admin;
     }
 
     public ValueTask<bool> UpdateAsync(AdminUpdateDto model)
