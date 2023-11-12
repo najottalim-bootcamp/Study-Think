@@ -35,5 +35,8 @@ public class AdminsController : ControllerBase
     [HttpDelete]
     public async ValueTask<IActionResult> DeleteAsync(long adminId)
         => Ok(await _service.DeleteAsync(adminId));
-    
+
+    [HttpGet]
+    public async ValueTask<IActionResult> GetByIdAsync(long adminId)
+        => Ok(await _service.GetByIdAsync(adminId));
 }
