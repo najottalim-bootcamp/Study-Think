@@ -3,5 +3,5 @@
 public class CourseModulCreationDto
 {
     public string Name { get; set; }
-    public int CourseID { get; set; }
+    public long CourseId { get; set; }
 }
