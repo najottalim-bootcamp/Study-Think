@@ -1,3 +1,4 @@
+using StudyThink.Service.Interfaces.Admins;
 using StudyThink.Service.Interfaces.Categories;
 using StudyThink.Service.Interfaces.Collobarators;
 using StudyThink.Service.Interfaces.Courses;
@@ -5,6 +6,7 @@ using StudyThink.Service.Interfaces.Payments;
 using StudyThink.Service.Interfaces.Studentsk;
 using StudyThink.Service.Interfaces.Teachers;
 using StudyThink.Service.Interfaces.Videos;
+using StudyThink.Service.Services.Admins;
 using StudyThink.Service.Services.Callaborators;
 using StudyThink.Service.Services.Categories;
 using StudyThink.Service.Services.Courses;
@@ -33,6 +35,7 @@ public static class ServiceLayerConfiguration
         builder.Services.AddScoped<ICourseReqService, CourseReqService>();
         builder.Services.AddScoped<ICourseModulService, CourseModulService>();
         builder.Services.AddScoped<IPaymentDetailsService, PaymentDetailService>();
+        builder.Services.AddScoped<IAdminService, AdminService>();
 
     }
 }

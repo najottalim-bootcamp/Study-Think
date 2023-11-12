@@ -39,7 +39,8 @@ public class AdminRepository : BaseRepository2, IAdminRepository
         {
             await _connection.OpenAsync();
             string query = "INSERT INTO Admins(FirstName, LastName, PhoneNumber, Email, Password, Role, CreatedAt, UpdatedAt, DeletedAt) " +
-                "VALUES (@FirstName, @LastName, @PhoneNumber, @Email, @Password, @Role, @CreatedAt, @UpdatedAt, @DeletedAt)";
+                           $"VALUES (@FirstName, @LastName, @PhoneNumber, @Email, @Password, '{model.Role.ToString()}', @CreatedAt, @UpdatedAt, @DeletedAt)";
+
 
             var result = await _connection.ExecuteAsync(query, model);
 
@@ -105,9 +106,29 @@ public class AdminRepository : BaseRepository2, IAdminRepository
         }
     }
 
-    public ValueTask<Admin> GetByEmailAsync(string email)
+    public async ValueTask<Admin> GetByEmailAsync(string email)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM Admins WHERE Email = @Email";
+
+            var parameters = new { Email = email };
+
+            Admin admin = await _connection.QuerySingleOrDefaultAsync<Admin>(query, parameters);
+
+            return admin;
+        }
+        catch
+        {
+            return new Admin();
+
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public async ValueTask<Admin> GetByIdAsync(long Id)
@@ -144,12 +165,26 @@ public class AdminRepository : BaseRepository2, IAdminRepository
     {
         try
         {
-            await _connection.OpenAsync();
-            string query = $"UPDATE Admins SET FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, Email = @Email," +
-                            $" Password = @Password Role=@Role, CreatedAt = @CreatedAt, UpdatedAt = @UpdatedAt " +
-                            $"WHERE Id = {model.Id}";
+            var paramets = new
+            {
+                Id = model.Id,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                Password = model.Password,
+                Role = model.Role.ToString(),
+                CreatedAt = model.CreatedAt,
+                UpdatedAt = model.UpdatedAt,
+                DeletedAt = model.DeletedAt
+            };
 
-            var result = await _connection.ExecuteAsync(query, model);
+            await _connection.OpenAsync();
+            string query = $"UPDATE Admins SET FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, Email = @Email, " +
+                           $"Password = @Password, Role = @Role, CreatedAt = @CreatedAt, UpdatedAt = @UpdatedAt, DeletedAt = @DeletedAt " +
+                           $"WHERE Id = @Id";
+
+            var result = await _connection.ExecuteAsync(query, paramets);
             return result > 0;
         }
         catch
@@ -161,4 +196,5 @@ public class AdminRepository : BaseRepository2, IAdminRepository
             await _connection.CloseAsync();
         }
     }
+
 }
