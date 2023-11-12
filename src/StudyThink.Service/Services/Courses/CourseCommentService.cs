@@ -9,13 +9,13 @@ using StudyThink.Service.Interfaces.Courses;
 
 namespace StudyThink.Service.Services.Courses;
 
-public class CourseCommetService : ICourseCommentService
+public class CourseCommentService : ICourseCommentService
 {
     private readonly ICourseCommentRepository _repository;
     private readonly IFileService _fileService;
     private readonly IMapper _mapper;
 
-    public CourseCommetService(ICourseCommentRepository repository,
+    public CourseCommentService(ICourseCommentRepository repository,
         IFileService fileService, IMapper mapper)
     {
         this._repository = repository;
