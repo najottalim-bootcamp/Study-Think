@@ -4,7 +4,7 @@ using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Admins;
 using StudyThink.Domain.Entities.Students;
 using StudyThink.Domain.Exceptions.Admin;
-using StudyThink.Domain.Exceptions.Student;
+using StudyThink.Domain.Exceptions.AdminExseptions;
 using StudyThink.Service.Common.Hasher;
 using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Admin;
@@ -50,14 +50,30 @@ public class AdminService : IAdminService
         return result;
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        var existAdmin = await _repository.GetByIdAsync(Id);
+
+        if (existAdmin is null)
+            throw new AdminNotFound();
+
+        var result = await _repository.DeleteAsync(Id);
+        return result;
     }
 
-    public ValueTask<bool> DeleteRangeAsync(List<long> adminIds)
+    public async ValueTask<bool> DeleteRangeAsync(List<long> adminIds)
     {
-        throw new NotImplementedException();
+        foreach (var i in adminIds)
+        {
+            Admin student = await _repository.GetByIdAsync(i);
+
+            if (student != null)
+            {
+                await _repository.DeleteAsync(i);
+            }
+        }
+
+        return true;
     }
 
     public ValueTask<IEnumerable<Admin>> GetAll(PaginationParams @params)
