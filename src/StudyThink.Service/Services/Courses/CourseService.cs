@@ -39,7 +39,7 @@ public class CourseService : ICourseService
 
     public async ValueTask<bool> DeleteAsync(long Id)
     {
-        var existCourse= await _courseRepository.GetByIdAsync(Id);
+        var existCourse = await _courseRepository.GetByIdAsync(Id);
         if (existCourse is null)
         {
             throw new CourseNotFoundException();
@@ -50,13 +50,23 @@ public class CourseService : ICourseService
 
     public async ValueTask<bool> DeleteRangeAsync(List<long> courseIds)
     {
-        throw new NotImplementedException();
+        foreach (var i in courseIds)
+        {
+            Course course = await _courseRepository.GetByIdAsync(i);
+
+            if (course != null)
+            {
+                await _courseRepository.DeleteAsync(i);
+            }
+        }
+
+        return true;
     }
 
     public async ValueTask<IEnumerable<Course>> GetAllAsync(PaginationParams @params)
     {
         var result = await _courseRepository.GetAllAsync(@params);
-        if(result is null)
+        if (result is null)
         {
             throw new CourseNotFoundException();
         }
@@ -66,7 +76,7 @@ public class CourseService : ICourseService
     public async ValueTask<Course> GetByIdAsync(long Id)
     {
         var result = await _courseRepository.GetByIdAsync(Id);
-        if(result is null)
+        if (result is null)
         {
             throw new CourseNotFoundException();
         }
@@ -75,8 +85,8 @@ public class CourseService : ICourseService
 
     public async ValueTask<bool> UpdateAsync(CourseUpdateDto model)
     {
-        var existCourse=await _courseRepository.GetByIdAsync(model.Id);
-        if(existCourse is null)
+        var existCourse = await _courseRepository.GetByIdAsync(model.Id);
+        if (existCourse is null)
         {
             throw new CourseNotFoundException();
         }

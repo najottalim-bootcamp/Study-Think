@@ -56,9 +56,19 @@ public class CourseModulService : ICourseModulService
         return result;
     }
 
-    public ValueTask<bool> DeleteRangeAsync(List<long> CourseModulIds)
+    public async ValueTask<bool> DeleteRangeAsync(List<long> CourseModulIds)
     {
-        throw new NotImplementedException();
+        foreach (var i in CourseModulIds)
+        {
+            CourseModul courseModul = await _repository.GetByIdAsync(i);
+
+            if (courseModul != null)
+            {
+                await _repository.DeleteAsync(i);
+            }
+        }
+
+        return true;
     }
 
     public async ValueTask<IEnumerable<CourseModul>> GetAllAsync(PaginationParams @params)

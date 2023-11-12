@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using StudyThink.DataAccess.Utils;
+﻿using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Admins;
-using StudyThink.Domain.Entities.Students;
 using StudyThink.Service.DTOs.Admin;
-using StudyThink.Service.DTOs.Student;
 
 namespace StudyThink.Service.Interfaces.Admins;
 
