@@ -44,7 +44,6 @@ public class AdminService : IAdminService
 
         admin.CreatedAt = TimeHelper.GetDateTime();
         admin.UpdatedAt = TimeHelper.GetDateTime();
-        //admin.DeletedAt = admin.DeletedAt.Date.Add(new TimeSpan(00, 00, 00));
         admin.DeletedAt = new DateTime(1900, 1, 1, 1, 1, 1);
 
         var result = await _repository.CreateAsync(admin);
@@ -112,6 +111,7 @@ public class AdminService : IAdminService
         _mapper.Map(model, admin);
 
         admin.UpdatedAt = TimeHelper.GetDateTime();
+        admin.DeletedAt = new DateTime(1900, 1, 1, 1, 1, 1);
 
         var result = await _repository.UpdateAsync(admin);
 

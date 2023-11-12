@@ -165,12 +165,26 @@ public class AdminRepository : BaseRepository2, IAdminRepository
     {
         try
         {
-            await _connection.OpenAsync();
-            string query = $"UPDATE Admins SET FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, Email = @Email," +
-                            $" Password = @Password Role=@Role, CreatedAt = @CreatedAt, UpdatedAt = @UpdatedAt " +
-                            $"WHERE Id = {model.Id}";
+            var paramets = new
+            {
+                Id = model.Id,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                Password = model.Password,
+                Role = model.Role.ToString(),
+                CreatedAt = model.CreatedAt,
+                UpdatedAt = model.UpdatedAt,
+                DeletedAt = model.DeletedAt
+            };
 
-            var result = await _connection.ExecuteAsync(query, model);
+            await _connection.OpenAsync();
+            string query = $"UPDATE Admins SET FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, Email = @Email, " +
+                           $"Password = @Password, Role = @Role, CreatedAt = @CreatedAt, UpdatedAt = @UpdatedAt, DeletedAt = @DeletedAt " +
+                           $"WHERE Id = @Id";
+
+            var result = await _connection.ExecuteAsync(query, paramets);
             return result > 0;
         }
         catch
@@ -182,4 +196,5 @@ public class AdminRepository : BaseRepository2, IAdminRepository
             await _connection.CloseAsync();
         }
     }
+
 }
