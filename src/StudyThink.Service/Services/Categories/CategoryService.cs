@@ -36,9 +36,19 @@ public class CategoryService : ICategoryService
         return await _repository.DeleteAsync(Id);
     }
 
-    public ValueTask<bool> DeleteRangeAsync(List<long> categoryIds)
+    public async ValueTask<bool> DeleteRangeAsync(List<long> categoryIds)
     {
-        throw new NotImplementedException();
+        foreach (var i in categoryIds)
+        {
+            Category category = await _repository.GetByIdAsync(i);
+
+            if (category != null)
+            {
+                await _repository.DeleteAsync(i);
+            }
+        }
+
+        return true;
     }
 
     public async ValueTask<IEnumerable<Category>> GetAllAsync(PaginationParams @params)

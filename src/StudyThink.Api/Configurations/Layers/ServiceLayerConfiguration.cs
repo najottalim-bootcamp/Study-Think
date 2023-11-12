@@ -29,7 +29,7 @@ public static class ServiceLayerConfiguration
         builder.Services.AddScoped<IPaymentService, PaymentService>();
         builder.Services.AddScoped<IStudentService, StudentService>();
         builder.Services.AddScoped<IVideoService, VideoService>();
-        builder.Services.AddScoped<ICourseCommentService, CourseCommnetService>();
+        builder.Services.AddScoped<ICourseCommentService, CourseCommentService>();
         builder.Services.AddScoped<ICourseReqService, CourseReqService>();
         builder.Services.AddScoped<ICourseModulService, CourseModulService>();
         builder.Services.AddScoped<IPaymentDetailsService, PaymentDetailService>();

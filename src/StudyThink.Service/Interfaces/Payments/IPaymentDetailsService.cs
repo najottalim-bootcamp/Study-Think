@@ -11,6 +11,5 @@ public interface IPaymentDetailsService
     ValueTask<IEnumerable<PaymentDetails>> GetAllAsync(PaginationParams @params);
     ValueTask<long> CountAsync();
     ValueTask<bool> UpdateAsync(PaymentDetailsUpdateDto model);
-
     ValueTask<bool> DeleteRangeAsync(List<long> paymenDetailsIds);
 }

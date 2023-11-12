@@ -24,26 +24,15 @@ public class PaymentDetailService : IPaymentDetailsService
     }
 
     public async ValueTask<long> CountAsync()
-        =>await _repository.CountAsync();
-        
+        => await _repository.CountAsync();
+
 
     public async ValueTask<bool> CreateAsync(PaymentDetailsCretionDto model)
     {
-        var paymentDetails=_mapper.Map<PaymentDetails>(model);
-        paymentDetails.CardHolderName = model.CardHolderName;
-        paymentDetails.CardPhoneNumber = model.CardPhoneNumber;
-        paymentDetails.CardNumber = model.CardNumber;
-        paymentDetails.CourseId = model.CourseId;
-        paymentDetails.CardCodeCVV = model.CardCodeCVV;
-        paymentDetails.ExpirationDate = model.ExpirationDate;
-        paymentDetails.IsPaid = model.IsPaid;
-        paymentDetails.StudentId = model.StudentId;
-        var result = await _repository.CreateAsync(paymentDetails);
-        return result;
-        //PaymentDetails paymentDetails = _mapper.Map<PaymentDetails>(model);
-        //bool dbResult = await _repository.CreateAsync(paymentDetails);
+        PaymentDetails paymentDetails = _mapper.Map<PaymentDetails>(model);
+        bool dbResult = await _repository.CreateAsync(paymentDetails);
 
-        //return dbResult;
+        return dbResult;
     }
 
     public async ValueTask<bool> DeleteRangeAsync(List<long> paymenDetailsIds)
@@ -61,9 +50,13 @@ public class PaymentDetailService : IPaymentDetailsService
         return true;
     }
 
-    public ValueTask<IEnumerable<PaymentDetails>> GetAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<PaymentDetails>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        IEnumerable<PaymentDetails> payments = await _repository.GetAllAsync(@params);
+        if (payments is null)
+            throw new PaymentDetailsNotFoundException();
+
+        return payments;
     }
 
     public async ValueTask<PaymentDetails> GetByIdAsync(long Id)
@@ -73,7 +66,7 @@ public class PaymentDetailService : IPaymentDetailsService
 
         if (payment == null)
         {
-            throw new PaymentDetailsNotFoundExeption();
+            throw new PaymentDetailsNotFoundException();
         }
         return payment;
     }

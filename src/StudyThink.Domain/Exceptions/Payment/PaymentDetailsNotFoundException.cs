@@ -1,7 +1,7 @@
 ﻿namespace StudyThink.Domain.Exceptions.Payment;
-public class PaymentDetailsNotFoundExeption:NotFoundException
+public class PaymentDetailsNotFoundException:NotFoundException
 {
-    public PaymentDetailsNotFoundExeption()
+    public PaymentDetailsNotFoundException()
     {
         TitleMessage = "Payment details not found";
     }

@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using StudyThink.DataAccess.Interfaces.Payments;
+using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Payments;
 
 namespace StudyThink.DataAccess.Repositories.Payments;
@@ -66,6 +67,28 @@ public class PaymentDetailsRepository : BaseRepository2, IPaymentDetailsReposito
         {
 
             return false;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
+    }
+
+    public async ValueTask<IEnumerable<PaymentDetails>> GetAllAsync(PaginationParams @params)
+    {
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM PaymentDetails ORDER BY Id DESC" +
+                $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+
+            var result = await _connection.QueryAsync<PaymentDetails>(query);
+
+            return result;
+        }
+        catch
+        {
+            return new List<PaymentDetails>();
         }
         finally
         {

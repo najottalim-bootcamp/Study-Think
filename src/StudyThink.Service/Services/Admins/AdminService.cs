@@ -1,6 +1,11 @@
-﻿using StudyThink.DataAccess.Interfaces.Admins;
+﻿using AutoMapper;
+using StudyThink.DataAccess.Interfaces.Admins;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Admins;
+using StudyThink.Domain.Exceptions.Admin;
+using StudyThink.Domain.Exceptions.AdminExseptions;
+using StudyThink.Service.Common.Hasher;
+using StudyThink.Service.Common.Helpers;
 using StudyThink.Service.DTOs.Admin;
 using StudyThink.Service.Interfaces.Admins;
 using StudyThink.Service.Interfaces.Common;
@@ -11,46 +16,102 @@ public class AdminService : IAdminService
 {
     private readonly IAdminRepository _repository;
     private readonly IFileService _fileService;
+    private readonly IMapper _mapper;
 
     public AdminService(IAdminRepository adminRepository,
-        IFileService fileService)
+        IFileService fileService,
+        IMapper mapper)
     {
         this._repository = adminRepository;
         this._fileService = fileService;
+        this._mapper = mapper;
     }
 
-    public ValueTask<long> CountAsync()
+    public async ValueTask<long> CountAsync()
+        => await _repository.CountAsync();
+
+    public async ValueTask<bool> CreateAsync(AdminCreationDto model)
     {
-        throw new NotImplementedException();
+        var exits = await _repository.GetByEmailAsync(model.Email);
+
+        if (exits is not null)
+            throw new AdminAlreadyExistsException();
+
+        var admin = _mapper.Map<Admin>(model);
+
+        admin.Password = Hash512.GenerateHash512(admin.Password);
+
+        admin.CreatedAt = TimeHelper.GetDateTime();
+        admin.UpdatedAt = TimeHelper.GetDateTime();
+
+        var result = await _repository.CreateAsync(admin);
+
+        return result;
     }
 
-    public ValueTask<bool> CreateAsync(AdminCreationDto model)
+    public async ValueTask<bool> DeleteAsync(long Id)
     {
-        throw new NotImplementedException();
+        var existAdmin = await _repository.GetByIdAsync(Id);
+
+        if (existAdmin is null)
+            throw new AdminNotFound();
+
+        var result = await _repository.DeleteAsync(Id);
+        return result;
     }
 
-    public ValueTask<bool> DeleteAsync(long Id)
+    public async ValueTask<bool> DeleteRangeAsync(List<long> adminIds)
     {
-        throw new NotImplementedException();
+        foreach (var i in adminIds)
+        {
+            Admin student = await _repository.GetByIdAsync(i);
+
+            if (student != null)
+            {
+                await _repository.DeleteAsync(i);
+            }
+        }
+
+        return true;
     }
 
-    public ValueTask<bool> DeleteRangeAsync(List<long> adminIds)
+    public async ValueTask<IEnumerable<Admin>> GetAll(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        IEnumerable<Admin> admins = await _repository.GetAllAsync(@params);
+
+        if (admins is null)
+            throw new AdminNotFound();
+
+        return admins;
     }
 
-    public ValueTask<IEnumerable<Admin>> GetAll(PaginationParams @params)
+    public async ValueTask<Admin> GetByIdAsync(long Id)
     {
-        throw new NotImplementedException();
+        Admin admin = await _repository.GetByIdAsync(Id);
+
+        if (admin == null)
+        {
+            throw new AdminNotFound();
+        }
+        return admin;
     }
 
-    public ValueTask<Admin> GetByIdAsync(long Id)
+    public async ValueTask<bool> UpdateAsync(AdminUpdateDto model)
     {
-        throw new NotImplementedException();
-    }
+        var admin = await _repository.GetByIdAsync(model.Id);
+        if (admin is null)
+            throw new AdminNotFound();
 
-    public ValueTask<bool> UpdateAsync(AdminUpdateDto model)
-    {
-        throw new NotImplementedException();
+        var emailResult = await _repository.GetByEmailAsync(model.Email);
+        if (emailResult is not null)
+            throw new AdminAlreadyExistsException();
+
+        _mapper.Map(model, admin);
+
+        admin.UpdatedAt = TimeHelper.GetDateTime();
+
+        var result = await _repository.UpdateAsync(admin);
+
+        return result;
     }
 }
