@@ -2,6 +2,7 @@
 using StudyThink.DataAccess.Interfaces.Admins;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Admins;
+using StudyThink.Domain.Entities.Students;
 using StudyThink.Domain.Exceptions.Admin;
 using StudyThink.Domain.Exceptions.AdminExseptions;
 using StudyThink.Service.Common.Hasher;
@@ -43,6 +44,8 @@ public class AdminService : IAdminService
 
         admin.CreatedAt = TimeHelper.GetDateTime();
         admin.UpdatedAt = TimeHelper.GetDateTime();
+        //admin.DeletedAt = admin.DeletedAt.Date.Add(new TimeSpan(00, 00, 00));
+        admin.DeletedAt = new DateTime(1900, 1, 1, 1, 1, 1);
 
         var result = await _repository.CreateAsync(admin);
 
