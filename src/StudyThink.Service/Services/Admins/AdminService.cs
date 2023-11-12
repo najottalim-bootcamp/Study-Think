@@ -2,7 +2,6 @@
 using StudyThink.DataAccess.Interfaces.Admins;
 using StudyThink.DataAccess.Utils;
 using StudyThink.Domain.Entities.Admins;
-using StudyThink.Domain.Entities.Students;
 using StudyThink.Domain.Exceptions.Admin;
 using StudyThink.Domain.Exceptions.AdminExseptions;
 using StudyThink.Service.Common.Hasher;
@@ -76,9 +75,14 @@ public class AdminService : IAdminService
         return true;
     }
 
-    public ValueTask<IEnumerable<Admin>> GetAll(PaginationParams @params)
+    public async ValueTask<IEnumerable<Admin>> GetAll(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        IEnumerable<Admin> admins = await _repository.GetAllAsync(@params);
+
+        if (admins is null)
+            throw new AdminNotFound();
+
+        return admins;
     }
 
     public ValueTask<Admin> GetByIdAsync(long Id)
