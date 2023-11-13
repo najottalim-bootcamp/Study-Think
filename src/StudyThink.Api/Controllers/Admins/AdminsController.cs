@@ -3,7 +3,7 @@ using StudyThink.DataAccess.Utils;
 using StudyThink.Service.DTOs.Admin;
 using StudyThink.Service.Interfaces.Admins;
 
-namespace StudyThink.Api.Controllers;
+namespace StudyThink.Api.Controllers.Admins;
 [Route("api/[controller]/[action]")]
 [ApiController]
 public class AdminsController : ControllerBase
@@ -13,7 +13,7 @@ public class AdminsController : ControllerBase
 
     public AdminsController(IAdminService service)
     {
-        this._service = service;
+        _service = service;
     }
 
     [HttpGet]
