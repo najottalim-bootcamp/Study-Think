@@ -10,6 +10,9 @@
 *.userosscache
 *.sln.docstates
 
+# For database connection Exclude appsettings.json 
+src/StudyThink.Api/appsettings.json
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -399,3 +402,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/src/StudyThink.DataAccess/Repositories/BaseRepository.cs
+/src/StudyThink.Api/appsettings.json
