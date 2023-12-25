@@ -16,6 +16,9 @@ src/StudyThink.Api/appsettings.json
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# Exclude appsettings.json
+src/StudyThink.Api/appsettings.json
+
 # Mono auto generated files
 mono_crash.*
 
